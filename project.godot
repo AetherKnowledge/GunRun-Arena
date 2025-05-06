@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Sia Game"
-run/main_scene="uid://d33rwh7tsdlpy"
+run/main_scene="uid://47noqqt74evc"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Music="*res://scenes/music.tscn"
 
 [editor]
 

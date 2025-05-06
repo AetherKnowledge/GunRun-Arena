@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://d33rwh7tsdlpy"]
+[gd_scene load_steps=13 format=4 uid="uid://d33rwh7tsdlpy"]
 
 [ext_resource type="PackedScene" uid="uid://yykkmtsqerow" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://h6okjvytql1v" path="res://assets/sprites/world_tileset.png" id="2_yqjtg"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://bkooy2uf63l2i" path="res://scenes/coin.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://84wajth4l6qf" path="res://scenes/killzone.tscn" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://d1dtibuldt310" path="res://scenes/slime.tscn" id="6_p57ef"]
-[ext_resource type="AudioStream" uid="uid://l5f10us46l3" path="res://assets/music/time_for_adventure.mp3" id="7_u5sy4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -218,6 +217,7 @@ _data = {
 [node name="Game" type="Node2D"]
 
 [node name="GameManager" type="Node" parent="."]
+unique_name_in_owner = true
 
 [node name="Tilemap" type="Node" parent="."]
 
@@ -269,8 +269,3 @@ position = Vector2(375, -18)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
 position = Vector2(8, 109)
 shape = SubResource("WorldBoundaryShape2D_p57ef")
-
-[node name="Music" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("7_u5sy4")
-autoplay = true
-bus = &"Music"
