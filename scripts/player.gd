@@ -19,6 +19,12 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+	
+	# checks if alive
+	if not alive:
+		if not animated_sprite.animation == "death":
+			animated_sprite.play("death")
+		return
 		
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
@@ -35,10 +41,7 @@ func _physics_process(delta: float) -> void:
 		animated_sprite.flip_h = true
 		
 	# Play animations
-	if not alive:
-		if not animated_sprite.animation == "death":
-			animated_sprite.play("death")
-	elif not is_on_floor():
+	if not is_on_floor():
 		animated_sprite.play("jump")
 	elif direction == 0:
 		animated_sprite.play("idle")
@@ -55,5 +58,6 @@ func _physics_process(delta: float) -> void:
 	
 func kill() -> void:
 	alive = false
-	death_sfx.play()
+	if not death_sfx.playing and not alive:
+		death_sfx.play()
 	
