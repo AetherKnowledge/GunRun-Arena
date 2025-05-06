@@ -1,11 +1,13 @@
-[gd_scene load_steps=13 format=4 uid="uid://d33rwh7tsdlpy"]
+[gd_scene load_steps=15 format=4 uid="uid://d33rwh7tsdlpy"]
 
+[ext_resource type="PackedScene" uid="uid://bdrcr5jgvmul8" path="res://scenes/game_manager.tscn" id="1_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://yykkmtsqerow" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://h6okjvytql1v" path="res://assets/sprites/world_tileset.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://cpe8ntjxh2l16" path="res://scenes/platform.tscn" id="3_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://bkooy2uf63l2i" path="res://scenes/coin.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://84wajth4l6qf" path="res://scenes/killzone.tscn" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://d1dtibuldt310" path="res://scenes/slime.tscn" id="6_p57ef"]
+[ext_resource type="PackedScene" uid="uid://bcxjubp1ocyjq" path="res://scenes/pause_menu.tscn" id="8_gee14"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -216,7 +218,7 @@ _data = {
 
 [node name="Game" type="Node2D"]
 
-[node name="GameManager" type="Node" parent="."]
+[node name="GameManager" parent="." instance=ExtResource("1_u5sy4")]
 unique_name_in_owner = true
 
 [node name="Tilemap" type="Node" parent="."]
@@ -269,3 +271,10 @@ position = Vector2(375, -18)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
 position = Vector2(8, 109)
 shape = SubResource("WorldBoundaryShape2D_p57ef")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("8_gee14")]
+unique_name_in_owner = true
+
+[connection signal="state_changed" from="CanvasLayer/PauseMenu" to="GameManager" method="_on_pause_menu_state_changed"]
