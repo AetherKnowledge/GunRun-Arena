@@ -8,7 +8,7 @@ func _on_body_entered(body: Node2D) -> void:
 	
 	if body is Player:
 		player = body as Player
-		player.alive = false
+		player.kill()
 		
 	Engine.time_scale = 0.5
 	timer.start()

@@ -1,7 +1,9 @@
-[gd_scene load_steps=34 format=3 uid="uid://yykkmtsqerow"]
+[gd_scene load_steps=36 format=3 uid="uid://yykkmtsqerow"]
 
 [ext_resource type="Texture2D" uid="uid://b5fh51psrqk3n" path="res://assets/sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://bedg770x1m1jj" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="AudioStream" uid="uid://du50dj5fj1t70" path="res://assets/sounds/hurt.wav" id="3_qhqgy"]
+[ext_resource type="AudioStream" uid="uid://ci57naxhy85ep" path="res://assets/sounds/jump.wav" id="4_dqkch"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
 atlas = ExtResource("1_3vyb7")
@@ -257,3 +259,11 @@ zoom = Vector2(4, 4)
 limit_bottom = 120
 limit_smoothed = true
 position_smoothing_enabled = true
+
+[node name="Death" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_qhqgy")
+bus = &"SFX"
+
+[node name="Jump" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_dqkch")
+bus = &"SFX"
