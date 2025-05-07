@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 const SPEED = 40
 var direction = 1
+var damage = 0
+
 @onready var ray_cast_right: RayCast2D = $RayCastRight
 @onready var ray_cast_left: RayCast2D = $RayCastLeft
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -26,3 +28,14 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
 	move_and_slide()
+
+
+func _on_hitbox_body_entered(body: Node2D) -> void:
+	if body is Player:
+		var player = body as Player
+		player.take_damage(damage, get_recoil_force(player))
+
+func get_recoil_force(player: Player) -> Vector2:
+	var knockback_strength = 200.0
+	var direction_to_player = (player.global_position - global_position).normalized()
+	return direction_to_player * knockback_strength

@@ -1,6 +1,13 @@
 extends Node
 class_name GameManager
 @onready var pause_menu: PauseMenu = %PauseMenu
+@onready var ui: UI = %UI
+@onready var player: Player = %Player
+
+func _process(delta: float) -> void:
+	ui.hp = player.hp
+	ui.xvel = player.velocity.x
+	ui.yvel = player.velocity.y
 
 func pause():
 	get_tree().paused = true

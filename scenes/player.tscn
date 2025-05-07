@@ -241,7 +241,6 @@ radius = 5.59017
 
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
-collision_layer = 2
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -254,16 +253,32 @@ autoplay = "idle"
 position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_g2els")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(4, 4)
-limit_bottom = 120
-limit_smoothed = true
-position_smoothing_enabled = true
-
-[node name="Death" type="AudioStreamPlayer2D" parent="."]
+[node name="Hurt" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_qhqgy")
 bus = &"SFX"
 
 [node name="Jump" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_dqkch")
 bus = &"SFX"
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 0.6
+one_shot = true
+
+[node name="JumpBufferTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+limit_bottom = 120
+limit_smoothed = true
+position_smoothing_enabled = true
+
+[connection signal="died" from="." to="." method="_on_death"]
+[connection signal="took_damage" from="." to="." method="_on_took_damage"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]
+[connection signal="timeout" from="JumpBufferTimer" to="." method="_on_jump_buffer_timer_timeout"]
+[connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
