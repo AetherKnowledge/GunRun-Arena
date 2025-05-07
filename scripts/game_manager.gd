@@ -8,6 +8,10 @@ func _process(delta: float) -> void:
 	ui.hp = player.hp
 	ui.xvel = player.velocity.x
 	ui.yvel = player.velocity.y
+	
+	if player.weapon is Gun:
+		var gun = player.weapon as Gun
+		ui.ammo = gun.ammo
 
 func pause():
 	get_tree().paused = true

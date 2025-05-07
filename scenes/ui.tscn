@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://boony3y1rqxqe"]
 
-[ext_resource type="Script" uid="uid://c5v0w75tww40" path="res://scenes/ui.gd" id="1_nt7q6"]
+[ext_resource type="Script" uid="uid://c5v0w75tww40" path="res://scripts/ui.gd" id="1_nt7q6"]
 
 [node name="UI" type="Control"]
 layout_mode = 3
@@ -32,6 +32,12 @@ theme_override_font_sizes/font_size = 32
 text = "X-Vel:"
 
 [node name="YVelLabel" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Y-Vel:"
+
+[node name="AmmoLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 32

@@ -55,7 +55,7 @@ script = ExtResource("1_n6pvg")
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_v5wyi")
 autoplay = "default"
-frame_progress = 0.413985
+frame_progress = 0.127975
 
 [node name="RayCastRight" type="RayCast2D" parent="."]
 position = Vector2(0, -6)

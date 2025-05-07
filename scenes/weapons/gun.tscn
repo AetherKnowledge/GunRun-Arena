@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgff6yj2xioxa"]
+
+[ext_resource type="Script" uid="uid://ci74tptpqg6i7" path="res://scripts/weapons/gun.gd" id="1_76485"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_76485"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"empty",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"fire",
+"speed": 5.0
+}]
+
+[node name="Gun" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_76485")
+animation = &"empty"
+script = ExtResource("1_76485")
+weapon_type = 1
+metadata/_custom_type_script = "uid://3tnthffuge04"

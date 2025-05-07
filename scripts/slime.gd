@@ -36,6 +36,6 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 		player.take_damage(damage, get_recoil_force(player))
 
 func get_recoil_force(player: Player) -> Vector2:
-	var knockback_strength = 200.0
-	var direction_to_player = (player.global_position - global_position).normalized()
-	return direction_to_player * knockback_strength
+	var knockback_strength = 4
+	var direction_to_player = sign(player.global_position.x - global_position.x)
+	return Vector2(direction_to_player * knockback_strength, -knockback_strength)  # up and away

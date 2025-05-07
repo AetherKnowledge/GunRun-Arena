@@ -267,6 +267,7 @@ position = Vector2(410, 12)
 [node name="Player" parent="." instance=ExtResource("1_uwrxv")]
 unique_name_in_owner = true
 position = Vector2(367, -19)
+collision_layer = 3
 
 [node name="Killzone" parent="." instance=ExtResource("5_iywne")]
 collision_mask = 1

@@ -7,11 +7,13 @@ class_name Player
 @onready var death_timer: Timer = $DeathTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 @onready var coyote_timer: Timer = $CoyoteTimer
+@onready var weapon: Weapon = $Glock
 
 var jump_buffer = false
 var can_jump = false
 
-const SPEED = 120
+const MAX_MOVEMENT_SPEED = 150
+const MOVEMENT_SPEED = 40
 const JUMP_VELOCITY = -300.0
 var alive = true
 
@@ -24,6 +26,9 @@ var hp := 100:
 		took_damage.emit()
 		if hp == 0:
 			died.emit()
+
+func _ready() -> void:
+	pass
 
 func _physics_process(delta: float) -> void:
 	
@@ -73,16 +78,17 @@ func _physics_process(delta: float) -> void:
 		animated_sprite.play("run")
 			
 	# Apply movement
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		
 	#if direction:
-		#var horizontal = clamp(direction * SPEED, velocity.x, direction * SPEED)
-		#velocity.x = move_toward(velocity.x, horizontal, 300 * delta)
+		#velocity.x = direction * SPEED
 	#else:
-		#velocity.x = move_toward(velocity.x, 0, SPEED * 300 * delta)
+		#velocity.x = move_toward(velocity.x, 0, SPEED)
+		
+	if direction:
+		var horizontal = clamp(direction * MAX_MOVEMENT_SPEED, velocity.x, direction * MAX_MOVEMENT_SPEED)
+		velocity.x = move_toward(velocity.x, horizontal, MOVEMENT_SPEED * 10 * delta)
+	else:
+		var half_speed = abs(velocity.x/4)
+		velocity.x = move_toward(velocity.x, 0, half_speed)
 
 	move_and_slide()
 	
@@ -100,6 +106,10 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 	hp -= damage
 	# Apply knockback if force is provided
 	if knockback_force != Vector2.ZERO:
+		if velocity.y > knockback_force.y:
+			velocity.y = 0
+		knockback_force.x = knockback_force.x * 50
+		knockback_force.y = knockback_force.y * 50
 		velocity = knockback_force
 	
 func kill():
