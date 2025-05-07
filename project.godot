@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 Music="*res://scenes/music.tscn"
 GlobalEnums="*res://scenes/global_enums.tscn"
+MultiplayerManager="*res://scripts/multiplayer/multiplayer_manager.gd"
+
+[display]
+
+window/size/always_on_top=true
 
 [editor]
 

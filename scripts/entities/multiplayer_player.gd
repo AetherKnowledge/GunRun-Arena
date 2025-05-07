@@ -1,5 +1,5 @@
-extends CharacterBody2D
-class_name Player
+extends Player
+class_name MultiplayerPlayer
 
 const default_weapon = preload("res://scenes/weapons/glock.tscn")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -10,9 +10,13 @@ const default_weapon = preload("res://scenes/weapons/glock.tscn")
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var weapon: Weapon
 
-var jump_buffer = false
+
 var can_jump = false
+var do_jump = false
 var looking_at: Vector2
+var _is_on_floor = true
+var jump_buffer = false
+var direction: int = 1
 
 const WEAPON_POSITION := Vector2(3,-4)
 const WEAPON_SCALE := Vector2(0.313, 0.313)
@@ -26,7 +30,14 @@ signal died
 signal weapon_changing
 signal weapon_changed
 
-var hp := 100:
+@onready var input_synchronizer: MultiplayerSynchronizer = %InputSynchronizer
+
+var player_id: int = 1:
+	set(id):
+		player_id = id
+		%InputSynchronizer.set_multiplayer_authority(id)
+
+@export var hp := 100:
 	set(value):
 		hp = clamp(value, 0, 100)
 		took_damage.emit()
@@ -38,15 +49,47 @@ func _ready() -> void:
 	weapon = default_weapon.instantiate()
 	weapon.player = self
 	_on_weapon_changed()
+	
+	if multiplayer.get_unique_id() == player_id:
+		$Camera2D.make_current()
+	else:
+		$Camera2D.enabled = false
+		$CanvasLayer.visible = false
 
 func _physics_process(delta: float) -> void:
 	
 	# checks if alive
 	if not alive:
-		if not animated_sprite.animation == "death":
-			animated_sprite.play("death")
 		return
 	
+	if multiplayer.is_server():
+		_is_on_floor = is_on_floor()
+		process_movement(delta)
+		
+	if not multiplayer.is_server() || MultiplayerManager.host_mode:
+		process_animations(delta)
+	
+func process_animations(delta):
+	
+	if not alive:
+		if not animated_sprite.animation == "death":
+			animated_sprite.play("death")
+	
+	# Flip the sprite
+	if direction > 0:
+		animated_sprite.flip_h = false
+	elif direction < 0:
+		animated_sprite.flip_h = true
+		
+	# Play animations
+	if not _is_on_floor:
+		animated_sprite.play("jump")
+	elif direction == 0:
+		animated_sprite.play("idle")
+	else:
+		animated_sprite.play("run")
+		
+func process_movement(delta):
 	looking_at = get_global_mouse_position()
 	
 	# Add the gravity.
@@ -62,31 +105,17 @@ func _physics_process(delta: float) -> void:
 			jump()
 			jump_buffer = false
 		
-	if Input.is_action_just_pressed("jump") and alive:
+	if do_jump:
 		if can_jump:
 			jump()
-			
+			do_jump = false
 		else:
 			jump_buffer = true
 			jump_buffer_timer.start()
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("move_left", "move_right")
-	
-	# Flip the sprite
-	if direction > 0:
-		animated_sprite.flip_h = false
-	elif direction < 0:
-		animated_sprite.flip_h = true
-		
-	# Play animations
-	if not is_on_floor():
-		animated_sprite.play("jump")
-	elif direction == 0:
-		animated_sprite.play("idle")
-	else:
-		animated_sprite.play("run")
+	direction = input_synchronizer.input_direction
 			
 	# Apply movement		
 	if direction:
@@ -97,8 +126,6 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, half_speed)
 
 	move_and_slide()
-	
-	
 
 func jump():
 	can_jump = false
