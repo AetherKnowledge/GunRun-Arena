@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8y06nt7b6jjw"]
+
+[ext_resource type="Script" uid="uid://bm370vo1toadv" path="res://scripts/global_enums.gd" id="1_tg2pa"]
+
+[node name="GlobalEnums" type="Node"]
+script = ExtResource("1_tg2pa")

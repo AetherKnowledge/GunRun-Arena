@@ -1,10 +1,9 @@
-[gd_scene load_steps=37 format=3 uid="uid://yykkmtsqerow"]
+[gd_scene load_steps=36 format=3 uid="uid://yykkmtsqerow"]
 
 [ext_resource type="Texture2D" uid="uid://b5fh51psrqk3n" path="res://assets/sprites/knight.png" id="1_3vyb7"]
-[ext_resource type="Script" uid="uid://bedg770x1m1jj" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="Script" uid="uid://cyt1jonphds8q" path="res://scripts/player.gd" id="1_qlg0r"]
 [ext_resource type="AudioStream" uid="uid://du50dj5fj1t70" path="res://assets/sounds/hurt.wav" id="3_qhqgy"]
 [ext_resource type="AudioStream" uid="uid://ci57naxhy85ep" path="res://assets/sounds/jump.wav" id="4_dqkch"]
-[ext_resource type="PackedScene" uid="uid://6rompywgvv8n" path="res://scenes/weapons/glock.tscn" id="5_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
 atlas = ExtResource("1_3vyb7")
@@ -242,7 +241,7 @@ radius = 5.59017
 
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
-script = ExtResource("1_g2els")
+script = ExtResource("1_qlg0r")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
@@ -278,13 +277,10 @@ limit_bottom = 120
 limit_smoothed = true
 position_smoothing_enabled = true
 
-[node name="Glock" parent="." instance=ExtResource("5_qlg0r")]
-position = Vector2(3, -4)
-scale = Vector2(0.313, 0.313)
-weapon_type = 0
-
 [connection signal="died" from="." to="." method="_on_death"]
 [connection signal="took_damage" from="." to="." method="_on_took_damage"]
+[connection signal="weapon_changed" from="." to="." method="_on_weapon_changed"]
+[connection signal="weapon_changing" from="." to="." method="_on_weapon_changing"]
 [connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]
 [connection signal="timeout" from="JumpBufferTimer" to="." method="_on_jump_buffer_timer_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]

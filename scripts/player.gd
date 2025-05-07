@@ -1,17 +1,21 @@
 extends CharacterBody2D
 class_name Player
 
+const default_weapon = preload("res://scenes/weapons/glock.tscn")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hurt: AudioStreamPlayer2D = $Hurt
 @onready var jump_sfx: AudioStreamPlayer2D = $Jump
 @onready var death_timer: Timer = $DeathTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 @onready var coyote_timer: Timer = $CoyoteTimer
-@onready var weapon: Weapon = $Glock
+@onready var weapon: Weapon
 
 var jump_buffer = false
 var can_jump = false
+var looking_at: Vector2
 
+const WEAPON_POSITION := Vector2(3,-4)
+const WEAPON_SCALE := Vector2(0.313, 0.313)
 const MAX_MOVEMENT_SPEED = 150
 const MOVEMENT_SPEED = 40
 const JUMP_VELOCITY = -300.0
@@ -19,6 +23,8 @@ var alive = true
 
 signal took_damage
 signal died
+signal weapon_changing
+signal weapon_changed
 
 var hp := 100:
 	set(value):
@@ -27,8 +33,11 @@ var hp := 100:
 		if hp == 0:
 			died.emit()
 
+
 func _ready() -> void:
-	pass
+	weapon = default_weapon.instantiate()
+	weapon.player = self
+	_on_weapon_changed()
 
 func _physics_process(delta: float) -> void:
 	
@@ -37,6 +46,8 @@ func _physics_process(delta: float) -> void:
 		if not animated_sprite.animation == "death":
 			animated_sprite.play("death")
 		return
+	
+	looking_at = get_global_mouse_position()
 	
 	# Add the gravity.
 	if not is_on_floor():
@@ -77,12 +88,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		animated_sprite.play("run")
 			
-	# Apply movement
-	#if direction:
-		#velocity.x = direction * SPEED
-	#else:
-		#velocity.x = move_toward(velocity.x, 0, SPEED)
-		
+	# Apply movement		
 	if direction:
 		var horizontal = clamp(direction * MAX_MOVEMENT_SPEED, velocity.x, direction * MAX_MOVEMENT_SPEED)
 		velocity.x = move_toward(velocity.x, horizontal, MOVEMENT_SPEED * 10 * delta)
@@ -108,8 +114,8 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 	if knockback_force != Vector2.ZERO:
 		if velocity.y > knockback_force.y:
 			velocity.y = 0
-		knockback_force.x = knockback_force.x * 50
-		knockback_force.y = knockback_force.y * 50
+		knockback_force.x = knockback_force.x * 10
+		knockback_force.y = knockback_force.y * 10
 		velocity = knockback_force
 	
 func kill():
@@ -135,3 +141,14 @@ func _on_jump_buffer_timer_timeout() -> void:
 
 func _on_coyote_timer_timeout() -> void:
 	can_jump = false
+
+
+func _on_weapon_changed() -> void:
+	weapon.scale = WEAPON_SCALE
+	weapon.position = WEAPON_POSITION
+	weapon.on_player = true
+	add_child(weapon)
+
+
+func _on_weapon_changing() -> void:
+	weapon.queue_free()
