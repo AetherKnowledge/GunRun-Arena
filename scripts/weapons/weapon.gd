@@ -21,15 +21,15 @@ func _process(delta: float) -> void:
 	if attacking:
 		attack()
 	
-	# Rotate towards mouse
-	look_at(get_global_mouse_position())
-
-	# Smooth flip based on mouse position
-	# flip v doesnt flip shoot pos
-	if get_global_mouse_position().x < global_position.x:
-		scale.y = default_y_scale * -1
-	else:
-		scale.y = default_y_scale
+	## Rotate towards mouse
+	#look_at(get_global_mouse_position())
+#
+	## Smooth flip based on mouse position
+	## flip v doesnt flip shoot pos
+	#if get_global_mouse_position().x < global_position.x:
+		#scale.y = default_y_scale * -1
+	#else:
+		#scale.y = default_y_scale
 
 func attack():
 	attacked.emit()

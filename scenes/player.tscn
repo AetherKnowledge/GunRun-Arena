@@ -280,7 +280,7 @@ position_smoothing_enabled = true
 
 [node name="Glock" parent="." instance=ExtResource("5_qlg0r")]
 position = Vector2(3, -4)
-scale = Vector2(0.3125, 0.3125)
+scale = Vector2(0.313, 0.313)
 weapon_type = 0
 
 [connection signal="died" from="." to="." method="_on_death"]
