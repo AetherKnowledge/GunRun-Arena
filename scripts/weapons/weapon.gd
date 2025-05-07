@@ -7,9 +7,10 @@ enum WeaponType {MELEE, RANGED}
 @export var damage: int = 10
 var attacking: bool = false
 signal attacked
+var default_y_scale
 
 func _ready() -> void:
-	pass
+	default_y_scale = scale.y
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack"):
@@ -20,13 +21,15 @@ func _process(delta: float) -> void:
 	if attacking:
 		attack()
 	
+	# Rotate towards mouse
 	look_at(get_global_mouse_position())
-	rotation_degrees = wrap(rotation_degrees, 0, 360)
-	if rotation_degrees > 90 and rotation_degrees < 270:
-		flip_v = true
+
+	# Smooth flip based on mouse position
+	# flip v doesnt flip shoot pos
+	if get_global_mouse_position().x < global_position.x:
+		scale.y = default_y_scale * -1
 	else:
-		flip_v = false
-	pass
+		scale.y = default_y_scale
 
 func attack():
 	attacked.emit()

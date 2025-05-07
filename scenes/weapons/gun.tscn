@@ -1,28 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://cgff6yj2xioxa"]
+[gd_scene load_steps=3 format=3 uid="uid://khv7vxdgppi"]
 
-[ext_resource type="Script" uid="uid://ci74tptpqg6i7" path="res://scripts/weapons/gun.gd" id="1_76485"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_76485"]
-animations = [{
-"frames": [],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"empty",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"fire",
-"speed": 5.0
-}]
+[ext_resource type="Script" uid="uid://kevo3nm86cl" path="res://scripts/weapons/gun.gd" id="1_76485"]
+[ext_resource type="AudioStream" uid="uid://cmob55xffu8f4" path="res://assets/sfx/empty.mp3" id="2_mgo42"]
 
 [node name="Gun" type="AnimatedSprite2D"]
-sprite_frames = SubResource("SpriteFrames_76485")
-animation = &"empty"
 script = ExtResource("1_76485")
 weapon_type = 1
-metadata/_custom_type_script = "uid://3tnthffuge04"
+metadata/_custom_type_script = "uid://jqpei711leqa"
+
+[node name="ShootSFX" type="AudioStreamPlayer2D" parent="."]
+
+[node name="EmptySFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_mgo42")
+
+[node name="PickupSFX" type="AudioStreamPlayer2D" parent="."]
+
+[node name="ShootPos" type="Marker2D" parent="."]

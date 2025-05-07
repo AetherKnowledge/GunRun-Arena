@@ -1,29 +1,17 @@
 extends Weapon
 class_name Gun
 
+const bullet_scene = preload("res://scenes/weapons/bullet.tscn")
 @export var ammo: int = 0
-@export var cooldown: float = 0.5 # seconds
-@export var fire_sfx: AudioStream
-@export var empty_sfx: AudioStream
-@export var pickup_sfx: AudioStream
+@export var cooldown: float = 0.5
 
-var fire_stream: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
-var empty_stream: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
-var pickup_stream: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
+@onready var shoot_sfx: AudioStreamPlayer2D = $ShootSFX
+@onready var empty_sfx: AudioStreamPlayer2D = $EmptySFX
+@onready var pickup_sfx: AudioStreamPlayer2D = $PickupSFX
+@onready var shoot_pos: Marker2D = $ShootPos
+
 var can_fire = true
 
-func _ready() -> void:
-	add_child(fire_stream)
-	add_child(empty_stream)
-	add_child(pickup_stream)
-	
-	fire_stream.bus = "SFX"
-	empty_stream.bus = "SFX"
-	pickup_stream.bus = "SFX"
-	
-	fire_stream.stream = fire_sfx
-	empty_stream.stream = empty_sfx
-	pickup_stream.stream = pickup_sfx
 
 func attack():
 	if not can_fire:
@@ -32,18 +20,26 @@ func attack():
 	super.attack()
 	
 	if ammo > 0:
-		stop()
-		play("fire")
-		fire_stream.play()
-		ammo -= 1
-		start_cooldown()
+		shoot()
 	elif ammo < 1 and not animation == "empty":
 		stop()
 		play("empty")
-		empty_stream.play()
+		empty_sfx.play()
 
 func start_cooldown() -> void:
 	can_fire = false
 	await get_tree().create_timer(cooldown).timeout
 	can_fire = true
 	
+func shoot():
+	var new_bullet: Bullet = bullet_scene.instantiate()
+	new_bullet.global_position = shoot_pos.global_position
+	new_bullet.global_rotation = shoot_pos.global_rotation
+	
+	get_tree().root.add_child(new_bullet)
+	
+	stop()
+	play("shoot")
+	shoot_sfx.play()
+	ammo -= 1
+	start_cooldown()
