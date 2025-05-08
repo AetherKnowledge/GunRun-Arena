@@ -24,8 +24,6 @@ func _process(delta: float) -> void:
 	if not on_player:
 		return
 	
-	super._process(delta)
-	
 	# Rotate towards mouse
 	var target_pos = player.looking_at
 	var dir = (target_pos - shoot_pos.global_position).normalized()

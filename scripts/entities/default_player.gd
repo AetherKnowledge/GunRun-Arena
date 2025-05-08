@@ -21,6 +21,7 @@ const MAX_MOVEMENT_SPEED = 150
 const MOVEMENT_SPEED = 40
 const JUMP_VELOCITY = -300.0
 var alive = true
+var holding_attack: bool = false
 
 signal took_damage
 signal died
@@ -89,6 +90,14 @@ func do_movement(delta):
 		else:
 			jump_buffer = true
 			jump_buffer_timer.start()
+	
+	if Input.is_action_just_pressed("attack"):
+		holding_attack = true
+	if Input.is_action_just_released("attack"):
+		holding_attack = false
+		
+	if holding_attack:
+		attack()
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -103,6 +112,10 @@ func do_movement(delta):
 		velocity.x = move_toward(velocity.x, 0, half_speed)
 
 	move_and_slide()
+
+func attack():
+	if weapon:
+		weapon.attack()
 
 func jump():
 	can_jump = false

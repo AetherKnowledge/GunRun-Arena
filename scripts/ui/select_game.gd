@@ -33,10 +33,10 @@ func single_player_pressed() -> void:
 
 
 func host_pressed() -> void:
-	await get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
+	get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
 	MultiplayerManager.host()
 
 
 func join_pressed() -> void:
-	await get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
+	get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
 	MultiplayerManager.join()

@@ -1,8 +1,5 @@
 extends Node
 class_name GameManager
-
-func _process(delta: float) -> void:
-	pass
 		
 func pause():
 	get_tree().paused = true

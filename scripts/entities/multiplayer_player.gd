@@ -10,9 +10,9 @@ const default_weapon = preload("res://scenes/weapons/glock.tscn")
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var weapon: Weapon
 
-
 var can_jump = false
 var do_jump = false
+var do_attack = false
 var looking_at: Vector2
 var _is_on_floor = true
 var jump_buffer = false
@@ -30,7 +30,7 @@ signal died
 signal weapon_changing
 signal weapon_changed
 
-@onready var input_synchronizer: MultiplayerSynchronizer = %InputSynchronizer
+@onready var input_synchronizer: InputSynchronizer = %InputSynchronizer
 
 var player_id: int = 1:
 	set(id):
@@ -40,10 +40,11 @@ var player_id: int = 1:
 @export var hp := 100:
 	set(value):
 		hp = clamp(value, 0, 100)
+		if hp == 100:
+			return
 		took_damage.emit()
 		if hp == 0:
 			died.emit()
-
 
 func _ready() -> void:
 	weapon = default_weapon.instantiate()
@@ -57,18 +58,19 @@ func _ready() -> void:
 		$CanvasLayer.visible = false
 
 func _physics_process(delta: float) -> void:
-	
 	# checks if alive
-	if not alive:
-		return
-	
 	if multiplayer.is_server():
+		if not alive:
+			return
 		_is_on_floor = is_on_floor()
 		process_movement(delta)
 		
 	if not multiplayer.is_server() || MultiplayerManager.host_mode:
 		process_animations(delta)
-	
+		
+	if do_attack:
+		attack()
+		
 func process_animations(delta):
 	
 	if not alive:
@@ -90,8 +92,7 @@ func process_animations(delta):
 		animated_sprite.play("run")
 		
 func process_movement(delta):
-	looking_at = get_global_mouse_position()
-	
+	looking_at = input_synchronizer.looking_at
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -111,7 +112,8 @@ func process_movement(delta):
 			do_jump = false
 		else:
 			jump_buffer = true
-			jump_buffer_timer.start()
+			jump_buffer_timer.start()	
+			
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -126,6 +128,10 @@ func process_movement(delta):
 		velocity.x = move_toward(velocity.x, 0, half_speed)
 
 	move_and_slide()
+
+func attack():
+	if weapon:
+		weapon.attack()
 
 func jump():
 	can_jump = false
@@ -160,8 +166,7 @@ func _on_death() -> void:
 func _on_death_timer_timeout() -> void:
 	Engine.time_scale = 1
 	alive = true
-	get_tree().reload_current_scene()
-
+	#get_tree().reload_current_scene()
 
 func _on_jump_buffer_timer_timeout() -> void:
 	jump_buffer = false
@@ -169,13 +174,11 @@ func _on_jump_buffer_timer_timeout() -> void:
 func _on_coyote_timer_timeout() -> void:
 	can_jump = false
 
-
 func _on_weapon_changed() -> void:
 	weapon.scale = WEAPON_SCALE
 	weapon.position = WEAPON_POSITION
 	weapon.on_player = true
 	add_child(weapon)
-
 
 func _on_weapon_changing() -> void:
 	weapon.queue_free()

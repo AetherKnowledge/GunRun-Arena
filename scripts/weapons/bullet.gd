@@ -8,9 +8,18 @@ var knockback_force: Vector2 = Vector2(200,200)
 
 func _physics_process(delta: float) -> void:
 	global_position += Vector2(1,0).rotated(rotation) * speed * delta
-	if collider.is_colliding() and not collider.get_collider() is Player:
-		if collider.get_collider() is Player:
-			var enemy = collider.get_collider() as Player
+	if not MultiplayerManager.is_multiplayer:
+		if collider.is_colliding() and not collider.get_collider() is Player:
+			if collider.get_collider() is Player:
+				var enemy = collider.get_collider() as Player
+				enemy.take_damage(damage, get_recoil_force(enemy))
+			
+			queue_free()
+		return
+	
+	if collider.is_colliding() and collider.get_collider() is MultiplayerPlayer:
+		var enemy = collider.get_collider() as MultiplayerPlayer
+		if enemy.player_id == multiplayer.get_unique_id():
 			enemy.take_damage(damage, get_recoil_force(enemy))
 		
 		queue_free()
