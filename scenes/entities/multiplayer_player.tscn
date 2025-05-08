@@ -33,6 +33,9 @@ properties/6/replication_mode = 1
 properties/7/path = NodePath(".:do_attack")
 properties/7/spawn = true
 properties/7/replication_mode = 1
+properties/8/path = NodePath(".:hp")
+properties/8/spawn = true
+properties/8/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2ws2a"]
 properties/0/path = NodePath("InputSynchronizer:input_direction")
@@ -331,7 +334,6 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [connection signal="died" from="." to="." method="_on_death"]
-[connection signal="took_damage" from="." to="." method="_on_took_damage"]
 [connection signal="weapon_changed" from="." to="." method="_on_weapon_changed"]
 [connection signal="weapon_changing" from="." to="." method="_on_weapon_changing"]
 [connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]

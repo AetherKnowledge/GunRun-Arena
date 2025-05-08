@@ -6,6 +6,11 @@ var speed: float = 120
 var damage: int = 0
 var knockback_force: Vector2 = Vector2(200,200)
 
+func _ready() -> void:
+	visible = false
+	await get_tree().process_frame
+	visible = true
+
 func _physics_process(delta: float) -> void:
 	global_position += Vector2(1,0).rotated(rotation) * speed * delta
 	if not MultiplayerManager.is_multiplayer:

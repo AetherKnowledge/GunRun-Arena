@@ -150,12 +150,10 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 		knockback_force.x = knockback_force.x * 10
 		knockback_force.y = knockback_force.y * 10
 		velocity = knockback_force
+	hurt.play()
 	
 func kill():
 	hp = 0
-
-func _on_took_damage() -> void:
-	hurt.play()
 
 func _on_death() -> void:
 	alive = false
@@ -166,7 +164,7 @@ func _on_death() -> void:
 func _on_death_timer_timeout() -> void:
 	Engine.time_scale = 1
 	alive = true
-	#get_tree().reload_current_scene()
+	position = (get_tree().get_current_scene().get_node("SpawnPoint") as Marker2D).global_position
 
 func _on_jump_buffer_timer_timeout() -> void:
 	jump_buffer = false
