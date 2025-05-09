@@ -29,18 +29,20 @@ func _on_options_pressed() -> void:
 
 func _on_main_menu_pressed() -> void:
 	resume()
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
 
 
 func pause():
 	paused = true
 	state_changed.emit()
 	animation_player.play("blur")
+	#get_tree().paused = paused
 	show()
 
 func resume():
 	paused = false
 	animation_player.play_backwards("blur")
+	#get_tree().paused = paused
 	state_changed.emit()
 
 func restart():

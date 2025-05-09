@@ -1,5 +1,5 @@
-extends CharacterBody2D
-class_name Player
+extends Player
+class_name DefaultPlayer
 
 const default_weapon = preload("res://scenes/weapons/glock.tscn")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -8,23 +8,16 @@ const default_weapon = preload("res://scenes/weapons/glock.tscn")
 @onready var death_timer: Timer = $DeathTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 @onready var coyote_timer: Timer = $CoyoteTimer
-@onready var weapon: Weapon
-
-var jump_buffer = false
-var can_jump = false
-var looking_at: Vector2
-
-const WEAPON_POSITION := Vector2(3,-4)
-const WEAPON_SCALE := Vector2(0.313, 0.313)
-const MAX_MOVEMENT_SPEED = 150
-const MOVEMENT_SPEED = 40
-const JUMP_VELOCITY = -300.0
-var alive = true
-
-signal took_damage
-signal died
-signal weapon_changing
-signal weapon_changed
+@onready var weapon: Weapon:
+	set(value):
+		if weapon != null:
+			weapon.queue_free()
+			
+		weapon = value
+		weapon.scale = WEAPON_SCALE
+		weapon.position = WEAPON_POSITION
+		add_child(weapon)
+	
 
 var hp := 100:
 	set(value):
@@ -47,6 +40,25 @@ func _physics_process(delta: float) -> void:
 			animated_sprite.play("death")
 		return
 	
+	do_movement(delta)
+	do_animations(delta)
+	
+func do_animations(delta):
+	# Flip the sprite
+	if direction > 0:
+		animated_sprite.flip_h = false
+	elif direction < 0:
+		animated_sprite.flip_h = true
+		
+	# Play animations
+	if not is_on_floor():
+		animated_sprite.play("jump")
+	elif direction == 0:
+		animated_sprite.play("idle")
+	else:
+		animated_sprite.play("run")
+		
+func do_movement(delta):
 	looking_at = get_global_mouse_position()
 	
 	# Add the gravity.
@@ -69,24 +81,18 @@ func _physics_process(delta: float) -> void:
 		else:
 			jump_buffer = true
 			jump_buffer_timer.start()
+	
+	if Input.is_action_just_pressed("attack"):
+		holding_attack = true
+	if Input.is_action_just_released("attack"):
+		holding_attack = false
+		
+	if holding_attack:
+		attack()
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("move_left", "move_right")
-	
-	# Flip the sprite
-	if direction > 0:
-		animated_sprite.flip_h = false
-	elif direction < 0:
-		animated_sprite.flip_h = true
-		
-	# Play animations
-	if not is_on_floor():
-		animated_sprite.play("jump")
-	elif direction == 0:
-		animated_sprite.play("idle")
-	else:
-		animated_sprite.play("run")
+	direction = Input.get_axis("move_left", "move_right")
 			
 	# Apply movement		
 	if direction:
@@ -97,8 +103,10 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, half_speed)
 
 	move_and_slide()
-	
-	
+
+func attack():
+	if weapon:
+		weapon.attack()
 
 func jump():
 	can_jump = false
@@ -146,7 +154,6 @@ func _on_coyote_timer_timeout() -> void:
 func _on_weapon_changed() -> void:
 	weapon.scale = WEAPON_SCALE
 	weapon.position = WEAPON_POSITION
-	weapon.on_player = true
 	add_child(weapon)
 
 

@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://47noqqt74evc"]
 
-[ext_resource type="Script" uid="uid://ba65s15ybsaug" path="res://scripts/main_menu.gd" id="1_bqqt6"]
-[ext_resource type="Texture2D" uid="uid://ku0sabbsndmc" path="res://assets/images/gamebg.png" id="1_ekxnf"]
-[ext_resource type="FontFile" uid="uid://d1rodyu85fb2" path="res://assets/fonts/GrapeSoda.ttf" id="2_bqqt6"]
+[ext_resource type="Script" uid="uid://ba65s15ybsaug" path="res://scripts/ui/main_menu.gd" id="1_1g8jr"]
+[ext_resource type="Texture2D" uid="uid://ku0sabbsndmc" path="res://assets/images/gamebg.png" id="2_m1kxf"]
+[ext_resource type="FontFile" uid="uid://d1rodyu85fb2" path="res://assets/fonts/GrapeSoda.ttf" id="3_x2yvf"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wu84c"]
-texture = ExtResource("1_ekxnf")
+texture = ExtResource("2_m1kxf")
 modulate_color = Color(0.517184, 0.517184, 0.517184, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ekxnf"]
@@ -44,7 +44,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_bqqt6")
+script = ExtResource("1_1g8jr")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -126,7 +126,7 @@ grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 5
 theme_override_constants/shadow_offset_y = 10
-theme_override_fonts/font = ExtResource("2_bqqt6")
+theme_override_fonts/font = ExtResource("3_x2yvf")
 theme_override_font_sizes/font_size = 128
 text = "SIA Game"
 horizontal_alignment = 1

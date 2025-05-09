@@ -7,11 +7,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
 		
 		var player: Player = body as Player
-		var gun: Weapon = gun_preload.instantiate()
-		gun.player = player
+		var gun: Weapon = gun_preload.instantiate().init(player)
 		# must come first to queue free the old weapon
-		player.weapon_changing.emit()
 		player.weapon = gun
-		player.weapon_changed.emit()
 		
 		animation_player.play("pickup")

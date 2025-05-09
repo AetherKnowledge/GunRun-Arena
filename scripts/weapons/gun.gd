@@ -18,13 +18,10 @@ const bullet_scene = preload("res://scenes/weapons/bullet.tscn")
 @onready var shoot_pos: Marker2D = $ShootPos
 
 var can_fire = true
-var player: Player
 
 func _process(delta: float) -> void:
-	if not on_player:
+	if not player:
 		return
-	
-	super._process(delta)
 	
 	# Rotate towards mouse
 	var target_pos = player.looking_at
@@ -60,14 +57,7 @@ func start_cooldown() -> void:
 	can_fire = true
 	
 func shoot():
-	var new_bullet: Bullet = bullet_scene.instantiate()
-	new_bullet.global_position = shoot_pos.global_position
-	new_bullet.damage = damage
-	# Calculate direction vector from shoot_pos to mouse position
-	var dir = (player.looking_at - shoot_pos.global_position).normalized()
-	# Set bullet rotation to face that direction
-	new_bullet.global_rotation = dir.angle()
-	
+	var new_bullet: Bullet = bullet_scene.instantiate().init(shoot_pos,damage,player)
 	get_tree().root.add_child(new_bullet)
 	
 	stop()
