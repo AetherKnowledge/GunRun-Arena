@@ -68,19 +68,43 @@ func _physics_process(delta: float) -> void:
 		attack()
 		
 func process_animations(delta):
-	# Flip the sprite
+	if not alive:
+		return  # Dead, no animations should override death
+
+	# Death animation has priority
+	if animated_sprite.animation == "death":
+		return
+
+	# Hurt animation priority
+	if animated_sprite.animation == "hurt" and animated_sprite.is_playing():
+		return
+
+	# Flip the sprite based on direction
 	if direction > 0:
 		animated_sprite.flip_h = false
 	elif direction < 0:
 		animated_sprite.flip_h = true
-		
-	# Play animations
+
+	# Jumping and Falling logic
 	if not _is_on_floor:
-		animated_sprite.play("jump")
-	elif direction == 0:
-		animated_sprite.play("idle")
+		if velocity.y < 0:
+			if animated_sprite.animation != "jump":
+				animated_sprite.play("jump")
+		else:
+			if animated_sprite.animation != "fall":
+				animated_sprite.play("fall")
+		return  # Jump/fall overrides run/idle
+	
+	# Running animation
+	if abs(velocity.x) > 10:
+		if animated_sprite.animation != "run":
+			animated_sprite.play("run")
 	else:
-		animated_sprite.play("run")
+		# Idle when not moving
+		if animated_sprite.animation != "idle":
+			animated_sprite.play("idle")
+
+		
 		
 func process_movement(delta):
 	do_attack = input_synchronizer.attacking
@@ -130,6 +154,7 @@ func jump():
 	if velocity.y > JUMP_VELOCITY:
 		velocity.y = 0
 	velocity.y += JUMP_VELOCITY
+	animated_sprite.play("jump")
 	jump_sfx.stop()
 	jump_sfx.play(0.0)
 	
@@ -143,15 +168,17 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 		knockback_force.x = knockback_force.x * 10
 		knockback_force.y = knockback_force.y * 10
 		velocity = knockback_force
+	animated_sprite.play("hurt")
 	hurt.play()
 	
 func kill():
 	if not multiplayer.is_server():
 		return # Server authoritative
 	hp = 0
-	sync_hp.rpc(hp)
 
 func process_death() -> void:
+	hurt.play()
+	
 	if not multiplayer.is_server():
 		return # Only server should apply death
 	
@@ -159,7 +186,7 @@ func process_death() -> void:
 	
 	# Start 3 second death timer
 	await get_tree().create_timer(3.0).timeout
-	
+	animated_sprite.play("idle")
 	# Respawn logic
 	hp = 100
 	alive = true
@@ -172,7 +199,3 @@ func _on_jump_buffer_timer_timeout() -> void:
 
 func _on_coyote_timer_timeout() -> void:
 	can_jump = false
-
-@rpc("call_remote")
-func sync_hp(new_hp: int):
-	hp = new_hp
