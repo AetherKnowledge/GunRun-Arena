@@ -38,5 +38,17 @@ func host_pressed() -> void:
 
 
 func join_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
+	start_multiplayer_game()
 	MultiplayerManager.join()
+
+func start_singleplayer_game():
+	if get_tree().root.get_node("Game"):
+		get_tree().root.get_node("Game").queue_free()
+	
+	get_tree().change_scene_to_file("res://scenes/game.tscn")
+
+func start_multiplayer_game():
+	if get_tree().root.get_node("Multiplayer"):
+		get_tree().root.get_node("Multiplayer").queue_free()
+	
+	get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")

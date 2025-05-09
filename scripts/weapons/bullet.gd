@@ -5,6 +5,18 @@ class_name Bullet
 var speed: float = 120
 var damage: int = 0
 var knockback_force: Vector2 = Vector2(200,200)
+var player: Player
+
+func init(shoot_pos: Marker2D, damage: int, player: Player):
+	self.player = player
+	self.damage = damage
+	
+	global_position = shoot_pos.global_position
+	# Calculate direction vector from shoot_pos to mouse position
+	var dir = (player.looking_at - shoot_pos.global_position).normalized()
+	# Set bullet rotation to face that direction
+	global_rotation = dir.angle()
+	return self
 
 func _ready() -> void:
 	visible = false
@@ -13,20 +25,24 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	global_position += Vector2(1,0).rotated(rotation) * speed * delta
-	if not MultiplayerManager.is_multiplayer:
-		if collider.is_colliding() and not collider.get_collider() is Player:
-			if collider.get_collider() is Player:
-				var enemy = collider.get_collider() as Player
-				enemy.take_damage(damage, get_recoil_force(enemy))
-			
-			queue_free()
+	if not collider.is_colliding():
 		return
 	
-	if collider.is_colliding() and collider.get_collider() is MultiplayerPlayer:
-		var enemy = collider.get_collider() as MultiplayerPlayer
-		if enemy.player_id == multiplayer.get_unique_id():
-			enemy.take_damage(damage, get_recoil_force(enemy))
-		
+	var target = collider.get_collider()
+	if not target is Player:
+		queue_free()
+		return
+	
+	if not MultiplayerManager.is_multiplayer:
+		var hit_player = target as Player
+		hit_player.take_damage(damage, get_recoil_force(hit_player))
+		queue_free()
+		return
+	
+	# Multiplayer case
+	var hit_player = target as MultiplayerPlayer
+	if hit_player.player_id != player.player_id:
+		hit_player.take_damage(damage, get_recoil_force(hit_player))
 		queue_free()
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -5,30 +5,21 @@ const default_weapon = preload("res://scenes/weapons/glock.tscn")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hurt: AudioStreamPlayer2D = $Hurt
 @onready var jump_sfx: AudioStreamPlayer2D = $Jump
-@onready var death_timer: Timer = $DeathTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 @onready var coyote_timer: Timer = $CoyoteTimer
-@onready var weapon: Weapon
+@onready var weapon: Weapon:
+	set(value):
+		if weapon != null:
+			weapon.queue_free()
+			
+		weapon = value
+		weapon.scale = WEAPON_SCALE
+		weapon.position = WEAPON_POSITION
+		add_child(weapon)
 
-var can_jump = false
 var do_jump = false
 var do_attack = false
-var looking_at: Vector2
 var _is_on_floor = true
-var jump_buffer = false
-var direction: int = 1
-
-const WEAPON_POSITION := Vector2(3,-4)
-const WEAPON_SCALE := Vector2(0.313, 0.313)
-const MAX_MOVEMENT_SPEED = 150
-const MOVEMENT_SPEED = 40
-const JUMP_VELOCITY = -300.0
-var alive = true
-
-signal took_damage
-signal died
-signal weapon_changing
-signal weapon_changed
 
 @onready var input_synchronizer: InputSynchronizer = %InputSynchronizer
 
@@ -39,17 +30,22 @@ var player_id: int = 1:
 
 @export var hp := 100:
 	set(value):
+		var old_hp = hp
 		hp = clamp(value, 0, 100)
-		if hp == 100:
-			return
-		took_damage.emit()
+		$HPBar.value = hp
+		
 		if hp == 0:
-			died.emit()
+			if not animated_sprite.animation == "death":
+				animated_sprite.play("death")
+		
+		if hp < old_hp:
+			took_damage.emit()
+			
+		if hp == 0:
+			process_death()
 
 func _ready() -> void:
-	weapon = default_weapon.instantiate()
-	weapon.player = self
-	_on_weapon_changed()
+	weapon = default_weapon.instantiate().init(self)
 	
 	if multiplayer.get_unique_id() == player_id:
 		$Camera2D.make_current()
@@ -59,9 +55,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	# checks if alive
+	if not alive:
+		return
 	if multiplayer.is_server():
-		if not alive:
-			return
 		_is_on_floor = is_on_floor()
 		process_movement(delta)
 		
@@ -72,11 +68,6 @@ func _physics_process(delta: float) -> void:
 		attack()
 		
 func process_animations(delta):
-	
-	if not alive:
-		if not animated_sprite.animation == "death":
-			animated_sprite.play("death")
-	
 	# Flip the sprite
 	if direction > 0:
 		animated_sprite.flip_h = false
@@ -92,6 +83,7 @@ func process_animations(delta):
 		animated_sprite.play("run")
 		
 func process_movement(delta):
+	do_attack = input_synchronizer.attacking
 	looking_at = input_synchronizer.looking_at
 	# Add the gravity.
 	if not is_on_floor():
@@ -113,7 +105,7 @@ func process_movement(delta):
 		else:
 			jump_buffer = true
 			jump_buffer_timer.start()	
-			
+			do_jump = false
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -142,6 +134,7 @@ func jump():
 	jump_sfx.play(0.0)
 	
 func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
+	
 	hp -= damage
 	# Apply knockback if force is provided
 	if knockback_force != Vector2.ZERO:
@@ -153,18 +146,26 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 	hurt.play()
 	
 func kill():
+	if not multiplayer.is_server():
+		return # Server authoritative
 	hp = 0
+	sync_hp.rpc(hp)
 
-func _on_death() -> void:
+func process_death() -> void:
+	if not multiplayer.is_server():
+		return # Only server should apply death
+	
 	alive = false
-	if not hurt.playing and not alive:
-		Engine.time_scale = 0.5
-	death_timer.start()
-
-func _on_death_timer_timeout() -> void:
-	Engine.time_scale = 1
+	
+	# Start 3 second death timer
+	await get_tree().create_timer(3.0).timeout
+	
+	# Respawn logic
+	hp = 100
 	alive = true
+	weapon = default_weapon.instantiate().init(self)
 	position = (get_tree().get_current_scene().get_node("SpawnPoint") as Marker2D).global_position
+
 
 func _on_jump_buffer_timer_timeout() -> void:
 	jump_buffer = false
@@ -172,11 +173,6 @@ func _on_jump_buffer_timer_timeout() -> void:
 func _on_coyote_timer_timeout() -> void:
 	can_jump = false
 
-func _on_weapon_changed() -> void:
-	weapon.scale = WEAPON_SCALE
-	weapon.position = WEAPON_POSITION
-	weapon.on_player = true
-	add_child(weapon)
-
-func _on_weapon_changing() -> void:
-	weapon.queue_free()
+@rpc("call_remote")
+func sync_hp(new_hp: int):
+	hp = new_hp

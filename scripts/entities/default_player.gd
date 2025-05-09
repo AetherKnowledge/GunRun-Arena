@@ -8,25 +8,16 @@ const default_weapon = preload("res://scenes/weapons/glock.tscn")
 @onready var death_timer: Timer = $DeathTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 @onready var coyote_timer: Timer = $CoyoteTimer
-@onready var weapon: Weapon
-
-var jump_buffer = false
-var can_jump = false
-var looking_at: Vector2
-var direction: int = 1
-
-const WEAPON_POSITION := Vector2(3,-4)
-const WEAPON_SCALE := Vector2(0.313, 0.313)
-const MAX_MOVEMENT_SPEED = 150
-const MOVEMENT_SPEED = 40
-const JUMP_VELOCITY = -300.0
-var alive = true
-var holding_attack: bool = false
-
-signal took_damage
-signal died
-signal weapon_changing
-signal weapon_changed
+@onready var weapon: Weapon:
+	set(value):
+		if weapon != null:
+			weapon.queue_free()
+			
+		weapon = value
+		weapon.scale = WEAPON_SCALE
+		weapon.position = WEAPON_POSITION
+		add_child(weapon)
+	
 
 var hp := 100:
 	set(value):
@@ -163,7 +154,6 @@ func _on_coyote_timer_timeout() -> void:
 func _on_weapon_changed() -> void:
 	weapon.scale = WEAPON_SCALE
 	weapon.position = WEAPON_POSITION
-	weapon.on_player = true
 	add_child(weapon)
 
 

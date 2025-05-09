@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://csdaf6s2dyu5o"]
+[gd_scene load_steps=43 format=3 uid="uid://csdaf6s2dyu5o"]
 
 [ext_resource type="Script" uid="uid://cpjxwhuswn5if" path="res://scripts/entities/multiplayer_player.gd" id="1_gsel8"]
 [ext_resource type="Script" uid="uid://ci2ysifd4oo60" path="res://scripts/multiplayer/input_synchronizer.gd" id="2_gm7j5"]
@@ -36,6 +36,9 @@ properties/7/replication_mode = 1
 properties/8/path = NodePath(".:hp")
 properties/8/spawn = true
 properties/8/replication_mode = 1
+properties/9/path = NodePath(".:alive")
+properties/9/spawn = true
+properties/9/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2ws2a"]
 properties/0/path = NodePath("InputSynchronizer:input_direction")
@@ -44,6 +47,9 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath("InputSynchronizer:looking_at")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("InputSynchronizer:attacking")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
 atlas = ExtResource("2_jlq18")
@@ -279,8 +285,29 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
 radius = 5.59017
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ws2a"]
+bg_color = Color(0.8, 0.8, 0.8, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gm7j5"]
+bg_color = Color(0.215686, 0.694118, 0.376471, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+anti_aliasing = false
+
 [node name="MultiplayerPlayer" type="CharacterBody2D"]
 z_index = 5
+collision_layer = 3
 script = ExtResource("1_gsel8")
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
@@ -309,15 +336,11 @@ bus = &"SFX"
 stream = ExtResource("4_m4ka2")
 bus = &"SFX"
 
-[node name="DeathTimer" type="Timer" parent="."]
-wait_time = 0.6
-one_shot = true
-
 [node name="JumpBufferTimer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.2
 
 [node name="CoyoteTimer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.2
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(4, 4)
@@ -333,9 +356,17 @@ unique_name_in_owner = true
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("6_gm7j5")]
 unique_name_in_owner = true
 
-[connection signal="died" from="." to="." method="_on_death"]
-[connection signal="weapon_changed" from="." to="." method="_on_weapon_changed"]
-[connection signal="weapon_changing" from="." to="." method="_on_weapon_changing"]
-[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]
+[node name="HPBar" type="ProgressBar" parent="."]
+texture_filter = 1
+offset_left = -9.0
+offset_top = -25.0
+offset_right = 9.0
+offset_bottom = -21.0
+theme_override_styles/background = SubResource("StyleBoxFlat_2ws2a")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gm7j5")
+step = 1.0
+value = 100.0
+show_percentage = false
+
 [connection signal="timeout" from="JumpBufferTimer" to="." method="_on_jump_buffer_timer_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
