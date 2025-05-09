@@ -21,5 +21,6 @@ Special thanks to the talented creators whose assets brought this game to life:
 - **Brackeys' Platformer Bundle** by *Brackeys*
 - **GUNS_V1.00** by *Arcade Island*
 - **Stringstar Fields** by *Trixie*
+- **Grape Soda** by *jeti*
 
 Please support these creators for their incredible work!
