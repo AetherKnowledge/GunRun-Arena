@@ -1,201 +1,293 @@
 extends Player
 class_name MultiplayerPlayer
 
-const default_weapon = preload("res://scenes/weapons/glock.tscn")
+const DEFAULT_WEAPON_SCENE = preload("res://scenes/weapons/glock.tscn")
+
+# Node references
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var hurt: AudioStreamPlayer2D = $Hurt
+@onready var hurt_sfx: AudioStreamPlayer2D = $Hurt
 @onready var jump_sfx: AudioStreamPlayer2D = $Jump
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
+@onready var dash_cooldown: Timer = $DashCooldown
 @onready var coyote_timer: Timer = $CoyoteTimer
-@onready var weapon: Weapon:
-	set(value):
-		if weapon != null:
-			weapon.queue_free()
-			
-		weapon = value
-		weapon.scale = WEAPON_SCALE
-		weapon.position = WEAPON_POSITION
-		add_child(weapon)
-
-var do_jump = false
-var do_attack = false
-var _is_on_floor = true
-
+@onready var hud: HUD = %HUD
 @onready var input_synchronizer: InputSynchronizer = %InputSynchronizer
+@onready var camera: Camera2D = $Camera2D
 
+# Player states
+var do_dash: bool = false
+var do_jump: bool = false
+var do_attack: bool = false
+var _is_on_floor: bool = true
+var can_coyote_jump: bool = true
+var holding_jump: bool = false
+
+# Jumping vars
+@export var max_jumps: int = 2
+var air_jumps_remaining: int = 1
+var jumps_remaining: int = 1
+var jumps_count: int = 0
+var ended_jump_early = false
+
+# Dashing vars
+@export var max_dash: int = 1
+var can_dash: bool = true
+var dash_remaining: int = 1
+
+# Multiplayer
 var player_id: int = 1:
 	set(id):
 		player_id = id
 		%InputSynchronizer.set_multiplayer_authority(id)
 
-@export var hp := 100:
+# Weapon logic
+var weapon: Weapon:
 	set(value):
-		var old_hp = hp
+		if weapon:
+			weapon.queue_free()
+		weapon = value
+		weapon.scale = WEAPON_SCALE
+		weapon.position = WEAPON_POSITION
+		add_child(weapon)
+
+# Health
+@export var hp: int = 100:
+	set(value):
+		if hp == value:
+			return
 		hp = clamp(value, 0, 100)
 		$HPBar.value = hp
-		
 		if hp == 0:
-			if not animated_sprite.animation == "death":
-				animated_sprite.play("death")
-		
-		if hp < old_hp:
-			took_damage.emit()
-			
-		if hp == 0:
-			process_death()
+			_process_death()
 
 func _ready() -> void:
-	weapon = default_weapon.instantiate().init(self)
-	
-	if multiplayer.get_unique_id() == player_id:
-		$Camera2D.make_current()
-	else:
-		$Camera2D.enabled = false
-		$CanvasLayer.visible = false
+	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
+	_setup_camera()
+
+func _setup_camera() -> void:
+	var is_local_player = multiplayer.get_unique_id() == player_id
+	camera.enabled = is_local_player
+	camera.visible = is_local_player
+	if is_local_player:
+		camera.make_current()
+
+func _process(delta: float) -> void:
+	if not alive:
+		return
+	update_hud()
 
 func _physics_process(delta: float) -> void:
-	# checks if alive
 	if not alive:
 		return
-	if multiplayer.is_server():
+
+	if is_multiplayer_authority() or MultiplayerManager.host_mode:
 		_is_on_floor = is_on_floor()
-		process_movement(delta)
-		
-	if not multiplayer.is_server() || MultiplayerManager.host_mode:
-		process_animations(delta)
-		
+		_process_movement(delta)
+		_process_animations(delta)
+
 	if do_attack:
-		attack()
-		
-func process_animations(delta):
-	if not alive:
-		return  # Dead, no animations should override death
+		_attack()
 
-	# Death animation has priority
-	if animated_sprite.animation == "death":
-		return
-
-	# Hurt animation priority
-	if animated_sprite.animation == "hurt" and animated_sprite.is_playing():
-		return
-
-	# Flip the sprite based on direction
-	if direction > 0:
-		animated_sprite.flip_h = false
-	elif direction < 0:
-		animated_sprite.flip_h = true
-
-	# Jumping and Falling logic
-	if not _is_on_floor:
-		if velocity.y < 0:
-			if animated_sprite.animation != "jump":
-				animated_sprite.play("jump")
-		else:
-			if animated_sprite.animation != "fall":
-				animated_sprite.play("fall")
-		return  # Jump/fall overrides run/idle
-	
-	# Running animation
-	if abs(velocity.x) > 10:
-		if animated_sprite.animation != "run":
-			animated_sprite.play("run")
-	else:
-		# Idle when not moving
-		if animated_sprite.animation != "idle":
-			animated_sprite.play("idle")
-
-		
-		
-func process_movement(delta):
-	do_attack = input_synchronizer.attacking
+func _process_movement(delta: float) -> void:
+	holding_jump = input_synchronizer.input_jump
+	do_attack = input_synchronizer.input_attack
 	looking_at = input_synchronizer.looking_at
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-	
-	# Handle jump.
-	if not is_on_floor():
-		coyote_timer.start()
-	else:
-		can_jump = true
-		if jump_buffer:
-			jump()
-			jump_buffer = false
-		
-	if do_jump:
-		if can_jump:
-			jump()
-			do_jump = false
-		else:
-			jump_buffer = true
-			jump_buffer_timer.start()	
-			do_jump = false
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	direction = input_synchronizer.input_direction
-			
-	# Apply movement		
-	if direction:
-		var horizontal = clamp(direction * MAX_MOVEMENT_SPEED, velocity.x, direction * MAX_MOVEMENT_SPEED)
-		velocity.x = move_toward(velocity.x, horizontal, MOVEMENT_SPEED * 10 * delta)
-	else:
-		var half_speed = abs(velocity.x/4)
-		velocity.x = move_toward(velocity.x, 0, half_speed)
+	
+	# Gravity
+	if not is_on_floor():
+		var gravity_force = get_gravity().y
+		
+		# Jump Cuts
+		if velocity.y < 0 and not holding_jump:
+			velocity.y *= 0.5
+		
+		# Apex Jump Modifier
+		elif abs(velocity.y) < APEX_VELOCITY_THRESHOLD:
+			gravity_force *= APEX_GRAVITY_MULTIPLIER
+		
+		velocity.y += gravity_force * delta
+		velocity.y = min(velocity.y, MAX_FALL_SPEED)
+	
+	# Jump handling
+	_handle_jump_logic(delta)
+	
+	# Dash handling
+	_handle_dash_logic(delta)
+	
+	# Movement handling
+	_handle_movement(delta)
 
 	move_and_slide()
 
-func attack():
+func _handle_movement(delta: float) -> void:
+	var target_speed = direction * MAX_MOVEMENT_SPEED
+
+	# Snappy ground acceleration
+	var accel = 0.0
+	if is_on_floor():
+		accel = 800.0
+	else:
+		accel = 400.0  # slower air accel
+	
+	# Apex Bonus: more air control near jump apex
+	if not is_on_floor() and abs(velocity.y) < APEX_VELOCITY_THRESHOLD:
+		accel *= 1.5
+
+	# Apply acceleration toward target speed
+	velocity.x = move_toward(velocity.x, target_speed, accel * delta)
+
+	# Apply friction when no input
+	if direction == 0:
+		var friction = 500.0 if is_on_floor() else 200.0
+		velocity.x = move_toward(velocity.x, 0, friction * delta)
+
+func _handle_dash_logic(delta):
+	if can_dash and do_dash:
+		dash(delta)
+	else:
+		do_dash = false
+	
+func dash(delta):
+	var dash_speed = max(DASH_SPEED, abs(velocity.x))
+	dash_speed = min(dash_speed, MAX_DASH_SPEED)
+	dash_speed = dash_speed * -1 if animated_sprite.flip_h else dash_speed
+	
+	velocity.x = dash_speed
+	
+	if velocity.y < 0:
+		velocity.y = 0
+		
+	do_dash = false
+	
+	can_dash = false
+	dash_cooldown.start()
+	
+
+func _handle_jump_logic(delta) -> void:
+	if is_on_floor():
+		_reset_jump_states(delta)
+	elif coyote_timer.is_stopped():
+		coyote_timer.start()
+
+	jumps_remaining = max_jumps if is_on_floor() or can_coyote_jump else air_jumps_remaining
+	var can_jump = can_coyote_jump or air_jumps_remaining > 0
+
+	if do_jump:
+		if can_jump:
+			_jump(delta)
+		else:
+			_buffer_jump()
+
+func _reset_jump_states(delta) -> void:
+	ended_jump_early = false
+	jumps_count = 0
+	can_coyote_jump = true
+	air_jumps_remaining = max_jumps - 1
+	if jump_buffer:
+		_jump(delta)
+		jump_buffer = false
+
+func _jump(delta) -> void:
+	if is_on_floor() or can_coyote_jump:
+		can_coyote_jump = false
+	else:
+		air_jumps_remaining -= 1
+	
+	do_jump = false
+	jumps_count += 1
+	velocity.y -= max(velocity.y, 0) + JUMP_VELOCITY
+	animated_sprite.play("jump")
+	
+	jump_sfx.play()
+
+func _buffer_jump() -> void:
+	jump_buffer = true
+	jump_buffer_timer.start()
+
+func _process_animations(delta: float) -> void:
+	if not alive:
+		return
+
+	# Flip sprite
+	animated_sprite.flip_h = direction < 0 if direction else animated_sprite.flip_h
+	#if direction > 0:
+		#animated_sprite.flip_h = false
+	#elif direction < 0:
+		#animated_sprite.flip_h = true
+
+	# Death animation priority
+	if animated_sprite.animation in ["death", "hurt"] and animated_sprite.is_playing():
+		return
+
+	# Jumping/Falling
+	if not _is_on_floor:
+		animated_sprite.play("jump")
+		return
+
+	# Running/Idle
+	if abs(velocity.x) > 10:
+		animated_sprite.play("run")
+	else:
+		animated_sprite.play("idle")
+
+func _attack() -> void:
 	if weapon:
 		weapon.attack()
 
-func jump():
-	can_jump = false
-	if velocity.y > JUMP_VELOCITY:
-		velocity.y = 0
-	velocity.y += JUMP_VELOCITY
-	animated_sprite.play("jump")
-	jump_sfx.stop()
-	jump_sfx.play(0.0)
-	
 func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
-	
+	if not alive:
+		return
+
 	hp -= damage
-	# Apply knockback if force is provided
+
+	# Knockback
 	if knockback_force != Vector2.ZERO:
-		if velocity.y > knockback_force.y:
-			velocity.y = 0
-		knockback_force.x = knockback_force.x * 10
-		knockback_force.y = knockback_force.y * 10
-		velocity = knockback_force
+		velocity = knockback_force * 10
+		velocity.y = min(velocity.y, knockback_force.y * 10)
+
 	animated_sprite.play("hurt")
-	hurt.play()
-	
-func kill():
+	hurt_sfx.play()
+
+func kill() -> void:
 	if not multiplayer.is_server():
-		return # Server authoritative
+		return
 	hp = 0
 
-func process_death() -> void:
-	hurt.play()
-	
-	if not multiplayer.is_server():
-		return # Only server should apply death
-	
+func _process_death() -> void:
+	if not alive:
+		return
+
 	alive = false
-	
-	# Start 3 second death timer
+	animated_sprite.play("death")
+	hurt_sfx.play()
+
+	# Respawn
 	await get_tree().create_timer(3.0).timeout
+	_respawn()
+
+func _respawn() -> void:
 	animated_sprite.play("idle")
-	# Respawn logic
 	hp = 100
 	alive = true
-	weapon = default_weapon.instantiate().init(self)
-	position = (get_tree().get_current_scene().get_node("SpawnPoint") as Marker2D).global_position
-
+	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
+	position = get_tree().get_current_scene().get_node("SpawnPoint").global_position
 
 func _on_jump_buffer_timer_timeout() -> void:
 	jump_buffer = false
 
 func _on_coyote_timer_timeout() -> void:
-	can_jump = false
+	can_coyote_jump = false
+
+func update_hud() -> void:
+	hud.hp = hp
+	hud.x_vel = velocity.x
+	hud.y_vel = velocity.y
+	hud.jump_remaining = jumps_remaining
+
+	if weapon is Gun:
+		hud.ammo = weapon.ammo
+
+
+func _on_dash_cooldown_timeout() -> void:
+	can_dash = true

@@ -1,9 +1,11 @@
 extends MultiplayerSynchronizer
 class_name InputSynchronizer
 
+var input_attack: bool = false
 var input_direction: int = 1
+var input_jump: bool = false
 @onready var player: MultiplayerPlayer = $".."
-@export var attacking: bool = false
+
 
 var looking_at: Vector2 = Vector2(0,0)
 
@@ -28,14 +30,26 @@ func _process(delta: float) -> void:
 		
 	if Input.is_action_just_pressed("jump"):
 		jump.rpc()
+		input_jump = true
+		if player.can_jump:
+			player.jump_sfx.play()
+	if Input.is_action_just_released("jump"):
+		input_jump = false 
+	
+	if Input.is_action_just_pressed("dash"):
+		dash.rpc()
 			
 	if Input.is_action_just_pressed("attack"):
-		attacking = true
+		input_attack = true
 	if Input.is_action_just_released("attack"):
-		attacking = false 
+		input_attack = false 
 
 @rpc("call_local")
 func jump():
 	if multiplayer.is_server():
 		player.do_jump = true
 		
+@rpc("call_local")
+func dash():
+	if multiplayer.is_server():
+		player.do_dash = true

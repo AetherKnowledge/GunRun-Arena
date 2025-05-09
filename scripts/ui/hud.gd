@@ -1,11 +1,21 @@
 extends Control
-class_name UI
+class_name HUD
 
 @onready var hp_label: Label = %HPLabel
 @onready var x_vel_label: Label = %XVelLabel
 @onready var y_vel_label: Label = %YVelLabel
 @onready var ammo_label: Label = %AmmoLabel
-@onready var player = $"../.."
+@onready var ping_label: Label = %PingLabel
+@onready var jumps_label: Label = %JumpsLabel
+
+var hp: int = 0
+var x_vel: int = 0
+var y_vel: int = 0
+var ammo: int = 0
+var jump_remaining: int = 0
+
+var last_ping_time: int = 0
+var ping_ms: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -13,14 +23,27 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if not player is Player:
-		return
-	
-	hp_label.text = "HP: " + str(player.hp)
-	x_vel_label.text = "X-Vel: " + str(int(player.velocity.x))
-	y_vel_label.text = "Y-Vel: " + str(int(player.velocity.y))
-	
-	if player.weapon is Gun:
-		var gun = player.weapon as Gun
-		ammo_label.text = "Ammo: " + str(gun.ammo)
+	hp_label.text = "HP: " + str(hp)
+	x_vel_label.text = "X-Vel: " + str(x_vel)
+	y_vel_label.text = "Y-Vel: " + str(y_vel)
+	ammo_label.text = "Ammo: " + str(ammo)
+	jumps_label.text = "Jumps: " + str(jump_remaining)
 		
+func _on_ping_timer_timeout() -> void:
+	if not MultiplayerManager.is_multiplayer:
+		return
+	last_ping_time = Time.get_ticks_msec()
+	if not multiplayer.is_server():
+		rpc_id(1, "ping_request", last_ping_time)  # assuming server has peer ID 1
+	ping_label.text = "Ping: %d ms" % ping_ms
+
+@rpc("any_peer")
+func ping_request(client_time: int):
+	var sender_id = multiplayer.get_remote_sender_id()
+	rpc_id(sender_id, "ping_response", client_time)
+
+@rpc("authority")
+func ping_response(client_time: int):
+	var now = Time.get_ticks_msec()
+	ping_ms = now - client_time
+	$PingLabel.text = "Ping: %d ms" % ping_ms

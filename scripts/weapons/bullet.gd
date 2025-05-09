@@ -32,15 +32,14 @@ func _physics_process(delta: float) -> void:
 	if not target is Player:
 		queue_free()
 		return
-	
+		
+	var hit_player = target as Player
 	if not MultiplayerManager.is_multiplayer:
-		var hit_player = target as Player
 		hit_player.take_damage(damage, get_recoil_force(hit_player))
 		queue_free()
 		return
 	
 	# Multiplayer case
-	var hit_player = target as MultiplayerPlayer
 	if hit_player.player_id != player.player_id:
 		hit_player.take_damage(damage, get_recoil_force(hit_player))
 		queue_free()
