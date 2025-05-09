@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cpe8ntjxh2l16"]
 
-[ext_resource type="Texture2D" uid="uid://d23r6hhrk42fa" path="res://assets/sprites/platforms.png" id="1_ba0x2"]
+[ext_resource type="Texture2D" uid="uid://d23r6hhrk42fa" path="res://assets/world/platforms.png" id="1_ba0x2"]
 [ext_resource type="Script" uid="uid://c631jvc6ivbh6" path="res://scripts/platform.gd" id="1_nlgqw"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_507ja"]

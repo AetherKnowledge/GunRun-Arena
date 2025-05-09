@@ -62,6 +62,7 @@ var weapon: Weapon:
 
 func _ready() -> void:
 	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
+	_respawn()
 	_setup_camera()
 
 func _setup_camera() -> void:
@@ -271,7 +272,7 @@ func _respawn() -> void:
 	hp = 100
 	alive = true
 	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
-	position = get_tree().get_current_scene().get_node("SpawnPoint").global_position
+	global_position = get_tree().get_current_scene().get_node("SpawnPoint").global_position
 
 func _on_jump_buffer_timer_timeout() -> void:
 	jump_buffer = false

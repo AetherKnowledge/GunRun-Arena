@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d23r6hhrk42fa"
-path="res://.godot/imported/platforms.png-3869606db457611ed4193d705dc364e4.ctex"
+uid="uid://dvslg3u1j7w2l"
+path="res://.godot/imported/Chests_Snow.png-332cd3f5374569b1f48be41e3c449b95.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/platforms.png"
-dest_files=["res://.godot/imported/platforms.png-3869606db457611ed4193d705dc364e4.ctex"]
+source_file="res://assets/entities/Chests_Snow.png"
+dest_files=["res://.godot/imported/Chests_Snow.png-332cd3f5374569b1f48be41e3c449b95.ctex"]
 
 [params]
 
