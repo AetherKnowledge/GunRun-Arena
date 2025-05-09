@@ -11,34 +11,52 @@
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gm7j5"]
 properties/0/path = NodePath(".:player_id")
 properties/0/spawn = true
-properties/0/replication_mode = 1
+properties/0/replication_mode = 0
 properties/1/path = NodePath(".:position")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 properties/2/path = NodePath(".:can_jump")
 properties/2/spawn = true
-properties/2/replication_mode = 1
+properties/2/replication_mode = 2
 properties/3/path = NodePath(".:_is_on_floor")
 properties/3/spawn = true
-properties/3/replication_mode = 1
+properties/3/replication_mode = 2
 properties/4/path = NodePath(".:do_jump")
 properties/4/spawn = true
-properties/4/replication_mode = 1
+properties/4/replication_mode = 2
 properties/5/path = NodePath(".:direction")
 properties/5/spawn = true
-properties/5/replication_mode = 1
+properties/5/replication_mode = 2
 properties/6/path = NodePath(".:looking_at")
 properties/6/spawn = true
-properties/6/replication_mode = 1
+properties/6/replication_mode = 2
 properties/7/path = NodePath(".:do_attack")
 properties/7/spawn = true
-properties/7/replication_mode = 1
+properties/7/replication_mode = 2
 properties/8/path = NodePath(".:hp")
 properties/8/spawn = true
-properties/8/replication_mode = 1
+properties/8/replication_mode = 2
 properties/9/path = NodePath(".:alive")
 properties/9/spawn = true
-properties/9/replication_mode = 1
+properties/9/replication_mode = 2
+properties/10/path = NodePath(".:velocity")
+properties/10/spawn = true
+properties/10/replication_mode = 1
+properties/11/path = NodePath(".:weapon")
+properties/11/spawn = true
+properties/11/replication_mode = 2
+properties/12/path = NodePath(".:max_jumps")
+properties/12/spawn = true
+properties/12/replication_mode = 2
+properties/13/path = NodePath(".:jumps_remaining")
+properties/13/spawn = true
+properties/13/replication_mode = 2
+properties/14/path = NodePath(".:jumps_count")
+properties/14/spawn = true
+properties/14/replication_mode = 2
+properties/15/path = NodePath(".:do_dash")
+properties/15/spawn = true
+properties/15/replication_mode = 2
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2ws2a"]
 properties/0/path = NodePath("InputSynchronizer:input_direction")
@@ -46,10 +64,13 @@ properties/0/spawn = true
 properties/0/replication_mode = 1
 properties/1/path = NodePath("InputSynchronizer:looking_at")
 properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("InputSynchronizer:attacking")
+properties/1/replication_mode = 2
+properties/2/path = NodePath("InputSynchronizer:input_attack")
 properties/2/spawn = true
-properties/2/replication_mode = 1
+properties/2/replication_mode = 2
+properties/3/path = NodePath("InputSynchronizer:input_jump")
+properties/3/spawn = true
+properties/3/replication_mode = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
 atlas = ExtResource("2_jlq18")
@@ -339,6 +360,9 @@ bus = &"SFX"
 [node name="JumpBufferTimer" type="Timer" parent="."]
 wait_time = 0.2
 
+[node name="DashCooldown" type="Timer" parent="."]
+one_shot = true
+
 [node name="CoyoteTimer" type="Timer" parent="."]
 wait_time = 0.2
 
@@ -350,7 +374,7 @@ position_smoothing_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="UI" parent="CanvasLayer" instance=ExtResource("5_jxau2")]
+[node name="HUD" parent="CanvasLayer" instance=ExtResource("5_jxau2")]
 unique_name_in_owner = true
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("6_gm7j5")]
@@ -369,4 +393,5 @@ value = 100.0
 show_percentage = false
 
 [connection signal="timeout" from="JumpBufferTimer" to="." method="_on_jump_buffer_timer_timeout"]
+[connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]

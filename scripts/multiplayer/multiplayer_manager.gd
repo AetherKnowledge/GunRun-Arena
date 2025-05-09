@@ -8,8 +8,15 @@ var is_multiplayer = true
 var host_mode = false
 var players_node: Node2D
 
+func _ready() -> void:
+	if OS.has_feature("dedicated_server"):
+		print("Starting Dedicated Server...")
+		get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
+		host()
+		
+
 func host():
-	print("Starting game on IP: %s and Port %s " % [SERVER_IP, str(SERVER_PORT)])
+	print("Starting game on Address: %s and Port %s " % [SERVER_IP, str(SERVER_PORT)])
 	
 	host_mode = true
 	var server_peer = ENetMultiplayerPeer.new()
@@ -20,13 +27,14 @@ func host():
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(remove_player)
 	
-	add_player(1)
+	if not OS.has_feature("dedicated_server"):
+		add_player(1)
 	
-func join():
-	print("Joining Game at IP: %s and Port %s " % [SERVER_IP, str(SERVER_PORT)])
+func join(address: String, port: int):
+	print("Joining Game at Address: %s and Port %s " % [address, str(port)])
 	
 	var client_peer = ENetMultiplayerPeer.new()
-	client_peer.create_client(SERVER_IP,SERVER_PORT)
+	client_peer.create_client(address,port)
 	
 	multiplayer.multiplayer_peer = client_peer
 	
