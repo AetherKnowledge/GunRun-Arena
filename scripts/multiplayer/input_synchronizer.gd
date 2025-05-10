@@ -1,25 +1,107 @@
 extends MultiplayerSynchronizer
 class_name InputSynchronizer
 
+const ATTACK_THRESHOLD: float = 0.8
 var input_attack: bool = false
 var input_direction: int = 1
 var input_jump: bool = false
+
 @onready var player: MultiplayerPlayer = $".."
-@onready var movement_stick: VirtualJoystick = %MovementStick
+@onready var aim_stick: VirtualJoystick = %HUD.aim_stick
+@onready var hud: HUD = %HUD
+@onready var camera_2d: Camera2D = %Camera2D
 
 var looking_at: Vector2 = Vector2(0,0)
 
+var double_tap_time = 0.3
+var left_tap_count = 0
+var right_tap_count = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	if get_multiplayer_authority() != multiplayer.get_unique_id():
 		set_process(false)
 		set_physics_process(false)
-	
+		set_process_input(false)
+		
 	input_direction = Input.get_axis("move_left", "move_right")
 	looking_at = player.get_global_mouse_position()
+
+func _input(event):
+	if not player.alive:
+		return
 	
-func _physics_process(delta: float) -> void:
+	_process_default_controls()
+	
+	if OS.get_name() != "Android" and not Settings.DEBUG_MODE:
+		_process_pc_controls()
+		return
+	
+	if event is InputEventScreenTouch:
+		process_android_controls(event.pressed, event.position)
+		
+		if Input.is_action_pressed("move_left"):
+			left_tap_count += 1
+			print(left_tap_count)
+			print(right_tap_count)
+			if left_tap_count == 1:
+				await get_tree().create_timer(double_tap_time).timeout
+				left_tap_count = 0
+			elif left_tap_count == 2:
+				left_tap_count = 0
+				dash.rpc()
+				
+		# Check for right input
+		elif Input.is_action_just_pressed("move_right"):
+			right_tap_count += 1
+			print(left_tap_count)
+			print(right_tap_count)
+			
+			if right_tap_count == 1:
+				await get_tree().create_timer(double_tap_time).timeout
+				right_tap_count = 0
+			elif right_tap_count == 2:
+				right_tap_count = 0
+				dash.rpc()
+	
+func process_android_controls(is_pressed: bool, touch_pos: Vector2):
+	if not hud or not hud.movement_controls or not camera_2d:
+		return
+	
+	var ignore_area_pos = hud.movement_controls.position  # Top-left corner
+	var ignore_area_size = hud.movement_controls.size * get_viewport().get_stretch_transform().get_scale()
+	
+	var inside_ignore_area = (touch_pos.x >= ignore_area_pos.x and touch_pos.x <= ignore_area_pos.x + ignore_area_size.x
+		and touch_pos.y >= ignore_area_pos.y and touch_pos.y <= ignore_area_pos.y + ignore_area_size.y)
+	
+	if not inside_ignore_area:
+		looking_at = player.get_global_mouse_position()
+		input_attack = is_pressed
+			
+func _process_pc_controls():
+	looking_at = player.get_global_mouse_position()
+	
+	if Input.is_action_just_pressed("attack"):
+		input_attack = true
+	if Input.is_action_just_released("attack"):
+		input_attack = false 
+		
+func _process_stick_aim_controls():
+	aim_stick = %HUD.aim_stick
+	if not aim_stick:
+		return
+		
+	if aim_stick.output != Vector2(0,0):
+		looking_at = aim_stick.output * Vector2(200,200) + player.global_position
+	
+	if abs(aim_stick.output.x) > ATTACK_THRESHOLD or abs(aim_stick.output.y) > ATTACK_THRESHOLD:
+		Input.action_press("attack")
+	else:
+		Input.action_release("attack")
+		
+
+func _process_default_controls():
+	#input_direction = Input.get_axis("move_left", "move_right")
 	if Input.is_action_pressed("move_left") and not Input.is_action_pressed("move_right"):
 		input_direction = -1
 	elif Input.is_action_pressed("move_right") and not Input.is_action_pressed("move_left"):
@@ -27,15 +109,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		input_direction = 0
 	
-	#input_direction = Input.get_axis("move_left", "move_right")
-	
-	looking_at = player.get_global_mouse_position()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	if not player.alive:
-		return
-		
 	if Input.is_action_just_pressed("jump"):
 		jump.rpc()
 		input_jump = true
@@ -43,14 +116,9 @@ func _process(delta: float) -> void:
 			player.jump_sfx.play()
 	if Input.is_action_just_released("jump"):
 		input_jump = false 
-	
+			
 	if Input.is_action_just_pressed("dash"):
 		dash.rpc()
-			
-	if Input.is_action_just_pressed("attack"):
-		input_attack = true
-	if Input.is_action_just_released("attack"):
-		input_attack = false 
 
 @rpc("call_local")
 func jump():

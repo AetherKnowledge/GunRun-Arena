@@ -45,6 +45,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1g8jr")
+metadata/_custom_type_script = "uid://cb2x6uokb10e0"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

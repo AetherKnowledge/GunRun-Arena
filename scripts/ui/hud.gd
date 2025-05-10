@@ -13,14 +13,16 @@ class_name HUD
 @onready var kill_label: Label = %KillLabel
 @onready var death_label: Label = %DeathLabel
 @onready var touch_controls: Control = $TouchControls
+@onready var movement_controls: Control = %MovementControls
+@onready var aim_controls: Control = %AimControls
+@onready var aim_stick: VirtualJoystick = %AimStick
 
 var last_ping_time: int = 0
 var ping_ms: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	touch_controls.visible = OS.get_name() == "Android"
-
+	touch_controls.visible = OS.get_name() == "Android" or Settings.DEBUG_MODE
 		
 func _on_ping_timer_timeout() -> void:
 	if not MultiplayerManager.is_multiplayer:

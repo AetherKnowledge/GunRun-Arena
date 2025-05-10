@@ -24,5 +24,6 @@ Special thanks to the talented creators whose assets brought this game to life:
 - **Chest Animations** by *Admurin*
 - **Pixel Art GUI Elements** by *Mounir Tohami*
 - **Grape Soda** by *jeti*
+- **Godot Virtual Joystick** by *Marco Fazio*
 
 Please support these creators for their incredible work!
