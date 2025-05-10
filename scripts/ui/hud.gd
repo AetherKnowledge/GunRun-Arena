@@ -10,13 +10,8 @@ class_name HUD
 @onready var ammo_label: Label = %AmmoLabel
 @onready var ping_label: Label = %PingLabel
 @onready var jumps_label: Label = %JumpsLabel
-
-var hp: int = 0
-var x_vel: int = 0
-var y_vel: int = 0
-var max_ammo: int = 0
-var ammo: int = 0
-var jump_remaining: int = 0
+@onready var kill_label: Label = %KillLabel
+@onready var death_label: Label = %DeathLabel
 
 var last_ping_time: int = 0
 var ping_ms: int = 0
@@ -25,17 +20,6 @@ var ping_ms: int = 0
 func _ready() -> void:
 	pass # Replace with function body.
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	hp_label.text = "HP: " + str(hp)
-	x_vel_label.text = "X-Vel: " + str(x_vel)
-	y_vel_label.text = "Y-Vel: " + str(y_vel)
-	ammo_label.text = "Ammo: " + str(ammo)
-	jumps_label.text = "Jumps: " + str(jump_remaining)
-	
-	hp_bar.value = hp
-	ammo_bar.max_value = max_ammo
-	ammo_bar.value = ammo
 		
 func _on_ping_timer_timeout() -> void:
 	if not MultiplayerManager.is_multiplayer:

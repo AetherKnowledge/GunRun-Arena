@@ -14,6 +14,7 @@ const DEFAULT_WEAPON_SCENE = preload("res://scenes/weapons/glock.tscn")
 @onready var input_synchronizer: InputSynchronizer = %InputSynchronizer
 @onready var camera: Camera2D = $Camera2D
 @onready var hp_bar: ProgressBar = $HPBar
+@onready var collision: CollisionShape2D = $CollisionShape2D
 
 # Player states
 var do_dash: bool = false
@@ -22,6 +23,8 @@ var do_attack: bool = false
 var _is_on_floor: bool = true
 var can_coyote_jump: bool = true
 var holding_jump: bool = false
+var kill_count: int = 0
+var death_count: int = 0
 
 # Jumping vars
 @export var max_jumps: int = 2
@@ -57,13 +60,16 @@ var weapon: Weapon:
 		if hp == value:
 			return
 		hp = clamp(value, 0, 100)
-		$HPBar.value = hp
+		update_hud()
 		if hp == 0:
 			_process_death()
+			update_hud()
 
 func _ready() -> void:
 	if player_id == multiplayer.get_unique_id():
 		hp_bar.visible = false
+	else:
+		%HUD.visible = false
 		
 	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
 	_respawn()
@@ -84,20 +90,24 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if not alive:
 		return
-
-	if is_multiplayer_authority() or MultiplayerManager.host_mode:
-		_is_on_floor = is_on_floor()
-		_process_movement(delta)
-		_process_animations(delta)
-
-	if do_attack:
-		_attack()
-
-func _process_movement(delta: float) -> void:
+	
 	holding_jump = input_synchronizer.input_jump
 	do_attack = input_synchronizer.input_attack
 	looking_at = input_synchronizer.looking_at
 	direction = input_synchronizer.input_direction
+	
+	if is_multiplayer_authority() or MultiplayerManager.host_mode:
+		_is_on_floor = is_on_floor()
+		_process_movement(delta)
+		
+	if not multiplayer.is_server() or MultiplayerManager.host_mode:
+		_process_animations(delta)
+	
+	if do_attack:
+		_attack()
+
+func _process_movement(delta: float) -> void:
+	
 	
 	# Gravity
 	if not is_on_floor():
@@ -215,11 +225,11 @@ func _process_animations(delta: float) -> void:
 		return
 
 	# Flip sprite
-	animated_sprite.flip_h = direction < 0 if direction else animated_sprite.flip_h
-	#if direction > 0:
-		#animated_sprite.flip_h = false
-	#elif direction < 0:
-		#animated_sprite.flip_h = true
+	#animated_sprite.flip_h = direction < 0 if direction else animated_sprite.flip_h
+	if direction > 0:
+		animated_sprite.flip_h = false
+	elif direction < 0:
+		animated_sprite.flip_h = true
 
 	# Death animation priority
 	if animated_sprite.animation in ["death", "hurt"] and animated_sprite.is_playing():
@@ -262,8 +272,10 @@ func kill() -> void:
 func _process_death() -> void:
 	if not alive:
 		return
-
+	
+	collision.disabled = true
 	alive = false
+	death_count += 1
 	animated_sprite.play("death")
 	hurt_sfx.play()
 
@@ -272,6 +284,7 @@ func _process_death() -> void:
 	_respawn()
 
 func _respawn() -> void:
+	collision.disabled = false
 	animated_sprite.play("idle")
 	hp = 100
 	alive = true
@@ -285,14 +298,20 @@ func _on_coyote_timer_timeout() -> void:
 	can_coyote_jump = false
 
 func update_hud() -> void:
-	hud.hp = hp
-	hud.x_vel = velocity.x
-	hud.y_vel = velocity.y
-	hud.jump_remaining = jumps_remaining
+	hud.hp_label.text = "HP: " + str(hp)
+	hud.x_vel_label.text = "X-Vel: " + str(int(velocity.x))
+	hud.y_vel_label.text = "Y-Vel: " + str(int(velocity.y))
+	hud.jumps_label.text = "Jumps: " + str(jumps_remaining)
+	hud.kill_label.text = "Kills: " + str(kill_count)
+	hud.death_label.text = "Deaths: " + str(death_count)
+	hud.hp_bar.value = hp
+	
+	hp_bar.value = hp
 
 	if weapon is Gun:
-		hud.max_ammo = weapon.max_ammo
-		hud.ammo = weapon.ammo
+		hud.ammo_label.text = "Ammo: " + str(weapon.ammo)
+		hud.ammo_bar.max_value = weapon.max_ammo
+		hud.ammo_bar.value = weapon.ammo
 
 
 func _on_dash_cooldown_timeout() -> void:

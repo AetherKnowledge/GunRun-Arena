@@ -29,6 +29,7 @@ func _on_options_pressed() -> void:
 
 func _on_main_menu_pressed() -> void:
 	resume()
+	MultiplayerManager.disconnect_to_server()
 	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
 
 

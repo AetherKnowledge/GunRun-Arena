@@ -35,13 +35,16 @@ func _physics_process(delta: float) -> void:
 		
 	var hit_player = target as Player
 	if not MultiplayerManager.is_multiplayer:
-		hit_player.take_damage(damage, get_recoil_force(hit_player))
+		hit_player.take_damage(damage, get_recoil_force(hit_player))		
+		
 		queue_free()
 		return
 	
 	# Multiplayer case
 	if hit_player.player_id != player.player_id:
 		hit_player.take_damage(damage, get_recoil_force(hit_player))
+		if not hit_player.alive:
+			player.kill_count += 1
 		queue_free()
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.

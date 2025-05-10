@@ -58,3 +58,9 @@ func remove_player(id: int):
 		return
 	
 	players_node.get_node(str(id)).queue_free()
+
+func disconnect_to_server():
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+		multiplayer.multiplayer_peer = null 
+		print("Disconnected from server.")
