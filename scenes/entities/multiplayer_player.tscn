@@ -377,6 +377,7 @@ limit_smoothed = true
 position_smoothing_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
 
 [node name="HUD" parent="CanvasLayer" instance=ExtResource("5_jxau2")]
 unique_name_in_owner = true

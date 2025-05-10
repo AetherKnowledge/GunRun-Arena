@@ -9,13 +9,14 @@ var input_jump: bool = false
 @onready var player: MultiplayerPlayer = $".."
 @onready var aim_stick: VirtualJoystick = %HUD.aim_stick
 @onready var hud: HUD = %HUD
-@onready var camera_2d: Camera2D = %Camera2D
+@onready var canvas_layer: CanvasLayer = %CanvasLayer
 
 var looking_at: Vector2 = Vector2(0,0)
 
 var double_tap_time = 0.3
 var left_tap_count = 0
 var right_tap_count = 0
+var last_valid_touch_pos: Vector2 = Vector2(0,0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -23,7 +24,7 @@ func _ready() -> void:
 		set_process(false)
 		set_physics_process(false)
 		set_process_input(false)
-		
+	
 	input_direction = Input.get_axis("move_left", "move_right")
 	looking_at = player.get_global_mouse_position()
 
@@ -39,7 +40,6 @@ func _input(event):
 	
 	if event is InputEventScreenTouch:
 		process_android_controls(event.pressed, event.position)
-		
 		if Input.is_action_pressed("move_left"):
 			left_tap_count += 1
 			print(left_tap_count)
@@ -63,9 +63,13 @@ func _input(event):
 			elif right_tap_count == 2:
 				right_tap_count = 0
 				dash.rpc()
+				
+	elif event is InputEventScreenDrag:
+		process_android_controls(true, event.position)
 	
+		
 func process_android_controls(is_pressed: bool, touch_pos: Vector2):
-	if not hud or not hud.movement_controls or not camera_2d:
+	if not hud or not hud.movement_controls or not canvas_layer:
 		return
 	
 	var ignore_area_pos = hud.movement_controls.position  # Top-left corner
@@ -75,7 +79,10 @@ func process_android_controls(is_pressed: bool, touch_pos: Vector2):
 		and touch_pos.y >= ignore_area_pos.y and touch_pos.y <= ignore_area_pos.y + ignore_area_size.y)
 	
 	if not inside_ignore_area:
-		looking_at = player.get_global_mouse_position()
+		var canvas_transform = get_viewport().get_canvas_transform()
+		var canvas_layer_pos = canvas_transform.affine_inverse() * touch_pos
+		
+		looking_at = canvas_layer_pos
 		input_attack = is_pressed
 			
 func _process_pc_controls():
@@ -84,7 +91,7 @@ func _process_pc_controls():
 	if Input.is_action_just_pressed("attack"):
 		input_attack = true
 	if Input.is_action_just_released("attack"):
-		input_attack = false 
+		input_attack = false
 		
 func _process_stick_aim_controls():
 	aim_stick = %HUD.aim_stick
