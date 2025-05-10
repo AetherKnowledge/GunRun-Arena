@@ -62,10 +62,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -163.5
-offset_top = -46.0
-offset_right = 163.5
-offset_bottom = 210.0
+offset_left = -327.0
+offset_top = -142.0
+offset_right = 327.0
+offset_bottom = 370.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
@@ -78,6 +78,7 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
@@ -92,6 +93,7 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
@@ -126,6 +128,7 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
@@ -142,6 +145,7 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
@@ -156,6 +160,7 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
@@ -170,31 +175,13 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
 theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
 text = "Back
 "
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -283.0
-offset_top = 64.0
-offset_right = 283.0
-offset_bottom = 192.0
-grow_horizontal = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 5
-theme_override_constants/shadow_offset_y = 10
-theme_override_fonts/font = ExtResource("3_aym5w")
-theme_override_font_sizes/font_size = 128
-text = "SIA Game"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="JoinPanel" type="Panel" parent="."]
 layout_mode = 1
@@ -203,10 +190,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -219.0
-offset_top = -41.0
-offset_right = 219.0
-offset_bottom = 75.0
+offset_left = -446.5
+offset_top = -93.5
+offset_right = 446.5
+offset_bottom = 93.5
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -228,18 +215,20 @@ theme_override_constants/separation = 5
 
 [node name="Label" type="Label" parent="JoinPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "Address:"
 
 [node name="AddressTxtBox" type="TextEdit" parent="JoinPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_font_sizes/font_size = 24
 text = "127.0.0.1:8080"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="JoinPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.6
-theme_override_constants/separation = 100
+theme_override_constants/separation = 200
 
 [node name="Connect" type="Button" parent="JoinPanel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -252,6 +241,7 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
@@ -269,11 +259,31 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
 theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
 text = "Cancel"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -566.0
+offset_top = 80.0
+offset_right = 566.0
+offset_bottom = 336.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 10
+theme_override_fonts/font = ExtResource("3_aym5w")
+theme_override_font_sizes/font_size = 256
+text = "SIA Game"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="single_player_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/LocalMultiplayer" to="." method="local_multiplayer_mouse_entered"]

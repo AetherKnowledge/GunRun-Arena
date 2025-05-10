@@ -22,6 +22,7 @@ Special thanks to the talented creators whose assets brought this game to life:
 - **GUNS_V1.00** by *Arcade Island*
 - **Stringstar Fields** by *Trixie*
 - **Chest Animations** by *Admurin*
+- **Pixel Art GUI Elements** by *Mounir Tohami*
 - **Grape Soda** by *jeti*
 
 Please support these creators for their incredible work!

@@ -307,7 +307,7 @@ animations = [{
 radius = 5.59017
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ws2a"]
-bg_color = Color(0.8, 0.8, 0.8, 1)
+bg_color = Color(0.0941176, 0.0784314, 0.145098, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
@@ -320,10 +320,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
+border_color = Color(0.0941176, 0.0784314, 0.145098, 1)
 anti_aliasing = false
 
 [node name="MultiplayerPlayer" type="CharacterBody2D"]
@@ -376,18 +373,16 @@ position_smoothing_enabled = true
 
 [node name="HUD" parent="CanvasLayer" instance=ExtResource("5_jxau2")]
 unique_name_in_owner = true
-visible = false
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("6_gm7j5")]
 unique_name_in_owner = true
 
 [node name="HPBar" type="ProgressBar" parent="."]
-visible = false
 texture_filter = 1
 offset_left = -9.0
-offset_top = -25.0
+offset_top = -24.0
 offset_right = 9.0
-offset_bottom = -21.0
+offset_bottom = -20.0
 theme_override_styles/background = SubResource("StyleBoxFlat_2ws2a")
 theme_override_styles/fill = SubResource("StyleBoxFlat_gm7j5")
 step = 1.0

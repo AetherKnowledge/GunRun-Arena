@@ -2,10 +2,11 @@ extends Weapon
 class_name Gun
 
 const bullet_scene = preload("res://scenes/weapons/bullet.tscn")
-@export_range(1, 200, 1) var ammo: int = 0:
+@export var max_ammo: int = 100
+
+var ammo: int = max_ammo:
 	set(value):
 		ammo = max(0, value)
-		ammo = min(200, value)
 		
 @export_range(0.05, 10.0, 0.05) var cooldown: float = 0.5:
 	set(value):
@@ -19,6 +20,9 @@ const bullet_scene = preload("res://scenes/weapons/bullet.tscn")
 
 var can_fire = true
 
+func _ready() -> void:
+	ammo = max_ammo
+
 func _process(delta: float) -> void:
 	if not player:
 		return
@@ -31,9 +35,9 @@ func _process(delta: float) -> void:
 	# Smooth flip based on mouse position
 	# flip v doesnt flip shoot pos
 	if player.looking_at.x < global_position.x:
-		scale.y = default_y_scale * -1
+		scale.y = player.WEAPON_SCALE.y * -1
 	else:
-		scale.y = default_y_scale
+		scale.y = player.WEAPON_SCALE.y
 		
 		
 func attack():

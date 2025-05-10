@@ -238,8 +238,6 @@ animations = [{
 sprite_frames = SubResource("SpriteFrames_qkjx8")
 animation = &"shoot"
 autoplay = "default"
-ammo = 30
-weapon_name = "Glock"
 
 [node name="ShootSFX" parent="." index="0"]
 stream = ExtResource("4_c04vw")

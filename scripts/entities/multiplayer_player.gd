@@ -13,6 +13,7 @@ const DEFAULT_WEAPON_SCENE = preload("res://scenes/weapons/glock.tscn")
 @onready var hud: HUD = %HUD
 @onready var input_synchronizer: InputSynchronizer = %InputSynchronizer
 @onready var camera: Camera2D = $Camera2D
+@onready var hp_bar: ProgressBar = $HPBar
 
 # Player states
 var do_dash: bool = false
@@ -61,6 +62,9 @@ var weapon: Weapon:
 			_process_death()
 
 func _ready() -> void:
+	if player_id == multiplayer.get_unique_id():
+		hp_bar.visible = false
+		
 	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
 	_respawn()
 	_setup_camera()
@@ -287,6 +291,7 @@ func update_hud() -> void:
 	hud.jump_remaining = jumps_remaining
 
 	if weapon is Gun:
+		hud.max_ammo = weapon.max_ammo
 		hud.ammo = weapon.ammo
 
 

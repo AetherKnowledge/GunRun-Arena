@@ -1,6 +1,9 @@
 extends Control
 class_name HUD
 
+@onready var hp_bar: TextureProgressBar = $HPBar
+@onready var ammo_bar: TextureProgressBar = $AmmoBar
+
 @onready var hp_label: Label = %HPLabel
 @onready var x_vel_label: Label = %XVelLabel
 @onready var y_vel_label: Label = %YVelLabel
@@ -11,6 +14,7 @@ class_name HUD
 var hp: int = 0
 var x_vel: int = 0
 var y_vel: int = 0
+var max_ammo: int = 0
 var ammo: int = 0
 var jump_remaining: int = 0
 
@@ -28,6 +32,10 @@ func _process(delta: float) -> void:
 	y_vel_label.text = "Y-Vel: " + str(y_vel)
 	ammo_label.text = "Ammo: " + str(ammo)
 	jumps_label.text = "Jumps: " + str(jump_remaining)
+	
+	hp_bar.value = hp
+	ammo_bar.max_value = max_ammo
+	ammo_bar.value = ammo
 		
 func _on_ping_timer_timeout() -> void:
 	if not MultiplayerManager.is_multiplayer:
