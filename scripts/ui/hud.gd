@@ -12,13 +12,14 @@ class_name HUD
 @onready var jumps_label: Label = %JumpsLabel
 @onready var kill_label: Label = %KillLabel
 @onready var death_label: Label = %DeathLabel
+@onready var touch_controls: Control = $TouchControls
 
 var last_ping_time: int = 0
 var ping_ms: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	touch_controls.visible = OS.get_name() == "Android"
 
 		
 func _on_ping_timer_timeout() -> void:
