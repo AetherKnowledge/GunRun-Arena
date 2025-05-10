@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=4 uid="uid://ba85b0r3q1r4b"]
+[gd_scene load_steps=32 format=4 uid="uid://ba85b0r3q1r4b"]
 
 [ext_resource type="PackedScene" uid="uid://bdrcr5jgvmul8" path="res://scenes/game_manager.tscn" id="1_p2uc1"]
 [ext_resource type="Texture2D" uid="uid://dnx4714i3x18i" path="res://assets/world/Buildings.png" id="3_oubon"]
@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://84wajth4l6qf" path="res://scenes/killzone.tscn" id="7_oubon"]
 [ext_resource type="Texture2D" uid="uid://bnyh8e6iortl3" path="res://assets/world/Tree-Assets.png" id="8_6y6ia"]
 [ext_resource type="PackedScene" uid="uid://sj5vsyy1sdu3" path="res://scenes/parallax.tscn" id="11_uie1y"]
+[ext_resource type="PackedScene" uid="uid://bcxjubp1ocyjq" path="res://scenes/ui/pause_menu.tscn" id="12_64p4e"]
+[ext_resource type="PackedScene" uid="uid://vmsni765mhvb" path="res://scenes/ui/tab_menu.tscn" id="13_we4bw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rnw5s"]
 texture = ExtResource("3_oubon")
@@ -4213,3 +4215,15 @@ position = Vector2(721, 834)
 
 [node name="Parallax" parent="." instance=ExtResource("11_uie1y")]
 position = Vector2(960, 540)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("12_64p4e")]
+visible = false
+
+[node name="TabMenu" parent="CanvasLayer" instance=ExtResource("13_we4bw")]
+visible = false
+
+[connection signal="despawned" from="MultiplayerSpawner" to="CanvasLayer/TabMenu" method="_on_multiplayer_spawner_despawned"]
+[connection signal="spawned" from="MultiplayerSpawner" to="CanvasLayer/TabMenu" method="_on_multiplayer_spawner_spawned"]

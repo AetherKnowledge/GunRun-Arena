@@ -93,7 +93,14 @@ text = "Deaths:"
 wait_time = 0.5
 autostart = true
 
+[node name="TabBtn" type="TouchScreenButton" parent="."]
+position = Vector2(-3, 2.38419e-07)
+scale = Vector2(5.292, 5.292)
+texture_normal = ExtResource("2_oj5la")
+action = "tab"
+
 [node name="PlayerIcon" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(68.7917, 63.5)
 scale = Vector2(5.29167, 5.29167)
 texture = ExtResource("2_oj5la")

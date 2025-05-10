@@ -8,6 +8,9 @@ var is_multiplayer = true
 var host_mode = false
 var players_node: Node2D
 
+signal player_connected(player: MultiplayerPlayer)
+signal player_disconnected(player: MultiplayerPlayer)
+
 func _ready() -> void:
 	if OS.has_feature("dedicated_server"):
 		print("Starting Dedicated Server...")
@@ -51,13 +54,18 @@ func add_player(id: int):
 		
 	players_node = get_tree().get_current_scene().get_node("Players")
 	players_node.add_child(player)
+	
+	if host_mode:
+		player_connected.emit(player)
 
 func remove_player(id: int):
 	print("Player %s has left " % id)
 	if not players_node.get_node(str(id)):
 		return
-	
 	players_node.get_node(str(id)).queue_free()
+	
+	if host_mode:
+		player_disconnected.emit()
 
 func disconnect_to_server():
 	if multiplayer.multiplayer_peer:
