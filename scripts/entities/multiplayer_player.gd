@@ -111,11 +111,11 @@ func _process_movement(delta: float) -> void:
 	
 	# Gravity
 	if not is_on_floor():
-		var gravity_force = get_gravity().y
+		var gravity_force = get_gravity().y * 0.7
 		
 		# Jump Cuts
 		if velocity.y < 0 and not holding_jump:
-			velocity.y *= 0.5
+			velocity.y *= 0.7
 		
 		# Apex Jump Modifier
 		elif abs(velocity.y) < APEX_VELOCITY_THRESHOLD:

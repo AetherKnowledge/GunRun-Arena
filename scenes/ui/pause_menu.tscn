@@ -193,6 +193,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_myx47")
+metadata/_custom_type_script = "uid://cb2x6uokb10e0"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_kukqi")
@@ -264,11 +265,13 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_myx47")
 theme_override_styles/hover = SubResource("StyleBoxFlat_kukqi")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_5d2l8")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7l7mv")
-text = "Resume"
+text = "Resume
+"
 
 [node name="Restart" type="Button" parent="Control/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -279,6 +282,7 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_myx47")
 theme_override_styles/hover = SubResource("StyleBoxFlat_kukqi")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_5d2l8")
@@ -295,6 +299,7 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_myx47")
 theme_override_styles/hover = SubResource("StyleBoxFlat_kukqi")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_5d2l8")
@@ -310,6 +315,7 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_myx47")
 theme_override_styles/hover = SubResource("StyleBoxFlat_kukqi")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_5d2l8")

@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://blhb6oe40xcx2"]
+[gd_scene load_steps=10 format=3 uid="uid://blhb6oe40xcx2"]
 
 [ext_resource type="Script" uid="uid://cy8864xjupidd" path="res://scripts/ui/select_game.gd" id="1_1qobq"]
 [ext_resource type="Texture2D" uid="uid://ku0sabbsndmc" path="res://assets/images/gamebg.png" id="2_a2txx"]
+[ext_resource type="Script" uid="uid://kwvwjs8ynrro" path="res://scripts/ui/touch_ui_button.gd" id="3_a2txx"]
 [ext_resource type="FontFile" uid="uid://d1rodyu85fb2" path="res://assets/fonts/GrapeSoda.ttf" id="3_aym5w"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wu84c"]
@@ -247,6 +248,8 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
 theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
 text = "Connect"
+script = ExtResource("3_a2txx")
+metadata/_custom_type_script = "uid://kwvwjs8ynrro"
 
 [node name="Cancel" type="Button" parent="JoinPanel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -265,6 +268,8 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
 theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
 text = "Cancel"
+script = ExtResource("3_a2txx")
+metadata/_custom_type_script = "uid://kwvwjs8ynrro"
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://boony3y1rqxqe"]
+[gd_scene load_steps=10 format=3 uid="uid://boony3y1rqxqe"]
 
 [ext_resource type="Script" uid="uid://c5v0w75tww40" path="res://scripts/ui/hud.gd" id="1_nt7q6"]
 [ext_resource type="Texture2D" uid="uid://qe8qqfwmtc5v" path="res://assets/ui/hp-bar-empty.png" id="2_bo48s"]
@@ -6,12 +6,19 @@
 [ext_resource type="Texture2D" uid="uid://cuhsey05rbkqf" path="res://assets/ui/hp-bar-fill.png" id="3_8qguk"]
 [ext_resource type="Texture2D" uid="uid://bovf88vkkgi1r" path="res://assets/ui/ammo-bar-fill.png" id="4_8qguk"]
 [ext_resource type="Texture2D" uid="uid://c3lp77u4n4ib8" path="res://assets/ui/ammo-bar-empty.png" id="5_gss2c"]
+[ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="7_gss2c"]
+[ext_resource type="Texture2D" uid="uid://esrwhw4av433" path="res://assets/ui/player-icon-empty.png" id="8_4jqwt"]
+[ext_resource type="Texture2D" uid="uid://lgy1hoakqlj6" path="res://assets/ui/menu_button.png" id="8_h022r"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -4.0
+offset_right = 1.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nt7q6")
@@ -29,6 +36,7 @@ theme_override_font_sizes/font_size = 32
 text = "Ping:"
 
 [node name="DebugContainer" type="VBoxContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -111,5 +119,75 @@ value = 50.0
 nine_patch_stretch = true
 texture_under = ExtResource("5_gss2c")
 texture_progress = ExtResource("4_8qguk")
+
+[node name="TouchControls" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuBtn" type="TouchScreenButton" parent="TouchControls"]
+position = Vector2(922, 6)
+scale = Vector2(3, 3)
+texture_normal = ExtResource("8_h022r")
+action = "pause"
+
+[node name="MovementControls" type="Control" parent="TouchControls"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -413.0
+offset_right = 545.0
+grow_vertical = 0
+
+[node name="JumpBtm" type="TouchScreenButton" parent="TouchControls/MovementControls"]
+position = Vector2(178, 21)
+scale = Vector2(7.21623, 7.21623)
+texture_normal = ExtResource("8_4jqwt")
+action = "jump"
+
+[node name="RightBtn" type="TouchScreenButton" parent="TouchControls/MovementControls"]
+position = Vector2(330, 225)
+scale = Vector2(7.21623, 7.21623)
+texture_normal = ExtResource("8_4jqwt")
+action = "move_right"
+
+[node name="LeftBtn" type="TouchScreenButton" parent="TouchControls/MovementControls"]
+position = Vector2(31, 222)
+scale = Vector2(7.21623, 7.21623)
+texture_normal = ExtResource("8_4jqwt")
+action = "move_left"
+
+[node name="AimControls" type="Control" parent="TouchControls"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = -350.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="AimStick" parent="TouchControls/AimControls" instance=ExtResource("7_gss2c")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="timeout" from="PingTimer" to="." method="_on_ping_timer_timeout"]

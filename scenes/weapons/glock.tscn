@@ -1,8 +1,8 @@
 [gd_scene load_steps=37 format=3 uid="uid://6rompywgvv8n"]
 
 [ext_resource type="PackedScene" uid="uid://khv7vxdgppi" path="res://scenes/weapons/gun.tscn" id="1_qkjx8"]
-[ext_resource type="Texture2D" uid="uid://cfktbqx21lqyy" path="res://assets/sprites/guns/Glock - P80 [64x48]/[SHOOT WITH CASING AND MUZZLE FLASH] Glock - P80.png" id="2_ea2y7"]
-[ext_resource type="Texture2D" uid="uid://csuni7rqjul87" path="res://assets/sprites/guns/Glock - P80 [64x48]/[EMPTY] Glock - P80.png" id="3_xtsmi"]
+[ext_resource type="Texture2D" uid="uid://cfktbqx21lqyy" path="res://assets/guns/Glock - P80 [64x48]/[SHOOT WITH CASING AND MUZZLE FLASH] Glock - P80.png" id="2_ea2y7"]
+[ext_resource type="Texture2D" uid="uid://csuni7rqjul87" path="res://assets/guns/Glock - P80 [64x48]/[EMPTY] Glock - P80.png" id="3_xtsmi"]
 [ext_resource type="AudioStream" uid="uid://bitc5kyq5lt0t" path="res://assets/sfx/glock_fire.mp3" id="4_c04vw"]
 [ext_resource type="AudioStream" uid="uid://be5euyqkv3fg7" path="res://assets/sfx/glock_pickup.mp3" id="6_w00mn"]
 

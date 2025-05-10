@@ -1,0 +1,96 @@
+[gd_scene load_steps=5 format=3 uid="uid://cp6xb1x6y5gv6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1g8jr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m1kxf"]
+bg_color = Color(0.737193, 0.737193, 0.737193, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x2yvf"]
+bg_color = Color(0.577008, 0.577008, 0.577008, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uhagc"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(3, 3)
+
+[node name="LocalMultiplayer" type="Button"]
+size_flags_vertical = 3
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1g8jr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m1kxf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x2yvf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhagc")
+text = "Local Multiplayer"
+
+[node name="LocalMultiplayerPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LocalMultiplayerPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 5
+
+[node name="Host" type="Button" parent="LocalMultiplayerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1g8jr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m1kxf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x2yvf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhagc")
+text = "Host"
+
+[node name="Join" type="Button" parent="LocalMultiplayerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1g8jr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m1kxf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x2yvf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhagc")
+text = "Join"

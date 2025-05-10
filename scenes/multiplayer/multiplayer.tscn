@@ -104,7 +104,7 @@ texture = ExtResource("3_oubon")
 12:3/0 = 0
 12:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 13:3/0 = 0
-13:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+13:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -0.179857, 8, -0.179857, 8, 8, -8, 8)
 14:3/0 = 0
 15:3/0 = 0
 16:3/0 = 0
@@ -4145,7 +4145,9 @@ _data = {
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_p57ef"]
 
-[node name="Game" type="Node2D"]
+[node name="Game" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 
 [node name="GameManager" parent="." instance=ExtResource("1_p2uc1")]
 unique_name_in_owner = true
