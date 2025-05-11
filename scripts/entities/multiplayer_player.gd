@@ -47,14 +47,17 @@ var player_id: int = 1:
 # Weapon logic
 var weapon: Weapon:
 	set(value):
-		if weapon:
+		
+		if weapon and multiplayer.is_server():
 			weapon.queue_free()
+		
 		weapon = value
 		weapon.scale = WEAPON_SCALE
 		weapon.position = WEAPON_POSITION
 		
 		if not multiplayer.is_server():
 			return
+		
 		
 		$Weapon.add_child(weapon, true)
 
@@ -280,7 +283,9 @@ func _process_death() -> void:
 	death_count += 1
 	animated_sprite.play("death")
 	hurt_sfx.play()
-	weapon.queue_free()
+	
+	if multiplayer.is_server():
+		weapon.queue_free()
 
 	# Respawn
 	await get_tree().create_timer(3.0).timeout
@@ -322,4 +327,5 @@ func _on_dash_cooldown_timeout() -> void:
 
 func _on_weapon_spawner_spawned(node: Node) -> void:
 	weapon = node as Weapon
+	print(weapon.name)
 	weapon.init(self)
