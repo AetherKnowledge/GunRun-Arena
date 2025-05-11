@@ -86,7 +86,13 @@ func process_android_controls(is_pressed: bool, touch_pos: Vector2):
 		input_attack = is_pressed
 			
 func _process_pc_controls():
-	if Input.get_connected_joypads().size() < 1:
+	var device := 0  # Usually 0 for the first connected gamepad
+	var right_stick_x := Input.get_joy_axis(device, JOY_AXIS_RIGHT_X)  # Right Stick X
+	var right_stick_y := Input.get_joy_axis(device, JOY_AXIS_RIGHT_Y)  # Right Stick Y
+
+	var aim_input := Vector2(right_stick_x, right_stick_y)
+
+	if aim_input.length() < 0.3:
 		looking_at = player.get_global_mouse_position()
 	
 	if Input.is_action_just_pressed("attack"):
