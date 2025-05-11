@@ -2,7 +2,7 @@ extends AnimatedSprite2D
 class_name Bullet
 @onready var collider: RayCast2D = $RayCast2D
 
-var speed: float = 120
+var speed: float = 200
 var damage: int = 0
 var knockback_force: Vector2 = Vector2(200,200)
 var player: Player

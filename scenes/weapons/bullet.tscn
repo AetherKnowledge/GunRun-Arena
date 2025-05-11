@@ -5,47 +5,47 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dnt7v"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(0, 0, 80, 80)
+region = Rect2(0, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1t05q"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(80, 0, 80, 80)
+region = Rect2(80, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ymvs7"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(160, 0, 80, 80)
+region = Rect2(160, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ulmgg"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(240, 0, 80, 80)
+region = Rect2(240, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w2h8x"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(320, 0, 80, 80)
+region = Rect2(320, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ws8kt"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(80, 0, 80, 80)
+region = Rect2(80, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4vfph"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(160, 0, 80, 80)
+region = Rect2(160, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vyb4s"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(240, 0, 80, 80)
+region = Rect2(240, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5jeis"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(320, 0, 80, 80)
+region = Rect2(320, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_namrt"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(240, 0, 80, 80)
+region = Rect2(240, 80, 80, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rxiyb"]
 atlas = ExtResource("1_mx1hr")
-region = Rect2(160, 0, 80, 80)
+region = Rect2(160, 80, 80, 80)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_pfnfn"]
 animations = [{
@@ -97,9 +97,8 @@ animations = [{
 z_index = 100
 scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_pfnfn")
+animation = &"on_air"
 autoplay = "default"
-frame = 4
-frame_progress = 1.0
 script = ExtResource("2_dnt7v")
 
 [node name="RayCast2D" type="RayCast2D" parent="."]

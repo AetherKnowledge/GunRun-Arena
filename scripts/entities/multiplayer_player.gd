@@ -52,7 +52,11 @@ var weapon: Weapon:
 		weapon = value
 		weapon.scale = WEAPON_SCALE
 		weapon.position = WEAPON_POSITION
-		add_child(weapon)
+		
+		if not multiplayer.is_server():
+			return
+		
+		$Weapon.add_child(weapon, true)
 
 # Health
 @export var hp: int = 100:
@@ -107,8 +111,6 @@ func _physics_process(delta: float) -> void:
 		_attack()
 
 func _process_movement(delta: float) -> void:
-	
-	
 	# Gravity
 	if not is_on_floor():
 		var gravity_force = get_gravity().y * 0.7
@@ -278,6 +280,7 @@ func _process_death() -> void:
 	death_count += 1
 	animated_sprite.play("death")
 	hurt_sfx.play()
+	weapon.queue_free()
 
 	# Respawn
 	await get_tree().create_timer(3.0).timeout
@@ -308,7 +311,7 @@ func update_hud() -> void:
 	
 	hp_bar.value = hp
 
-	if weapon is Gun:
+	if weapon and weapon is Gun:
 		hud.ammo_label.text = "Ammo: " + str(weapon.ammo)
 		hud.ammo_bar.max_value = weapon.max_ammo
 		hud.ammo_bar.value = weapon.ammo
@@ -316,3 +319,7 @@ func update_hud() -> void:
 
 func _on_dash_cooldown_timeout() -> void:
 	can_dash = true
+
+func _on_weapon_spawner_spawned(node: Node) -> void:
+	weapon = node as Weapon
+	weapon.init(self)

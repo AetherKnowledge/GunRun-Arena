@@ -7,6 +7,7 @@ const SERVER_PORT = 8080
 var is_multiplayer = true
 var host_mode = false
 var players_node: Node2D
+var player_count: int = 0
 
 signal player_connected(player: MultiplayerPlayer)
 signal player_disconnected(player: MultiplayerPlayer)
@@ -32,6 +33,7 @@ func host():
 	
 	if not OS.has_feature("dedicated_server"):
 		add_player(1)
+		player_count += 1
 	
 func join(address: String, port: int):
 	print("Joining Game at Address: %s and Port %s " % [address, str(port)])
@@ -54,6 +56,7 @@ func add_player(id: int):
 		
 	players_node = get_tree().get_current_scene().get_node("Players")
 	players_node.add_child(player)
+	player_count += 1
 	
 	if host_mode:
 		player_connected.emit(player)
@@ -63,6 +66,7 @@ func remove_player(id: int):
 	if not players_node.get_node(str(id)):
 		return
 	players_node.get_node(str(id)).queue_free()
+	player_count -= 1
 	
 	if host_mode:
 		player_disconnected.emit()

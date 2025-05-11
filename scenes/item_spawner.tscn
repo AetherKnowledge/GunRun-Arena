@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjha85c4y6th"]
+
+[ext_resource type="Script" uid="uid://dbibix1aig0t6" path="res://scripts/item_spawner.gd" id="1_cu1q2"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_g5b8y"]
+b = Vector2(1242, -1)
+
+[node name="ItemSpawner" type="Area2D"]
+script = ExtResource("1_cu1q2")
+
+[node name="PickupSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://bkooy2uf63l2i")
+spawn_path = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("SegmentShape2D_g5b8y")
+
+[node name="SpawnTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 5.0
+autostart = true
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

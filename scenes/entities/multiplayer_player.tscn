@@ -331,6 +331,7 @@ anti_aliasing = false
 [node name="MultiplayerPlayer" type="CharacterBody2D"]
 z_index = 5
 collision_layer = 3
+collision_mask = 3
 script = ExtResource("1_gsel8")
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
@@ -340,6 +341,10 @@ replication_config = SubResource("SceneReplicationConfig_gm7j5")
 unique_name_in_owner = true
 replication_config = SubResource("SceneReplicationConfig_2ws2a")
 script = ExtResource("2_gm7j5")
+
+[node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://bkqws3c7xfme3", "uid://6rompywgvv8n")
+spawn_path = NodePath("../Weapon")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
@@ -394,6 +399,9 @@ step = 1.0
 value = 100.0
 show_percentage = false
 
+[node name="Weapon" type="Node2D" parent="."]
+
+[connection signal="spawned" from="WeaponSpawner" to="." method="_on_weapon_spawner_spawned"]
 [connection signal="timeout" from="JumpBufferTimer" to="." method="_on_jump_buffer_timer_timeout"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]

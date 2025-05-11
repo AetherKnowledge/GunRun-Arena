@@ -1,14 +1,46 @@
-extends Area2D
+extends CharacterBody2D
+class_name Pickup
 
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+const MAX_ITEM_FALL_SPEED = 100
 const gun_preload = preload("res://scenes/weapons/ak_47.tscn")
+@onready var pickup_collision: CollisionShape2D = $PickupArea/PickupCollision
+@onready var pickup_sound: AudioStreamPlayer2D = $PickupSound
 
-func _on_body_entered(body: Node2D) -> void:
-	if body is Player:
+func _ready() -> void:
+	if not multiplayer.is_server():
+		pickup_collision.disabled = true
+
+func _physics_process(delta: float) -> void:
+	if not multiplayer.is_server():
+		return
+	
+	if not is_on_floor():
+		var gravity_force = get_gravity().y * 0.7
 		
+		velocity.y += gravity_force * delta
+		velocity.y = min(velocity.y, MAX_ITEM_FALL_SPEED)
+		
+	move_and_slide()
+
+func _on_pickup_area_body_entered(body: Node2D) -> void:
+	if not multiplayer.is_server():
+		return
+	
+	if body is Player:
 		var player: Player = body as Player
 		var gun: Weapon = gun_preload.instantiate().init(player)
 		# must come first to queue free the old weapon
 		player.weapon = gun
-		
-		animation_player.play("pickup")
+		pickup_collision.set_deferred("disabled", true)
+		visible = false
+		pickup_sound.play()
+		await get_tree().create_timer(1).timeout
+		remove_pickup()
+
+func _on_despawn_timer_timeout() -> void:
+	if not multiplayer.is_server():
+		return
+	remove_pickup()
+	
+func remove_pickup():
+	queue_free()

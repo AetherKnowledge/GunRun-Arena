@@ -1,7 +1,6 @@
 extends Control
 
 @onready var color_rect: ColorRect = $ColorRect
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
 const player_stats_scene = preload("res://scenes/ui/player_stats.tscn")
 
 func _input(event: InputEvent) -> void:

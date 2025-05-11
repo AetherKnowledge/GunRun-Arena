@@ -1,12 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://khv7vxdgppi"]
+[gd_scene load_steps=4 format=3 uid="uid://khv7vxdgppi"]
 
 [ext_resource type="Script" uid="uid://kevo3nm86cl" path="res://scripts/weapons/gun.gd" id="1_76485"]
 [ext_resource type="AudioStream" uid="uid://cmob55xffu8f4" path="res://assets/sfx/empty.mp3" id="2_mgo42"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mgo42"]
+properties/0/path = NodePath(".:ammo")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [node name="Gun" type="AnimatedSprite2D"]
 script = ExtResource("1_76485")
 weapon_type = 1
 metadata/_custom_type_script = "uid://jqpei711leqa"
+
+[node name="GunSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_mgo42")
 
 [node name="ShootSFX" type="AudioStreamPlayer2D" parent="."]
 bus = &"SFX"
