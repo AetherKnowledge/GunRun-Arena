@@ -35,8 +35,6 @@ func _on_pickup_area_body_entered(body: Node2D) -> void:
 		player.weapon = gun
 		pickup_collision.set_deferred("disabled", true)
 		visible = false
-		gun.PickupSFX.play()
-		await get_tree().create_timer(1).timeout
 		remove_pickup()
 
 func _on_despawn_timer_timeout() -> void:

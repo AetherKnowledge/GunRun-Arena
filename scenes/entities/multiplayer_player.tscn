@@ -361,10 +361,12 @@ shape = SubResource("CircleShape2D_g2els")
 
 [node name="Hurt" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_xk3hh")
+max_distance = 200.0
 bus = &"SFX"
 
 [node name="Jump" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_m4ka2")
+max_distance = 200.0
 bus = &"SFX"
 
 [node name="DashCooldown" type="Timer" parent="."]

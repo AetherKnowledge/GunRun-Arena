@@ -6,3 +6,6 @@
 script = ExtResource("1_nqevj")
 
 [node name="PickupSFX" type="AudioStreamPlayer2D" parent="."]
+autoplay = true
+max_distance = 100.0
+bus = &"SFX"

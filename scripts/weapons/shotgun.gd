@@ -1,4 +1,5 @@
 extends Gun
+class_name Shotgun
 
 var bullet_count = 6
 var spread_min_deg = 5
