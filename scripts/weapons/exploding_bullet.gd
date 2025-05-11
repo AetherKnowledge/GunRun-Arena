@@ -3,8 +3,10 @@ class_name ExplodingBullet
 
 var explosion_radius: float = 100.0
 var exploded = false
+var do_explosion = false
 
 func explode():
+	do_explosion = true
 	exploded = true
 	$RayCast2D.enabled = false
 	scale *= 20
@@ -24,6 +26,17 @@ func explode():
 	# Queue the bullet for deletion after exploding
 	queue_free()
 
+func _process(delta: float) -> void:
+	if not multiplayer.is_server():
+		if do_explosion and not exploded:
+			exploded = true
+			scale *= 20
+			play("explosion")
+			$ExplosionSFX.play()
+			await animation_finished
+			visible = false
+		return
+		
 func process_physics_server(delta: float):
 	if exploded:
 		return
@@ -31,7 +44,7 @@ func process_physics_server(delta: float):
 	global_position += Vector2(1,0).rotated(rotation) * speed * delta
 	if initial_pos.distance_to(global_position) >= max_distance:
 		explode()
-		return	
+		return
 	
 	elif collider.is_colliding():
 		var target = collider.get_collider()

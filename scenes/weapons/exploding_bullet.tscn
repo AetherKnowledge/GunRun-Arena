@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://rpc2hyyi5o82"]
+[gd_scene load_steps=26 format=3 uid="uid://rpc2hyyi5o82"]
 
 [ext_resource type="PackedScene" uid="uid://i4j3cdrs3yr8" path="res://scenes/weapons/bullet.tscn" id="1_ksud7"]
 [ext_resource type="Texture2D" uid="uid://bsjyoncjyqx1n" path="res://assets/guns/bullet.png" id="2_nsmhg"]
@@ -150,6 +150,11 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hxnhk"]
+properties/0/path = NodePath(".:do_explosion")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="ExplodingBullet" instance=ExtResource("1_ksud7")]
 sprite_frames = SubResource("SpriteFrames_hxnhk")
 animation = &"on_air"
@@ -159,3 +164,6 @@ script = ExtResource("2_to0cy")
 stream = ExtResource("5_hxnhk")
 volume_db = -7.376
 bus = &"SFX"
+
+[node name="ExplosionSynchronizer" type="MultiplayerSynchronizer" parent="." index="3"]
+replication_config = SubResource("SceneReplicationConfig_hxnhk")
