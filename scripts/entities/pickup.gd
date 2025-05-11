@@ -13,6 +13,8 @@ var WEAPON_SCENES = {
 @onready var pickup_collision: CollisionShape2D = $PickupArea/PickupCollision
 @onready var pickup_sound: AudioStreamPlayer2D = $PickupSound
 var item: Weapon
+var changed_texture = false
+var weapon_idx: int = 0
 
 func _ready() -> void:
 	if not multiplayer.is_server():
@@ -26,6 +28,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if not multiplayer.is_server():
+		if not changed_texture:
+			change_weapon_texture_on_client()
 		return
 	
 	if not is_on_floor():
@@ -58,6 +62,14 @@ func remove_pickup():
 	queue_free()
 	
 func get_random_weapon_scene() -> PackedScene:
-	var random_gun = GlobalEnums.Guns.values()[randi() % GlobalEnums.Guns.values().size()]
+	weapon_idx = randi() % GlobalEnums.Guns.values().size()
+	var random_gun = GlobalEnums.Guns.values()[weapon_idx]
 	return WEAPON_SCENES[random_gun]
 	
+func change_weapon_texture_on_client():
+	changed_texture = true
+	var gun_idx = GlobalEnums.Guns.values()[weapon_idx]
+	var random_gun = WEAPON_SCENES[gun_idx].instantiate()
+	$AnimatedSprite2D.sprite_frames = random_gun.sprite_frames
+	$AnimatedSprite2D.scale *= 0.313
+	$AnimatedSprite2D.play("default")
