@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://cpjxwhuswn5if" path="res://scripts/entities/multiplayer_player.gd" id="1_gsel8"]
 [ext_resource type="Script" uid="uid://ci2ysifd4oo60" path="res://scripts/multiplayer/input_synchronizer.gd" id="2_gm7j5"]
 [ext_resource type="Texture2D" uid="uid://b5fh51psrqk3n" path="res://assets/entities/knight.png" id="2_jlq18"]
-[ext_resource type="AudioStream" uid="uid://du50dj5fj1t70" path="res://assets/sounds/hurt.wav" id="3_xk3hh"]
-[ext_resource type="AudioStream" uid="uid://ci57naxhy85ep" path="res://assets/sounds/jump.wav" id="4_m4ka2"]
+[ext_resource type="AudioStream" uid="uid://du50dj5fj1t70" path="res://assets/sfx/hurt.wav" id="3_xk3hh"]
+[ext_resource type="AudioStream" uid="uid://ci57naxhy85ep" path="res://assets/sfx/jump.wav" id="4_m4ka2"]
 [ext_resource type="PackedScene" uid="uid://boony3y1rqxqe" path="res://scenes/ui/hud.tscn" id="5_jxau2"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gm7j5"]
@@ -331,7 +331,7 @@ border_width_bottom = 1
 border_color = Color(0.0941176, 0.0784314, 0.145098, 1)
 anti_aliasing = false
 
-[node name="MultiplayerPlayer" type="CharacterBody2D"]
+[node name="MultiplayerPlayer" type="CharacterBody2D" groups=["Players"]]
 z_index = 5
 collision_layer = 3
 collision_mask = 3
@@ -344,10 +344,6 @@ replication_config = SubResource("SceneReplicationConfig_gm7j5")
 unique_name_in_owner = true
 replication_config = SubResource("SceneReplicationConfig_2ws2a")
 script = ExtResource("2_gm7j5")
-
-[node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://bkqws3c7xfme3", "uid://6rompywgvv8n", "uid://d1ecvajwo05")
-spawn_path = NodePath("../Weapon")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
@@ -401,8 +397,6 @@ step = 1.0
 value = 100.0
 show_percentage = false
 
-[node name="Weapon" type="Node2D" parent="."]
-
 [node name="UsernameLabel" type="Label" parent="."]
 offset_left = -19.0
 offset_top = -40.0
@@ -413,6 +407,12 @@ text = "Player"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="spawned" from="WeaponSpawner" to="." method="_on_weapon_spawner_spawned"]
+[node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://bkqws3c7xfme3", "uid://6rompywgvv8n", "uid://d1ecvajwo05", "uid://ckvmfiunmpy1q")
+spawn_path = NodePath("../Weapon")
+
+[node name="Weapon" type="Node2D" parent="."]
+
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
+[connection signal="spawned" from="WeaponSpawner" to="." method="_on_weapon_spawner_spawned"]

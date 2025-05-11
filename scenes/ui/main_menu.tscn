@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://47noqqt74evc"]
 
 [ext_resource type="Script" uid="uid://ba65s15ybsaug" path="res://scripts/ui/main_menu.gd" id="1_1g8jr"]
-[ext_resource type="Texture2D" uid="uid://ku0sabbsndmc" path="res://assets/images/gamebg.png" id="2_m1kxf"]
+[ext_resource type="Texture2D" uid="uid://ku0sabbsndmc" path="res://assets/ui/gamebg.png" id="2_m1kxf"]
 [ext_resource type="FontFile" uid="uid://d1rodyu85fb2" path="res://assets/fonts/GrapeSoda.ttf" id="3_x2yvf"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wu84c"]

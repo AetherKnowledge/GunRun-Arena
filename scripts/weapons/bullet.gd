@@ -2,6 +2,7 @@ extends AnimatedSprite2D
 class_name Bullet
 @onready var collider: RayCast2D = $RayCast2D
 
+var bullet_type: GlobalEnums.BulletTypes
 var max_distance: int = 100
 var speed: float = 200
 var damage: int = 0
@@ -31,6 +32,9 @@ func _ready() -> void:
 	visible = false
 	await get_tree().process_frame
 	visible = true
+	play("default")
+	await animation_finished
+	play("on_air")
 
 func _physics_process(delta: float) -> void:
 
@@ -67,13 +71,6 @@ func process_physics_server(delta: float):
 		if not hit_player.alive:
 			player.kill_count += 1
 		queue_free()
-	
-	
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	if not is_playing():
-		play("on_air")
 
 func _on_timer_timeout() -> void:
 	queue_free()

@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://b5fh51psrqk3n" path="res://assets/entities/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cyt1jonphds8q" path="res://scripts/entities/default_player.gd" id="1_qlg0r"]
-[ext_resource type="AudioStream" uid="uid://du50dj5fj1t70" path="res://assets/sounds/hurt.wav" id="3_qhqgy"]
-[ext_resource type="AudioStream" uid="uid://ci57naxhy85ep" path="res://assets/sounds/jump.wav" id="4_dqkch"]
+[ext_resource type="AudioStream" uid="uid://du50dj5fj1t70" path="res://assets/sfx/hurt.wav" id="3_qhqgy"]
+[ext_resource type="AudioStream" uid="uid://ci57naxhy85ep" path="res://assets/sfx/jump.wav" id="4_dqkch"]
 [ext_resource type="PackedScene" uid="uid://boony3y1rqxqe" path="res://scenes/ui/hud.tscn" id="5_n3hnt"]
 [ext_resource type="PackedScene" uid="uid://bcxjubp1ocyjq" path="res://scenes/ui/pause_menu.tscn" id="6_erhne"]
 

@@ -3,7 +3,14 @@ extends Node
 enum Guns {
 	Glock,
 	AK47,
-	Shotgun
+	Shotgun,
+	Sniper,
+	RPG
+}
+
+enum BulletTypes {
+	Default,
+	Explosive
 }
 
 enum WeaponType {

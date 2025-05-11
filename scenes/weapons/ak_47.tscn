@@ -1,9 +1,9 @@
 [gd_scene load_steps=32 format=3 uid="uid://bkqws3c7xfme3"]
 
 [ext_resource type="PackedScene" uid="uid://khv7vxdgppi" path="res://scenes/weapons/gun.tscn" id="1_jx0ug"]
-[ext_resource type="AudioStream" uid="uid://d1uq4xn4et0ky" path="res://assets/sfx/ak47_fire.wav" id="2_hh3i5"]
-[ext_resource type="Texture2D" uid="uid://rl3ybe71x2g6" path="res://assets/guns/AK 47 [96x48]/[EMPTY] AK 47.png" id="2_yw5sm"]
-[ext_resource type="Texture2D" uid="uid://l1hoj2cdvrkd" path="res://assets/guns/AK 47 [96x48]/[SHOOT WITH CASING AND MUZZLE FLASH] AK 47.png" id="3_ephn8"]
+[ext_resource type="AudioStream" uid="uid://d1uq4xn4et0ky" path="res://assets/sfx/ak47_shoot.wav" id="2_hh3i5"]
+[ext_resource type="Texture2D" uid="uid://l1hoj2cdvrkd" path="res://assets/guns/AK47/ak47_shoot.png" id="3_ephn8"]
+[ext_resource type="Texture2D" uid="uid://d2d4hr7n63g1f" path="res://assets/guns/AK47/ak47_empty.png" id="3_yw5sm"]
 [ext_resource type="AudioStream" uid="uid://cr0oribgdbdx4" path="res://assets/sfx/ak47_pickup.wav" id="5_4322t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yw5sm"]
@@ -11,51 +11,51 @@ atlas = ExtResource("3_ephn8")
 region = Rect2(0, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ephn8"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(0, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4322t"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(96, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_by5cj"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(192, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ltjax"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(288, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_al1dd"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(384, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x1h5y"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(480, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5nsnf"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(576, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8hnrm"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(672, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wjk46"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(768, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k0tov"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(864, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gvmfo"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(960, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r825x"]
-atlas = ExtResource("2_yw5sm")
+atlas = ExtResource("3_yw5sm")
 region = Rect2(1056, 0, 96, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mo868"]
@@ -203,6 +203,8 @@ animations = [{
 sprite_frames = SubResource("SpriteFrames_006mj")
 animation = &"empty"
 autoplay = "default"
+frame = 11
+frame_progress = 1.0
 max_ammo = 60
 max_distance = 200
 cooldown = 0.1

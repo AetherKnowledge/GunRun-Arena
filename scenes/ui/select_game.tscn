@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://blhb6oe40xcx2"]
 
 [ext_resource type="Script" uid="uid://cy8864xjupidd" path="res://scripts/ui/select_game.gd" id="1_1qobq"]
-[ext_resource type="Texture2D" uid="uid://ku0sabbsndmc" path="res://assets/images/gamebg.png" id="2_a2txx"]
+[ext_resource type="Texture2D" uid="uid://ku0sabbsndmc" path="res://assets/ui/gamebg.png" id="2_a2txx"]
 [ext_resource type="FontFile" uid="uid://d1rodyu85fb2" path="res://assets/fonts/GrapeSoda.ttf" id="3_aym5w"]
 [ext_resource type="Shader" uid="uid://b6ul0hp42tf6o" path="res://assets/shaders/blur.gdshader" id="4_a2txx"]
 

@@ -1,7 +1,10 @@
 extends Weapon
 class_name Gun
 
-const bullet_scene = preload("res://scenes/weapons/bullet.tscn")
+const default_bullet_scene = preload("res://scenes/weapons/bullet.tscn")
+const exploding_bullet_scene = preload("res://scenes/weapons/exploding_bullet.tscn")
+@export var bullet_type: GlobalEnums.BulletTypes = GlobalEnums.BulletTypes.Default
+
 @export var max_ammo: int = 100
 @export_range(50, 1000, 1) var max_distance = 100
 
@@ -65,7 +68,7 @@ func shoot():
 	# Calculate direction vector from shoot_pos to mouse position
 	if multiplayer.is_server():
 		var dir_angle = (player.looking_at - shoot_pos.global_position).normalized().angle()
-		var new_bullet: Bullet = bullet_scene.instantiate().init(shoot_pos, dir_angle, max_distance,damage,player)
+		var new_bullet: Bullet = get_bullet().instantiate().init(shoot_pos, dir_angle, max_distance,damage,player)
 		get_tree().get_current_scene().get_node("Bullets").add_child(new_bullet, true)
 	
 	stop()
@@ -73,3 +76,11 @@ func shoot():
 	shoot_sfx.play()
 	ammo -= 1
 	start_cooldown()
+	
+func get_bullet() -> PackedScene:
+	match bullet_type:
+		GlobalEnums.BulletTypes.Explosive:
+			return exploding_bullet_scene
+		_:
+			return default_bullet_scene
+	

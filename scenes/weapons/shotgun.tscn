@@ -2,9 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://khv7vxdgppi" path="res://scenes/weapons/gun.tscn" id="1_0frcf"]
 [ext_resource type="Script" uid="uid://7b5eshbq7ks7" path="res://scripts/weapons/shotgun.gd" id="2_278ir"]
-[ext_resource type="Texture2D" uid="uid://dpcbpjx602ax5" path="res://assets/guns/Shotgun_V1.00/shotgun.png" id="2_uukpr"]
-[ext_resource type="Texture2D" uid="uid://cvchpp11xaiu8" path="res://assets/guns/Shotgun_V1.00/shotgun_empty.png" id="3_qn8fy"]
-[ext_resource type="AudioStream" uid="uid://cw5625jsw2mu8" path="res://assets/sfx/shotgun_fire.wav" id="5_xtykv"]
+[ext_resource type="Texture2D" uid="uid://dpcbpjx602ax5" path="res://assets/guns/Shotgun/shotgun_shoot.png" id="2_uukpr"]
+[ext_resource type="Texture2D" uid="uid://cvchpp11xaiu8" path="res://assets/guns/Shotgun/shotgun_empty.png" id="3_qn8fy"]
+[ext_resource type="AudioStream" uid="uid://cw5625jsw2mu8" path="res://assets/sfx/shotgun_shoot.wav" id="5_xtykv"]
 [ext_resource type="AudioStream" uid="uid://b5c8vj5jydtdu" path="res://assets/sfx/shotgun_pickup.wav" id="6_vx5qo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qn8fy"]

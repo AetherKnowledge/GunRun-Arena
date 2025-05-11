@@ -19,7 +19,6 @@ func _ready() -> void:
 		print("Starting Dedicated Server...")
 		get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
 		host()
-		
 
 func host(username: String = "Player"):
 	print("Starting game on Address: %s and Port %s " % [SERVER_IP, str(SERVER_PORT)])

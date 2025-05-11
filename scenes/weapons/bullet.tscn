@@ -105,7 +105,6 @@ properties/1/replication_mode = 2
 z_index = 100
 scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_pfnfn")
-animation = &"on_air"
 autoplay = "default"
 script = ExtResource("2_dnt7v")
 

@@ -11,9 +11,11 @@ properties/0/replication_mode = 1
 
 [node name="Gun" instance=ExtResource("1_mfrst")]
 script = ExtResource("1_76485")
+bullet_type = 0
 max_ammo = 100
 max_distance = 100
 cooldown = 0.5
+weapon_type = 1
 
 [node name="GunSynchronizer" type="MultiplayerSynchronizer" parent="." index="1"]
 replication_config = SubResource("SceneReplicationConfig_imjbj")

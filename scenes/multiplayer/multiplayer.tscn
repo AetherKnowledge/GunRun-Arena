@@ -4232,7 +4232,7 @@ position = Vector2(518, 583)
 scale = Vector2(0.832482, 1)
 
 [node name="BulletSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://i4j3cdrs3yr8")
+_spawnable_scenes = PackedStringArray("uid://i4j3cdrs3yr8", "uid://rpc2hyyi5o82")
 spawn_path = NodePath("../Bullets")
 
 [node name="Bullets" type="Node2D" parent="."]

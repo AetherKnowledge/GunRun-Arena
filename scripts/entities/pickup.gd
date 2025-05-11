@@ -4,6 +4,8 @@ class_name Pickup
 const MAX_ITEM_FALL_SPEED = 100
 const ak47_preload = preload("res://scenes/weapons/ak_47.tscn")
 const shotgun_preload = preload("res://scenes/weapons/shotgun.tscn")
+const sniper_preload = preload("res://scenes/weapons/sniper.tscn")
+const rpg_scene = preload("res://scenes/weapons/rpg.tscn")
 
 @onready var pickup_collision: CollisionShape2D = $PickupArea/PickupCollision
 @onready var pickup_sound: AudioStreamPlayer2D = $PickupSound
@@ -30,7 +32,7 @@ func _on_pickup_area_body_entered(body: Node2D) -> void:
 	
 	if body is Player:
 		var player: Player = body as Player
-		var gun: Weapon = shotgun_preload.instantiate().init(player)
+		var gun: Weapon = rpg_scene.instantiate().init(player)
 		# must come first to queue free the old weapon
 		player.weapon = gun
 		pickup_collision.set_deferred("disabled", true)

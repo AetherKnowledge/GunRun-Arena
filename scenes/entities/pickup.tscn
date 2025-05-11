@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cyoiq567yd3po" path="res://scripts/entities/pickup.gd" id="1_7cqbe"]
 [ext_resource type="Texture2D" uid="uid://bhsoec6f12met" path="res://assets/entities/coin.png" id="1_pg2rt"]
-[ext_resource type="AudioStream" uid="uid://dshfeho5aam8w" path="res://assets/sounds/coin.wav" id="3_11l1o"]
+[ext_resource type="AudioStream" uid="uid://dshfeho5aam8w" path="res://assets/sfx/coin.wav" id="3_11l1o"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kyjqt"]
 properties/0/path = NodePath(".:position")
