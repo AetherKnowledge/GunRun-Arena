@@ -86,7 +86,8 @@ func process_android_controls(is_pressed: bool, touch_pos: Vector2):
 		input_attack = is_pressed
 			
 func _process_pc_controls():
-	looking_at = player.get_global_mouse_position()
+	if Input.get_connected_joypads().size() < 1:
+		looking_at = player.get_global_mouse_position()
 	
 	if Input.is_action_just_pressed("attack"):
 		input_attack = true
@@ -109,6 +110,18 @@ func _process_stick_aim_controls():
 
 func _process_default_controls():
 	#input_direction = Input.get_axis("move_left", "move_right")
+	if Input.get_connected_joypads().size() > 0:
+		var device := 0  # Usually 0 for the first connected gamepad
+		var right_stick_x := Input.get_joy_axis(device, JOY_AXIS_RIGHT_X)  # Right Stick X
+		var right_stick_y := Input.get_joy_axis(device, JOY_AXIS_RIGHT_Y)  # Right Stick Y
+
+		var aim_input := Vector2(right_stick_x, right_stick_y)
+
+		# Deadzone check (avoid small drift)
+		if aim_input.length() > 0.2:
+			looking_at = aim_input * Vector2(200, 200) + player.global_position
+
+	
 	if Input.is_action_pressed("move_left") and not Input.is_action_pressed("move_right"):
 		input_direction = -1
 	elif Input.is_action_pressed("move_right") and not Input.is_action_pressed("move_left"):
@@ -122,6 +135,7 @@ func _process_default_controls():
 		if player.can_jump:
 			player.jump_sfx.play()
 	if Input.is_action_just_released("jump"):
+		release_jump.rpc()
 		input_jump = false 
 			
 	if Input.is_action_just_pressed("dash"):
@@ -131,6 +145,11 @@ func _process_default_controls():
 func jump():
 	if multiplayer.is_server():
 		player.do_jump = true
+		
+@rpc("call_local")
+func release_jump():
+	if multiplayer.is_server():
+		player.release_jump = true
 		
 @rpc("call_local")
 func dash():

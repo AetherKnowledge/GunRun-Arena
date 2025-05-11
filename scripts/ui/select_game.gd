@@ -7,13 +7,14 @@ extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	join_panel.visible = false
+	$PanelBlur.visible = false
 	local_multiplayer_panel.visible = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
-		join_panel.visible = false
+		show_join_panel(false)
 
 
 func local_multiplayer() -> void:
@@ -41,7 +42,7 @@ func host_pressed() -> void:
 	MultiplayerManager.host()
 
 func join_pressed() -> void:
-	join_panel.visible = true
+	show_join_panel(true)
 
 func start_singleplayer_game():
 	if get_tree().root.get_node("Game"):
@@ -57,7 +58,7 @@ func start_multiplayer_game():
 
 
 func _on_connect_pressed() -> void:
-	join_panel.visible = false
+	show_join_panel(false)
 	start_multiplayer_game()
 	parse_and_join(address_txt_box.text)
 	
@@ -73,4 +74,16 @@ func parse_and_join(full_address: String):
 
 
 func _on_cancel_pressed() -> void:
-	join_panel.visible = false
+	show_join_panel(false)
+
+func show_join_panel(show: bool):
+	join_panel.visible = show
+	
+	if show:
+		$PanelBlur.visible = show
+		$AnimationPlayer.play("blur")
+	else:
+		$AnimationPlayer.play_backwards("blur")
+		await $AnimationPlayer.animation_finished
+		$PanelBlur.visible = show
+		

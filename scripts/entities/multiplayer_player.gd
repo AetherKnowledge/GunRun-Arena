@@ -7,7 +7,6 @@ const DEFAULT_WEAPON_SCENE = preload("res://scenes/weapons/glock.tscn")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hurt_sfx: AudioStreamPlayer2D = $Hurt
 @onready var jump_sfx: AudioStreamPlayer2D = $Jump
-@onready var jump_buffer_timer: Timer = $JumpBufferTimer
 @onready var dash_cooldown: Timer = $DashCooldown
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var hud: HUD = %HUD
@@ -18,7 +17,6 @@ const DEFAULT_WEAPON_SCENE = preload("res://scenes/weapons/glock.tscn")
 
 # Player states
 var do_dash: bool = false
-var do_jump: bool = false
 var do_attack: bool = false
 var _is_on_floor: bool = true
 var can_coyote_jump: bool = true
@@ -32,6 +30,8 @@ var air_jumps_remaining: int = 1
 var jumps_remaining: int = 1
 var jumps_count: int = 0
 var ended_jump_early = false
+var do_jump = false
+var release_jump = false
 
 # Dashing vars
 @export var max_dash: int = 1
@@ -130,7 +130,7 @@ func _process_movement(delta: float) -> void:
 		velocity.y = min(velocity.y, MAX_FALL_SPEED)
 	
 	# Jump handling
-	_handle_jump_logic(delta)
+	_handle_jump_logic()
 	
 	# Dash handling
 	_handle_dash_logic(delta)
@@ -184,46 +184,44 @@ func dash(delta):
 	dash_cooldown.start()
 	
 
-func _handle_jump_logic(delta) -> void:
+func _handle_jump_logic() -> void:
 	if is_on_floor():
-		_reset_jump_states(delta)
+		_reset_jump_states()
 	elif coyote_timer.is_stopped():
 		coyote_timer.start()
 
 	jumps_remaining = max_jumps if is_on_floor() or can_coyote_jump else air_jumps_remaining
 	var can_jump = can_coyote_jump or air_jumps_remaining > 0
-
-	if do_jump:
-		if can_jump:
-			_jump(delta)
-		else:
-			_buffer_jump()
-
-func _reset_jump_states(delta) -> void:
+	
+	if do_jump and not is_on_floor() and can_jump and release_jump:
+		_jump()
+		release_jump = false
+	elif holding_jump and is_on_floor() and can_jump:
+		_jump()
+		
+func _reset_jump_states() -> void:
 	ended_jump_early = false
 	jumps_count = 0
 	can_coyote_jump = true
 	air_jumps_remaining = max_jumps - 1
-	if jump_buffer:
-		_jump(delta)
-		jump_buffer = false
 
-func _jump(delta) -> void:
+func _jump() -> void:
 	if is_on_floor() or can_coyote_jump:
 		can_coyote_jump = false
 	else:
 		air_jumps_remaining -= 1
 	
-	do_jump = false
 	jumps_count += 1
 	velocity.y -= max(velocity.y, 0) + JUMP_VELOCITY
 	animated_sprite.play("jump")
 	
+	do_jump = false
+	
 	jump_sfx.play()
+	print(jumps_count)
 
 func _buffer_jump() -> void:
 	jump_buffer = true
-	jump_buffer_timer.start()
 
 func _process_animations(delta: float) -> void:
 	if not alive:

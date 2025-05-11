@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://vmsni765mhvb"]
 
 [ext_resource type="Script" uid="uid://dqhi135o6ikx5" path="res://scripts/ui/tab_menu.gd" id="1_x1u8e"]
-[ext_resource type="Shader" uid="uid://b6ul0hp42tf6o" path="res://assets/shaders/pause_menu.gdshader" id="2_5ca08"]
+[ext_resource type="Shader" uid="uid://b6ul0hp42tf6o" path="res://assets/shaders/blur.gdshader" id="2_5ca08"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5ca08"]
 shader = ExtResource("2_5ca08")

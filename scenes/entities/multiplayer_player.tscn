@@ -361,9 +361,6 @@ bus = &"SFX"
 stream = ExtResource("4_m4ka2")
 bus = &"SFX"
 
-[node name="JumpBufferTimer" type="Timer" parent="."]
-wait_time = 0.2
-
 [node name="DashCooldown" type="Timer" parent="."]
 one_shot = true
 
@@ -399,6 +396,5 @@ show_percentage = false
 [node name="Weapon" type="Node2D" parent="."]
 
 [connection signal="spawned" from="WeaponSpawner" to="." method="_on_weapon_spawner_spawned"]
-[connection signal="timeout" from="JumpBufferTimer" to="." method="_on_jump_buffer_timer_timeout"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
