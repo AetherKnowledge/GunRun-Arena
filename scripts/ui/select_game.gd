@@ -3,14 +3,15 @@ extends Control
 @onready var local_multiplayer_panel: Panel = $VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel
 @onready var join_panel: Panel = $JoinPanel
 @onready var address_txt_box: TextEdit = $JoinPanel/MarginContainer/VBoxContainer/AddressTxtBox
+var is_join_panel_up: bool = false
+var textbox_focused: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	join_panel.visible = false
 	$PanelBlur.visible = false
 	local_multiplayer_panel.visible = false
-
-
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
@@ -58,7 +59,7 @@ func start_multiplayer_game():
 
 
 func _on_connect_pressed() -> void:
-	show_join_panel(false)
+	join_panel.visible = false
 	start_multiplayer_game()
 	parse_and_join(address_txt_box.text)
 	
@@ -86,4 +87,41 @@ func show_join_panel(show: bool):
 		$AnimationPlayer.play_backwards("blur")
 		await $AnimationPlayer.animation_finished
 		$PanelBlur.visible = show
+
+func panel_focus():
+	textbox_focused = false
+	%AddressTxtBox.release_focus()
+	%UsernameTxtBox.release_focus()
+	move_join_panel(false)
+
+func textbox_focus():
+	textbox_focused = true
+	move_join_panel(true)
+
+func textbox_unfocus():
+	if not textbox_focused:
+		move_join_panel(false)
 		
+func move_join_panel(up: bool):
+	if OS.get_name() != "Android":
+		return
+	
+	if is_join_panel_up == up:
+		return
+	
+	is_join_panel_up = up
+	
+	if up:
+		$AnimationPlayer.play("move_up_join_panel")
+	else:
+		$AnimationPlayer.play_backwards("move_up_join_panel")
+	
+
+func _on_panel_blur_gui_input(event: InputEvent) -> void:
+	if not textbox_focused:
+		return
+	
+	if event is InputEventMouse and event.is_pressed():
+		panel_focus()
+	if event is InputEventScreenTouch and event.is_pressed():
+		panel_focus()

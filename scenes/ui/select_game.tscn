@@ -49,21 +49,10 @@ length = 0.5
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("JoinPanel:position:x")
+tracks/0/path = NodePath("JoinPanel:position:y")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(514, -0.25, 0, 0.25, 0, 514, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.5)
-}
-tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("JoinPanel:position:y")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "handle_modes": PackedInt32Array(0, 0),
 "points": PackedFloat32Array(371, -0.25, 0, 0.25, 0, 130, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0, 0.5)
@@ -74,40 +63,40 @@ length = 0.001
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("JoinPanel:position:x")
+tracks/0/path = NodePath("JoinPanel:position:y")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(514, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(371, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("JoinPanel:position:y")
+tracks/1/path = NodePath("PanelBlur/ColorRect:material:shader_parameter/lod")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(371, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("PanelBlur/ColorRect:material:shader_parameter/lod")
+tracks/2/path = NodePath("PanelBlur:self_modulate:r")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/3/type = "bezier"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("PanelBlur:self_modulate:r")
+tracks/3/path = NodePath("PanelBlur:self_modulate:g")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -118,7 +107,7 @@ tracks/3/keys = {
 tracks/4/type = "bezier"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("PanelBlur:self_modulate:g")
+tracks/4/path = NodePath("PanelBlur:self_modulate:b")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -129,21 +118,10 @@ tracks/4/keys = {
 tracks/5/type = "bezier"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("PanelBlur:self_modulate:b")
+tracks/5/path = NodePath("PanelBlur:self_modulate:a")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/6/type = "bezier"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("PanelBlur:self_modulate:a")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
 "handle_modes": PackedInt32Array(0),
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
@@ -394,6 +372,7 @@ grow_vertical = 2
 [node name="ColorRect" type="ColorRect" parent="PanelBlur"]
 material = SubResource("ShaderMaterial_aym5w")
 layout_mode = 2
+mouse_filter = 1
 
 [node name="JoinPanel" type="Panel" parent="."]
 layout_mode = 1
@@ -416,6 +395,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -423,14 +403,17 @@ theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="JoinPanel/MarginContainer"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_constants/separation = 5
 
 [node name="Label2" type="Label" parent="JoinPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_font_sizes/font_size = 24
 text = "Username:"
 
 [node name="UsernameTxtBox" type="TextEdit" parent="JoinPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 24
@@ -438,10 +421,12 @@ placeholder_text = "Player"
 
 [node name="Label" type="Label" parent="JoinPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_font_sizes/font_size = 24
 text = "Address:"
 
 [node name="AddressTxtBox" type="TextEdit" parent="JoinPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 24
@@ -451,6 +436,7 @@ placeholder_text = "127.0.0.1:8080"
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.6
+mouse_filter = 0
 theme_override_constants/separation = 200
 
 [node name="Connect" type="Button" parent="JoinPanel/MarginContainer/VBoxContainer/HBoxContainer"]
@@ -458,7 +444,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.7
-mouse_filter = 1
 theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -476,7 +461,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.7
-mouse_filter = 1
 theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -501,5 +485,10 @@ libraries = {
 [connection signal="pressed" from="VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel/HBoxContainer/Host" to="." method="host_pressed"]
 [connection signal="pressed" from="VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel/HBoxContainer/Join" to="." method="join_pressed"]
 [connection signal="pressed" from="VBoxContainer/Back" to="." method="on_back_pressed"]
+[connection signal="gui_input" from="PanelBlur" to="." method="_on_panel_blur_gui_input"]
+[connection signal="focus_entered" from="JoinPanel/MarginContainer/VBoxContainer/UsernameTxtBox" to="." method="textbox_focus"]
+[connection signal="focus_exited" from="JoinPanel/MarginContainer/VBoxContainer/UsernameTxtBox" to="." method="textbox_unfocus"]
+[connection signal="focus_entered" from="JoinPanel/MarginContainer/VBoxContainer/AddressTxtBox" to="." method="textbox_focus"]
+[connection signal="focus_exited" from="JoinPanel/MarginContainer/VBoxContainer/AddressTxtBox" to="." method="textbox_unfocus"]
 [connection signal="pressed" from="JoinPanel/MarginContainer/VBoxContainer/HBoxContainer/Connect" to="." method="_on_connect_pressed"]
 [connection signal="pressed" from="JoinPanel/MarginContainer/VBoxContainer/HBoxContainer/Cancel" to="." method="_on_cancel_pressed"]
