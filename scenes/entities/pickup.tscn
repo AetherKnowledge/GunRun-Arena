@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bkooy2uf63l2i"]
+[gd_scene load_steps=20 format=3 uid="uid://bkooy2uf63l2i"]
 
 [ext_resource type="Script" uid="uid://cyoiq567yd3po" path="res://scripts/entities/pickup.gd" id="1_7cqbe"]
 [ext_resource type="Texture2D" uid="uid://bhsoec6f12met" path="res://assets/entities/coin.png" id="1_pg2rt"]
@@ -113,6 +113,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kyjqt"]
+size = Vector2(29, 14)
+
 [node name="Pickup" type="CharacterBody2D"]
 collision_layer = 4
 collision_mask = 4
@@ -133,7 +136,8 @@ frame_progress = 0.391035
 collision_mask = 2
 
 [node name="PickupCollision" type="CollisionShape2D" parent="PickupArea"]
-shape = SubResource("CircleShape2D_ssuvv")
+unique_name_in_owner = true
+shape = SubResource("RectangleShape2D_kyjqt")
 
 [node name="PickupSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_11l1o")

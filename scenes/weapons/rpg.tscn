@@ -436,6 +436,7 @@ damage = 50
 
 [node name="PickupSFX" parent="." index="0"]
 stream = ExtResource("4_cuvca")
+volume_db = -8.851
 
 [node name="ShootSFX" parent="." index="2"]
 stream = ExtResource("5_cnqvu")

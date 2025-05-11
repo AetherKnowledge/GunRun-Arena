@@ -1,7 +1,7 @@
 extends Area2D
 
 const PICKUP_SCENE = preload("res://scenes/entities/pickup.tscn")
-@export_range(0,100,1) var max_items: int = 5
+@export_range(0,100,1) var max_items: int = 8
 
 func _physics_process(delta: float) -> void:
 	pass
