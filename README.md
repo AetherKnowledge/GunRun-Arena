@@ -1,11 +1,11 @@
-# SIA-Game 🎮  
+# GunRun Arena 🎮  
 *A 2D Online Platformer Shooter Built for Multiplayer Fun*  
 **System Integration and Architecture (SIA) Project**
 
 ## 📚 Overview
-**SIA-Game** is a 2D online multiplayer platformer shooter developed as part of a **System Integration and Architecture** course project. It combines fast-paced platforming with online shooting mechanics, allowing players to either join online multiplayer sessions or host LAN games with friends.
+**GunRun Arena** is a 2D online multiplayer platformer shooter developed as part of a **System Integration and Architecture** course project. It combines fast-paced platforming with online shooting mechanics, allowing players to either join online multiplayer sessions or host LAN games with friends.
 
-Built with modularity and integration in mind, SIA-Game demonstrates the power of scalable and synchronized game architecture while delivering fun and competitive gameplay.
+Built with modularity and integration in mind, GunRun Arena demonstrates the power of scalable and synchronized game architecture while delivering fun and competitive gameplay.
 
 ## 🚀 Features
 - 🔫 **Online Multiplayer** — Connect with players over the internet

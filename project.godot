@@ -10,10 +10,11 @@ config_version=5
 
 [application]
 
-config/name="Sia Game"
+config/name="GunRun Arena"
+config/version="1.0.0"
 run/main_scene="uid://47noqqt74evc"
 config/features=PackedStringArray("4.4", "Mobile")
-config/icon="res://icon.svg"
+config/icon="uid://lenp21s8lxk5"
 
 [autoload]
 

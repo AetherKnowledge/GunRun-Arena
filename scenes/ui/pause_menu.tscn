@@ -228,7 +228,7 @@ theme_override_constants/shadow_offset_x = 5
 theme_override_constants/shadow_offset_y = 10
 theme_override_fonts/font = ExtResource("1_n87rw")
 theme_override_font_sizes/font_size = 256
-text = "SIA Game"
+text = "GunRun Arena"
 horizontal_alignment = 1
 vertical_alignment = 1
 
