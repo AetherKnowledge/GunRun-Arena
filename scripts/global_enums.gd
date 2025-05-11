@@ -2,7 +2,8 @@ extends Node
 
 enum Guns {
 	Glock,
-	AK47
+	AK47,
+	Shotgun
 }
 
 enum WeaponType {

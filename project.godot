@@ -19,9 +19,9 @@ config/icon="uid://lenp21s8lxk5"
 [autoload]
 
 Music="*res://scenes/music.tscn"
-GlobalEnums="*res://scenes/global_enums.tscn"
 MultiplayerManager="*res://scripts/multiplayer/multiplayer_manager.gd"
 Settings="*res://scripts/settings.gd"
+GlobalEnums="*res://scripts/global_enums.gd"
 
 [display]
 

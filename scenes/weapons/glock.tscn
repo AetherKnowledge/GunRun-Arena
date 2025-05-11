@@ -132,7 +132,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ea2y7")
 }],
-"loop": true,
+"loop": false,
 "name": &"default",
 "speed": 17.0
 }, {
@@ -236,14 +236,14 @@ animations = [{
 
 [node name="Glock" instance=ExtResource("1_qkjx8")]
 sprite_frames = SubResource("SpriteFrames_qkjx8")
-animation = &"shoot"
 autoplay = "default"
+max_distance = 125
 
-[node name="ShootSFX" parent="." index="0"]
-stream = ExtResource("4_c04vw")
-
-[node name="PickupSFX" parent="." index="2"]
+[node name="PickupSFX" parent="." index="0"]
 stream = ExtResource("6_w00mn")
 
-[node name="ShootPos" parent="." index="3"]
+[node name="ShootSFX" parent="." index="2"]
+stream = ExtResource("4_c04vw")
+
+[node name="ShootPos" parent="." index="4"]
 position = Vector2(16, -12)

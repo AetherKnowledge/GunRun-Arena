@@ -346,7 +346,7 @@ replication_config = SubResource("SceneReplicationConfig_2ws2a")
 script = ExtResource("2_gm7j5")
 
 [node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://bkqws3c7xfme3", "uid://6rompywgvv8n")
+_spawnable_scenes = PackedStringArray("uid://bkqws3c7xfme3", "uid://6rompywgvv8n", "uid://d1ecvajwo05")
 spawn_path = NodePath("../Weapon")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

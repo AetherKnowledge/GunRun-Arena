@@ -155,6 +155,8 @@ func _process_default_controls():
 func jump():
 	if multiplayer.is_server():
 		player.do_jump = true
+	elif player.jumps_remaining > 0:
+		player.jump_sfx.play()
 		
 @rpc("call_local")
 func release_jump():

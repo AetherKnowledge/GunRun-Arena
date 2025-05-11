@@ -20,10 +20,13 @@ Special thanks to the talented creators whose assets brought this game to life:
 - **Sidescroller Fantasy** by *Anokolisa*
 - **Brackeys' Platformer Bundle** by *Brackeys*
 - **GUNS_V1.00** by *Arcade Island*
+- **Snake's Authentic Gun Sounds** by *SnakeF8*
 - **Stringstar Fields** by *Trixie*
 - **Chest Animations** by *Admurin*
 - **Pixel Art GUI Elements** by *Mounir Tohami*
 - **Grape Soda** by *jeti*
 - **Godot Virtual Joystick** by *Marco Fazio*
+- **Shotgun Reload Old** by *RA The Sun God*
+- **12 Ga Winchester Shotgun** by *RA The Sun God*
 
 Please support these creators for their incredible work!

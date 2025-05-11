@@ -1,29 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://khv7vxdgppi"]
+[gd_scene load_steps=5 format=3 uid="uid://khv7vxdgppi"]
 
 [ext_resource type="Script" uid="uid://kevo3nm86cl" path="res://scripts/weapons/gun.gd" id="1_76485"]
+[ext_resource type="PackedScene" uid="uid://k2ua23ygxig5" path="res://scenes/weapons/weapon.tscn" id="1_mfrst"]
 [ext_resource type="AudioStream" uid="uid://cmob55xffu8f4" path="res://assets/sfx/empty.mp3" id="2_mgo42"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mgo42"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_imjbj"]
 properties/0/path = NodePath(".:ammo")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
-[node name="Gun" type="AnimatedSprite2D"]
+[node name="Gun" instance=ExtResource("1_mfrst")]
 script = ExtResource("1_76485")
-weapon_type = 1
-metadata/_custom_type_script = "uid://jqpei711leqa"
+max_ammo = 100
+max_distance = 100
+cooldown = 0.5
 
-[node name="GunSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_mgo42")
+[node name="GunSynchronizer" type="MultiplayerSynchronizer" parent="." index="1"]
+replication_config = SubResource("SceneReplicationConfig_imjbj")
 
-[node name="ShootSFX" type="AudioStreamPlayer2D" parent="."]
+[node name="ShootSFX" type="AudioStreamPlayer2D" parent="." index="2"]
 bus = &"SFX"
 
-[node name="EmptySFX" type="AudioStreamPlayer2D" parent="."]
+[node name="EmptySFX" type="AudioStreamPlayer2D" parent="." index="3"]
 stream = ExtResource("2_mgo42")
 bus = &"SFX"
 
-[node name="PickupSFX" type="AudioStreamPlayer2D" parent="."]
-bus = &"SFX"
-
-[node name="ShootPos" type="Marker2D" parent="."]
+[node name="ShootPos" type="Marker2D" parent="." index="4"]

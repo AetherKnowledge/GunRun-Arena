@@ -3,6 +3,7 @@ class_name Gun
 
 const bullet_scene = preload("res://scenes/weapons/bullet.tscn")
 @export var max_ammo: int = 100
+@export_range(50, 1000, 1) var max_distance = 100
 
 var ammo: int = max_ammo:
 	set(value):
@@ -61,11 +62,11 @@ func start_cooldown() -> void:
 	can_fire = true
 	
 func shoot():
-	if get_tree() == null:
-		await get_tree().process_frame
-		
-	var new_bullet: Bullet = bullet_scene.instantiate().init(shoot_pos,damage,player)
-	get_tree().root.add_child(new_bullet)
+	# Calculate direction vector from shoot_pos to mouse position
+	if multiplayer.is_server():
+		var dir_angle = (player.looking_at - shoot_pos.global_position).normalized().angle()
+		var new_bullet: Bullet = bullet_scene.instantiate().init(shoot_pos, dir_angle, max_distance,damage,player)
+		get_tree().get_current_scene().get_node("Bullets").add_child(new_bullet, true)
 	
 	stop()
 	play("shoot")

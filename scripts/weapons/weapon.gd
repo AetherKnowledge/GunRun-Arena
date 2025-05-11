@@ -4,6 +4,7 @@ class_name Weapon
 @export var weapon_name: GlobalEnums.Guns
 @export var weapon_type: GlobalEnums.WeaponType
 @export var damage: int = 10
+@export var PickupSFX: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
 
 var player: Player
 var default_y_scale

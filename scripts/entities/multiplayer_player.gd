@@ -259,6 +259,14 @@ func _attack() -> void:
 func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 	if not alive:
 		return
+	
+	if not multiplayer.is_server() and not MultiplayerManager.host_mode:
+		animated_sprite.play("hurt")
+		hurt_sfx.play()
+		return
+	elif MultiplayerManager.host_mode:
+		animated_sprite.play("hurt")
+		hurt_sfx.play()
 
 	hp -= damage
 
@@ -267,8 +275,7 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 		velocity = knockback_force * 10
 		velocity.y = min(velocity.y, knockback_force.y * 10)
 
-	animated_sprite.play("hurt")
-	hurt_sfx.play()
+	
 
 func kill() -> void:
 	if not multiplayer.is_server():
@@ -331,3 +338,4 @@ func _on_weapon_spawner_spawned(node: Node) -> void:
 	weapon = node as Weapon
 	weapon.init(self)
 	weapon.reparent($Weapon)
+	weapon.PickupSFX.play()
