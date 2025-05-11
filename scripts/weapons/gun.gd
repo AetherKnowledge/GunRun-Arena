@@ -67,8 +67,7 @@ func start_cooldown() -> void:
 func shoot():
 	# Calculate direction vector from shoot_pos to mouse position
 	if multiplayer.is_server():
-		var dir_angle = (player.looking_at - shoot_pos.global_position).normalized().angle()
-		var new_bullet: Bullet = get_bullet().instantiate().init(shoot_pos, dir_angle, max_distance,damage,player)
+		var new_bullet: Bullet = make_bullet(player, bullet_type)
 		get_tree().get_current_scene().get_node("Bullets").add_child(new_bullet, true)
 	
 	stop()
@@ -77,7 +76,11 @@ func shoot():
 	ammo -= 1
 	start_cooldown()
 	
-func get_bullet() -> PackedScene:
+func make_bullet(player: Player, bullet_type: GlobalEnums.BulletTypes, dir_angle: float = (player.looking_at - shoot_pos.global_position).normalized().angle()) -> Bullet:
+	return get_bullet(bullet_type).instantiate().init(shoot_pos, dir_angle, max_distance,damage,player)
+		
+
+func get_bullet(bullet_type: GlobalEnums.BulletTypes) -> PackedScene:
 	match bullet_type:
 		GlobalEnums.BulletTypes.Explosive:
 			return exploding_bullet_scene

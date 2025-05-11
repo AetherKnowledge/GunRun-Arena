@@ -6,7 +6,7 @@ var bullet_type: GlobalEnums.BulletTypes
 var max_distance: int = 100
 var speed: float = 200
 var damage: int = 0
-var knockback_force: Vector2 = Vector2(200,200)
+var knockback_strength = 10
 var player: Player
 var player_id: int = 100
 var initial_pos: Vector2
@@ -76,6 +76,5 @@ func _on_timer_timeout() -> void:
 	queue_free()
 
 func get_recoil_force(player: Player) -> Vector2:
-	var knockback_strength = 4
 	var direction_to_player = sign(player.global_position.x - global_position.x)
 	return Vector2(direction_to_player * knockback_strength, -knockback_strength)  # up and away

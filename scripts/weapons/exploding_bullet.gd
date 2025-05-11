@@ -3,6 +3,8 @@ class_name ExplodingBullet
 
 var explosion_radius: float = 100.0
 var exploded = false
+
+#fix this shit later make client check if explosion occured
 var do_explosion = false
 
 func explode():

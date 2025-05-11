@@ -15,5 +15,5 @@ func shoot():
 		var angle_offset = deg_to_rad(randf_range(spread_min_deg, spread_max_deg)) * sign
 		var dir_angle = (player.looking_at - shoot_pos.global_position).normalized().angle() + angle_offset
 		
-		var new_bullet: Bullet = get_bullet().instantiate().init(shoot_pos, dir_angle, max_distance,damage,player)
+		var new_bullet: Bullet = make_bullet(player, bullet_type, dir_angle)
 		get_tree().get_current_scene().get_node("Bullets").add_child(new_bullet, true)
