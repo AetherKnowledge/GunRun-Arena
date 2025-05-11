@@ -39,6 +39,7 @@ var can_dash: bool = true
 var dash_remaining: int = 1
 
 # Multiplayer
+var username := "Player"
 var player_id: int = 1:
 	set(id):
 		player_id = id
@@ -81,6 +82,7 @@ func _ready() -> void:
 	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
 	_respawn()
 	_setup_camera()
+	update_hud()
 
 func _setup_camera() -> void:
 	var is_local_player = multiplayer.get_unique_id() == player_id
@@ -92,6 +94,7 @@ func _setup_camera() -> void:
 func _process(delta: float) -> void:
 	if not alive:
 		return
+
 	update_hud()
 
 func _physics_process(delta: float) -> void:
@@ -102,6 +105,7 @@ func _physics_process(delta: float) -> void:
 	do_attack = input_synchronizer.input_attack
 	looking_at = input_synchronizer.looking_at
 	direction = input_synchronizer.input_direction
+	username = input_synchronizer.username
 	
 	if is_multiplayer_authority() or MultiplayerManager.host_mode:
 		_is_on_floor = is_on_floor()
@@ -218,7 +222,6 @@ func _jump() -> void:
 	do_jump = false
 	
 	jump_sfx.play()
-	print(jumps_count)
 
 func _buffer_jump() -> void:
 	jump_buffer = true
@@ -313,7 +316,8 @@ func update_hud() -> void:
 	hud.hp_bar.value = hp
 	
 	hp_bar.value = hp
-
+	$UsernameLabel.text = username
+	
 	if weapon and weapon is Gun:
 		hud.ammo_label.text = "Ammo: " + str(weapon.ammo)
 		hud.ammo_bar.max_value = weapon.max_ammo
@@ -325,5 +329,5 @@ func _on_dash_cooldown_timeout() -> void:
 
 func _on_weapon_spawner_spawned(node: Node) -> void:
 	weapon = node as Weapon
-	print(weapon.name)
 	weapon.init(self)
+	weapon.reparent($Weapon)

@@ -12,6 +12,7 @@ var input_jump: bool = false
 @onready var canvas_layer: CanvasLayer = %CanvasLayer
 
 var looking_at: Vector2 = Vector2(0,0)
+var username: String = "Player"
 
 var double_tap_time = 0.3
 var left_tap_count = 0
@@ -24,9 +25,12 @@ func _ready() -> void:
 		set_process(false)
 		set_physics_process(false)
 		set_process_input(false)
-	
+	else:
+		username = MultiplayerManager.username
 	input_direction = Input.get_axis("move_left", "move_right")
 	looking_at = player.get_global_mouse_position()
+
+
 
 func _input(event):
 	if not player.alive:

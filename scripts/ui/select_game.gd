@@ -1,21 +1,26 @@
 extends Control
 
 @onready var local_multiplayer_panel: Panel = $VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel
-@onready var join_panel: Panel = $JoinPanel
-@onready var address_txt_box: TextEdit = $JoinPanel/MarginContainer/VBoxContainer/AddressTxtBox
-var is_join_panel_up: bool = false
+@onready var popup_panel: Panel = $PopupPanel
+@onready var username_txt_box: TextEdit = %UsernameTxtBox
+@onready var address_txt_box: TextEdit = %AddressTxtBox
+var popup_default_height: float = 287
+
+var is_popup_panel_up: bool = false
 var textbox_focused: bool = false
+var do_host := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	join_panel.visible = false
+	popup_default_height = popup_panel.size.y
+	popup_panel.visible = false
 	$PanelBlur.visible = false
 	local_multiplayer_panel.visible = false
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
-		show_join_panel(false)
+		show_popup_panel(false)
 
 
 func local_multiplayer() -> void:
@@ -39,11 +44,19 @@ func single_player_pressed() -> void:
 
 
 func host_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
-	MultiplayerManager.host()
+	do_host = true
+	popup_panel.size.y = popup_default_height/2
+	%AddressLabel.visible = false
+	%AddressTxtBox.visible = false
+	
+	show_popup_panel(true)
 
 func join_pressed() -> void:
-	show_join_panel(true)
+	do_host = false
+	%AddressLabel.visible = true
+	%AddressTxtBox.visible = true
+	popup_panel.size.y = popup_default_height
+	show_popup_panel(true)
 
 func start_singleplayer_game():
 	if get_tree().root.get_node("Game"):
@@ -51,34 +64,38 @@ func start_singleplayer_game():
 	
 	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
-func start_multiplayer_game():
+func _on_connect_pressed() -> void:
 	if get_tree().root.get_node("Multiplayer"):
 		get_tree().root.get_node("Multiplayer").queue_free()
-	
+		
 	get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
-
-
-func _on_connect_pressed() -> void:
-	join_panel.visible = false
-	start_multiplayer_game()
-	parse_and_join(address_txt_box.text)
+	popup_panel.visible = false
 	
-func parse_and_join(full_address: String):
+	if do_host:
+		var username = username_txt_box.text if username_txt_box.text != "" else username_txt_box.placeholder_text
+		MultiplayerManager.host(username)
+	else:
+		var username = username_txt_box.text if username_txt_box.text != "" else username_txt_box.placeholder_text
+		var address = address_txt_box.text if address_txt_box.text != "" else address_txt_box.placeholder_text
+		print(username, address)
+		parse_and_join(address, username)
+	
+func parse_and_join(full_address: String, username: String):
 	var parts = full_address.split(":")
 	if parts.size() == 2 and parts[1].is_valid_int():
 		var address = parts[0]
 		var port = int(parts[1])
-		MultiplayerManager.join(address, port)
+		MultiplayerManager.join(address, port, username)
 	else:
 		print("Invalid address format. Use address:port")
 
 
 
 func _on_cancel_pressed() -> void:
-	show_join_panel(false)
+	show_popup_panel(false)
 
-func show_join_panel(show: bool):
-	join_panel.visible = show
+func show_popup_panel(show: bool):
+	popup_panel.visible = show
 	
 	if show:
 		$PanelBlur.visible = show
@@ -92,29 +109,29 @@ func panel_focus():
 	textbox_focused = false
 	%AddressTxtBox.release_focus()
 	%UsernameTxtBox.release_focus()
-	move_join_panel(false)
+	move_popup_panel(false)
 
 func textbox_focus():
 	textbox_focused = true
-	move_join_panel(true)
+	move_popup_panel(true)
 
 func textbox_unfocus():
 	if not textbox_focused:
-		move_join_panel(false)
+		move_popup_panel(false)
 		
-func move_join_panel(up: bool):
+func move_popup_panel(up: bool):
 	if OS.get_name() != "Android":
 		return
 	
-	if is_join_panel_up == up:
+	if is_popup_panel_up == up:
 		return
 	
-	is_join_panel_up = up
+	is_popup_panel_up = up
 	
 	if up:
-		$AnimationPlayer.play("move_up_join_panel")
+		$AnimationPlayer.play("move_up_popup_panel")
 	else:
-		$AnimationPlayer.play_backwards("move_up_join_panel")
+		$AnimationPlayer.play_backwards("move_up_popup_panel")
 	
 
 func _on_panel_blur_gui_input(event: InputEvent) -> void:

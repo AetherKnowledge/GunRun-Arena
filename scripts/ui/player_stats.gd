@@ -15,7 +15,7 @@ func _process(delta: float) -> void:
 		return
 	
 	has_player = true
-	%PlayerName.text = player.name
+	%PlayerName.text = player.username
 	%Kills.text = str(player.kill_count)
 	%Deaths.text = str(player.death_count)
 	var kdr = (player.kill_count/player.death_count) if player.death_count > 0 else player.kill_count

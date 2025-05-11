@@ -59,6 +59,9 @@ properties/15/replication_mode = 1
 properties/16/path = NodePath(".:death_count")
 properties/16/spawn = true
 properties/16/replication_mode = 1
+properties/17/path = NodePath(".:username")
+properties/17/spawn = true
+properties/17/replication_mode = 2
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2ws2a"]
 properties/0/path = NodePath("InputSynchronizer:input_direction")
@@ -73,6 +76,9 @@ properties/2/replication_mode = 2
 properties/3/path = NodePath("InputSynchronizer:input_jump")
 properties/3/spawn = true
 properties/3/replication_mode = 2
+properties/4/path = NodePath("InputSynchronizer:username")
+properties/4/spawn = true
+properties/4/replication_mode = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
 atlas = ExtResource("2_jlq18")
@@ -394,6 +400,16 @@ value = 100.0
 show_percentage = false
 
 [node name="Weapon" type="Node2D" parent="."]
+
+[node name="UsernameLabel" type="Label" parent="."]
+offset_left = -19.0
+offset_top = -40.0
+offset_right = 21.0
+offset_bottom = -24.0
+theme_override_font_sizes/font_size = 8
+text = "Player"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="spawned" from="WeaponSpawner" to="." method="_on_weapon_spawner_spawned"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

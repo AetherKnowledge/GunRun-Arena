@@ -61,6 +61,9 @@ func start_cooldown() -> void:
 	can_fire = true
 	
 func shoot():
+	if get_tree() == null:
+		await get_tree().process_frame
+		
 	var new_bullet: Bullet = bullet_scene.instantiate().init(shoot_pos,damage,player)
 	get_tree().root.add_child(new_bullet)
 	

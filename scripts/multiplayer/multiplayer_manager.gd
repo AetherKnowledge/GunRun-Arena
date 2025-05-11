@@ -3,11 +3,13 @@ extends Node
 const player_scene = preload("res://scenes/entities/multiplayer_player.tscn")
 const SERVER_IP = "127.0.0.1"
 const SERVER_PORT = 8080
+var SERVER_FULL_ADDRESS = SERVER_IP + ":" + str(SERVER_PORT)
 
 var is_multiplayer = true
 var host_mode = false
 var players_node: Node2D
 var player_count: int = 0
+var username: String = "Player"
 
 signal player_connected(player: MultiplayerPlayer)
 signal player_disconnected(player: MultiplayerPlayer)
@@ -19,7 +21,7 @@ func _ready() -> void:
 		host()
 		
 
-func host():
+func host(username: String = "Player"):
 	print("Starting game on Address: %s and Port %s " % [SERVER_IP, str(SERVER_PORT)])
 	
 	host_mode = true
@@ -32,12 +34,14 @@ func host():
 	multiplayer.peer_disconnected.connect(remove_player)
 	
 	if not OS.has_feature("dedicated_server"):
+		self.username = username
 		add_player(1)
 		player_count += 1
 	
-func join(address: String, port: int):
+func join(address: String, port: int, wew: String):
 	print("Joining Game at Address: %s and Port %s " % [address, str(port)])
 	
+	self.username = wew
 	var client_peer = ENetMultiplayerPeer.new()
 	client_peer.create_client(address,port)
 	
