@@ -5,7 +5,7 @@ var click_cooldown := false
 var last_click_position: Vector2 = Vector2(0,0)
 
 func _input(event):
-	if OS.get_name() != "Android" and not Settings.DEBUG_MODE:
+	if OS.get_name() != "Android" and not Settings.DEBUG_ANDROID:
 		return
 	
 	if event is InputEventScreenTouch:
@@ -16,7 +16,7 @@ func _input(event):
 			simulate_mouse_click(event.pressed, event.position)
 			start_click_cooldown()
 
-		if Settings.DEBUG_MODE:
+		if Settings.DEBUG_ANDROID:
 			if event.pressed:
 				print("Touched at: ", event.position)
 			else:

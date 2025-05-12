@@ -54,7 +54,7 @@ func add_player(id: int):
 	player.name = str(id)
 	
 	#have to wait for scene to load before adding node
-	while get_tree().get_current_scene() == null:
+	while not get_tree().get_current_scene() || not get_tree().get_current_scene().get_node("Players"):
 		await get_tree().process_frame
 		
 	players_node = get_tree().get_current_scene().get_node("Players")

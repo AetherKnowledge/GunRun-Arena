@@ -15,6 +15,9 @@ var WEAPON_SCENES = {
 
 @export var random_item: bool = true
 @export var selected_item: GlobalEnums.Items = GlobalEnums.Items.Glock
+@export var do_despawn: bool = true
+@export_range(5, 10000, 0.1) var time_to_despawn: float = 60
+
 var item: Weapon
 var changed_texture = false
 
@@ -23,6 +26,10 @@ func _ready() -> void:
 		pickup_collision.disabled = true
 		return
 	
+	if do_despawn:
+		$DespawnTimer.start()
+		
+	$DespawnTimer.wait_time = time_to_despawn
 	item = get_random_weapon_scene().instantiate() if random_item else WEAPON_SCENES.get(selected_item).instantiate()
 	
 	$AnimatedSprite2D.sprite_frames = item.sprite_frames
@@ -32,7 +39,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not multiplayer.is_server():
 		if not changed_texture:
-			change_weapon_texture_on_client()
+			sync_weapon_texture_on_client()
 		return
 	
 	if not is_on_floor():
@@ -69,7 +76,7 @@ func get_random_weapon_scene() -> PackedScene:
 	var random_gun = GlobalEnums.Items.values()[selected_item]
 	return WEAPON_SCENES[random_gun]
 	
-func change_weapon_texture_on_client():
+func sync_weapon_texture_on_client():
 	changed_texture = true
 	var gun_idx = GlobalEnums.Items.values()[selected_item]
 	var random_gun = WEAPON_SCENES[gun_idx].instantiate()

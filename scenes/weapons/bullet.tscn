@@ -100,9 +100,6 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:player_id")
 properties/1/spawn = true
 properties/1/replication_mode = 2
-properties/2/path = NodePath(".:selected_item")
-properties/2/spawn = true
-properties/2/replication_mode = 1
 
 [node name="Bullet" type="AnimatedSprite2D"]
 z_index = 100

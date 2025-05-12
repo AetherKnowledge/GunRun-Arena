@@ -17,7 +17,7 @@ properties/2/replication_mode = 1
 properties/3/path = NodePath(".:visible")
 properties/3/spawn = true
 properties/3/replication_mode = 1
-properties/4/path = NodePath(".:weapon_idx")
+properties/4/path = NodePath(".:selected_item")
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
@@ -149,7 +149,6 @@ bus = &"SFX"
 [node name="DespawnTimer" type="Timer" parent="."]
 wait_time = 60.0
 one_shot = true
-autostart = true
 
 [connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]
 [connection signal="timeout" from="DespawnTimer" to="." method="_on_despawn_timer_timeout"]

@@ -38,7 +38,7 @@ func _input(event):
 	
 	_process_default_controls()
 	
-	if OS.get_name() != "Android" and not Settings.DEBUG_MODE:
+	if OS.get_name() != "Android" and not Settings.DEBUG_ANDROID:
 		_process_pc_controls()
 		return
 	

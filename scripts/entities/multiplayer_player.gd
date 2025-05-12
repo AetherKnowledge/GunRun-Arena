@@ -305,8 +305,16 @@ func _respawn() -> void:
 	hp = 100
 	alive = true
 	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
-	global_position = get_tree().get_current_scene().get_node("SpawnPoint").global_position
+	global_position = get_random_spawnpoint().global_position
 
+func get_random_spawnpoint() -> Marker2D:
+	var spawnpoints = get_tree().get_nodes_in_group("SpawnPoints")
+	if spawnpoints.size() < 1:
+		return
+		
+	var rand_idx = randi() % spawnpoints.size()
+	return spawnpoints[rand_idx]
+	 
 func _on_jump_buffer_timer_timeout() -> void:
 	jump_buffer = false
 

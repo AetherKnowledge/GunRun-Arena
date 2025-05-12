@@ -22,7 +22,7 @@ func spawn_item_on_segment():
 	var global_point = $CollisionShape2D.global_transform * random_point
 	
 	var pickup = PICKUP_SCENE.instantiate()
-	add_child(pickup, true)
+	get_tree().get_current_scene().get_node("Items").add_child(pickup, true)
 	pickup.global_position = global_point
 
 func _on_spawn_timer_timeout() -> void:
