@@ -1,8 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://bkooy2uf63l2i"]
+[gd_scene load_steps=9 format=3 uid="uid://bkooy2uf63l2i"]
 
 [ext_resource type="Script" uid="uid://cyoiq567yd3po" path="res://scripts/entities/pickup.gd" id="1_7cqbe"]
-[ext_resource type="Texture2D" uid="uid://bhsoec6f12met" path="res://assets/entities/coin.png" id="1_pg2rt"]
-[ext_resource type="AudioStream" uid="uid://dshfeho5aam8w" path="res://assets/sfx/coin.wav" id="3_11l1o"]
+[ext_resource type="Texture2D" uid="uid://do5xg3b6tgtni" path="res://assets/entities/health_pickup.png" id="2_kyjqt"]
+[ext_resource type="AudioStream" uid="uid://cbfb7mgc7jkti" path="res://assets/sfx/heal.mp3" id="3_kyjqt"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kyjqt"]
 properties/0/path = NodePath(".:position")
@@ -21,105 +21,28 @@ properties/4/path = NodePath(".:selected_item")
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ssuvv"]
-radius = 5.38516
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_i64fm"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_11l1o"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d14el"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1ikuy"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(48, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wnlwo"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(64, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jig8b"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(80, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xmuha"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(96, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kfxoj"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(112, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jsmju"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(128, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s0mny"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(144, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7cc30"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(160, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rojmm"]
-atlas = ExtResource("1_pg2rt")
-region = Rect2(176, 0, 16, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_yoejb"]
+atlas = ExtResource("2_kyjqt")
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ls27i"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_i64fm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_11l1o")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_d14el")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1ikuy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wnlwo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jig8b")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xmuha")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kfxoj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jsmju")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s0mny")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7cc30")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rojmm")
+"texture": SubResource("AtlasTexture_yoejb")
 }],
-"loop": true,
+"loop": false,
 "name": &"default",
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_ssuvv"]
+radius = 5.38516
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kyjqt"]
 size = Vector2(29, 14)
 
-[node name="Pickup" type="CharacterBody2D"]
+[node name="Pickup" type="CharacterBody2D" groups=["Items"]]
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("1_7cqbe")
@@ -127,13 +50,13 @@ script = ExtResource("1_7cqbe")
 [node name="PickupSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_kyjqt")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_ssuvv")
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ls27i")
 autoplay = "default"
 frame_progress = 0.391035
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ssuvv")
 
 [node name="PickupArea" type="Area2D" parent="."]
 collision_mask = 2
@@ -143,7 +66,7 @@ unique_name_in_owner = true
 shape = SubResource("RectangleShape2D_kyjqt")
 
 [node name="PickupSound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_11l1o")
+stream = ExtResource("3_kyjqt")
 bus = &"SFX"
 
 [node name="DespawnTimer" type="Timer" parent="."]

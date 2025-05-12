@@ -2307,6 +2307,8 @@ visible = false
 [node name="RandomItemSpawner" parent="." instance=ExtResource("13_6gd5a")]
 position = Vector2(121, 862)
 scale = Vector2(0.352482, 1)
+max_items = 10
+cooldown = 0.5
 
 [node name="PickupSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://bkooy2uf63l2i")
@@ -2316,31 +2318,31 @@ spawn_path = NodePath("../Items")
 
 [node name="Pickup" parent="Items" instance=ExtResource("13_cl4fu")]
 position = Vector2(694, 899)
-random_item = false
+do_random_item = false
 do_despawn = false
 
 [node name="Pickup2" parent="Items" instance=ExtResource("13_cl4fu")]
 position = Vector2(777, 898)
-random_item = false
-selected_item = 1
+do_random_item = false
+selected_item = 2
 do_despawn = false
 
 [node name="Pickup3" parent="Items" instance=ExtResource("13_cl4fu")]
 position = Vector2(857, 898)
-random_item = false
-selected_item = 2
+do_random_item = false
+selected_item = 3
 do_despawn = false
 
 [node name="Pickup4" parent="Items" instance=ExtResource("13_cl4fu")]
 position = Vector2(936, 897)
-random_item = false
-selected_item = 3
+do_random_item = false
+selected_item = 4
 do_despawn = false
 
 [node name="Pickup5" parent="Items" instance=ExtResource("13_cl4fu")]
 position = Vector2(1015, 896)
-random_item = false
-selected_item = 4
+do_random_item = false
+selected_item = 5
 do_despawn = false
 
 [node name="BulletSpawner" type="MultiplayerSpawner" parent="."]

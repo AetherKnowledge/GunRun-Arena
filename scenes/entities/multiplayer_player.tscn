@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://csdaf6s2dyu5o"]
+[gd_scene load_steps=46 format=3 uid="uid://csdaf6s2dyu5o"]
 
 [ext_resource type="Script" uid="uid://cpjxwhuswn5if" path="res://scripts/entities/multiplayer_player.gd" id="1_gsel8"]
 [ext_resource type="Script" uid="uid://ci2ysifd4oo60" path="res://scripts/multiplayer/input_synchronizer.gd" id="2_gm7j5"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://du50dj5fj1t70" path="res://assets/sfx/hurt.wav" id="3_xk3hh"]
 [ext_resource type="AudioStream" uid="uid://ci57naxhy85ep" path="res://assets/sfx/jump.wav" id="4_m4ka2"]
 [ext_resource type="PackedScene" uid="uid://boony3y1rqxqe" path="res://scenes/ui/hud.tscn" id="5_jxau2"]
+[ext_resource type="AudioStream" uid="uid://cbfb7mgc7jkti" path="res://assets/sfx/heal.mp3" id="6_gm7j5"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gm7j5"]
 properties/0/path = NodePath(".:player_id")
@@ -312,7 +313,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
-radius = 5.59017
+radius = 8.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ws2a"]
 bg_color = Color(0.0941176, 0.0784314, 0.145098, 1)
@@ -382,13 +383,12 @@ replication_config = SubResource("SceneReplicationConfig_2ws2a")
 script = ExtResource("2_gm7j5")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -12)
+position = Vector2(0, -4)
 sprite_frames = SubResource("SpriteFrames_tuyoq")
 animation = &"run"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_g2els")
 
 [node name="Hurt" type="AudioStreamPlayer2D" parent="."]
@@ -399,6 +399,10 @@ bus = &"SFX"
 [node name="Jump" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_m4ka2")
 max_distance = 200.0
+bus = &"SFX"
+
+[node name="Heal" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_gm7j5")
 bus = &"SFX"
 
 [node name="DashCooldown" type="Timer" parent="."]
@@ -428,9 +432,9 @@ unique_name_in_owner = true
 [node name="HPBar" type="ProgressBar" parent="."]
 texture_filter = 1
 offset_left = -9.0
-offset_top = -24.0
+offset_top = -16.0
 offset_right = 9.0
-offset_bottom = -20.0
+offset_bottom = -12.0
 theme_override_styles/background = SubResource("StyleBoxFlat_2ws2a")
 theme_override_styles/fill = SubResource("StyleBoxFlat_gm7j5")
 step = 1.0
@@ -439,13 +443,14 @@ show_percentage = false
 
 [node name="UsernameLabel" type="Label" parent="."]
 offset_left = -19.0
-offset_top = -40.0
+offset_top = -32.0
 offset_right = 21.0
-offset_bottom = -24.0
+offset_bottom = -16.0
 theme_override_font_sizes/font_size = 8
 text = "Player"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://bkqws3c7xfme3", "uid://6rompywgvv8n", "uid://d1ecvajwo05", "uid://ckvmfiunmpy1q", "uid://ce3onrd0plj8n")

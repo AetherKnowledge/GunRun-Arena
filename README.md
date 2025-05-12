@@ -30,5 +30,6 @@ Special thanks to the talented creators whose assets brought this game to life:
 - **12 Ga Winchester Shotgun** by *RA The Sun God*
 - **Explosion Animations Pack** by *ansimuz*
 - **Free Weapon Sound Effects** by *Bluezone Corporation*
+- **Sound Effect** by *freesound_community from Pixabay*
 
 Please support these creators for their incredible work!

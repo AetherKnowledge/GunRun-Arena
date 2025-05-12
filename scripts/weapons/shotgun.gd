@@ -1,9 +1,9 @@
 extends Gun
 class_name Shotgun
 
-var bullet_count = 6
+var bullet_count = 4
 var spread_min_deg = 5
-var spread_max_deg = 10
+var spread_max_deg = 15
 
 func shoot():
 	super.shoot()

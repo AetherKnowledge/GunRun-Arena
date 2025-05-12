@@ -49,7 +49,7 @@ func _physics_process(delta: float) -> void:
 		
 		var hit_player = collider.get_collider() as MultiplayerPlayer
 		if hit_player.player_id != player_id and not bullet_hit_has_played:
-			hit_player.take_damage(damage, get_recoil_force(hit_player))
+			hit_player.take_damage(damage, get_knockback_force(hit_player))
 			bullet_hit_has_played = true
 
 func process_physics_server(delta: float):
@@ -68,7 +68,7 @@ func process_physics_server(delta: float):
 		
 	var hit_player = target as Player
 	if hit_player.player_id != player.player_id:
-		hit_player.take_damage(damage, get_recoil_force(hit_player))
+		hit_player.take_damage(damage, get_knockback_force(hit_player))
 		if not hit_player.alive:
 			player.kill_count += 1
 		queue_free()
@@ -76,6 +76,8 @@ func process_physics_server(delta: float):
 func _on_timer_timeout() -> void:
 	queue_free()
 
-func get_recoil_force(player: Player) -> Vector2:
-	var direction_to_player = sign(player.global_position.x - global_position.x)
-	return Vector2(direction_to_player * knockback_strength, -knockback_strength)  # up and away
+func get_knockback_force(player: Player) -> Vector2:
+	var direction_to_player = (player.global_position - global_position).normalized()
+	direction_to_player.y *= 3
+	
+	return direction_to_player * knockback_strength

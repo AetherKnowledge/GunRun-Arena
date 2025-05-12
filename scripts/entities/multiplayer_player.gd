@@ -66,8 +66,11 @@ var weapon: Weapon:
 # Health
 @export var hp: int = 100:
 	set(value):
-		if hp == value:
+		if value == hp:
 			return
+		elif value > hp and alive:
+			$Heal.play()
+			
 		hp = clamp(value, 0, 100)
 		update_hud()
 		if hp == 0:
@@ -274,7 +277,6 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 	# Knockback
 	if alive and knockback_force != Vector2.ZERO:
 		velocity = knockback_force * 10
-		velocity.y = min(velocity.y, knockback_force.y * 10)
 
 	
 
@@ -310,6 +312,7 @@ func _respawn() -> void:
 	if multiplayer.is_server():
 		weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
 		global_position = get_random_spawnpoint().global_position
+		velocity = Vector2(0,0)
 
 func get_random_spawnpoint() -> Marker2D:
 	var spawnpoints = get_tree().get_nodes_in_group("SpawnPoints")

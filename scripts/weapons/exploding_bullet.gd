@@ -17,7 +17,7 @@ func explode():
 		if other_player.global_position.distance_to(global_position) <= explosion_radius:
 			var distance = other_player.global_position.distance_to(global_position)
 			var explosion_damage = (1 - (distance/explosion_radius)) * damage
-			other_player.take_damage(explosion_damage, get_recoil_force(other_player))
+			other_player.take_damage(explosion_damage, get_knockback_force(other_player))
 	
 	play("explosion")
 	$ExplosionSFX.play()

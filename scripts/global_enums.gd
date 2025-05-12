@@ -1,6 +1,7 @@
 extends Node
 
 enum Items {
+	Health,
 	Glock,
 	AK47,
 	Shotgun,

@@ -426,7 +426,7 @@ animations = [{
 [node name="RPG" instance=ExtResource("1_qkcha")]
 sprite_frames = SubResource("SpriteFrames_384id")
 autoplay = "default"
-offset = Vector2(0, -10)
+offset = Vector2(0, 17)
 bullet_type = 1
 max_ammo = 15
 max_distance = 200
@@ -443,4 +443,4 @@ volume_db = -8.851
 stream = ExtResource("5_cnqvu")
 
 [node name="ShootPos" parent="." index="4"]
-position = Vector2(51, -13)
+position = Vector2(51, 13)

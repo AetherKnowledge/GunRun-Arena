@@ -16,6 +16,8 @@ var ammo: int = max_ammo:
 	set(value):
 		cooldown = max(0.05, value)
 		cooldown = min(10, value)
+		
+
 
 @onready var shoot_sfx: AudioStreamPlayer2D = $ShootSFX
 @onready var empty_sfx: AudioStreamPlayer2D = $EmptySFX
@@ -69,6 +71,8 @@ func shoot():
 	if multiplayer.is_server():
 		var new_bullet: Bullet = make_bullet(player, bullet_type)
 		get_tree().get_current_scene().get_node("Bullets").add_child(new_bullet, true)
+		
+		
 	
 	stop()
 	play("shoot")
@@ -86,4 +90,8 @@ func get_bullet(bullet_type: GlobalEnums.BulletTypes) -> PackedScene:
 			return exploding_bullet_scene
 		_:
 			return default_bullet_scene
-	
+
+func get_recoil_force(player: Player) -> Vector2:
+	var direction_to_player = (global_position - player.global_position).normalized()
+	direction_to_player.y *= 3
+	return direction_to_player * knockback_strength

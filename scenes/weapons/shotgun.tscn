@@ -232,10 +232,9 @@ animations = [{
 sprite_frames = SubResource("SpriteFrames_uukpr")
 animation = &"shoot"
 autoplay = "default"
-offset = Vector2(25, -10)
+offset = Vector2(25, 20)
 script = ExtResource("2_278ir")
 max_ammo = 30
-max_distance = 125
 cooldown = 1.0
 knockback_strength = 20
 
@@ -245,3 +244,6 @@ stream = ExtResource("6_vx5qo")
 [node name="ShootSFX" parent="." index="2"]
 stream = ExtResource("5_xtykv")
 volume_db = -4.426
+
+[node name="ShootPos" parent="." index="4"]
+position = Vector2(43, 19)

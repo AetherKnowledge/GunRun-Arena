@@ -2,7 +2,8 @@ extends CharacterBody2D
 class_name Pickup
 
 const MAX_ITEM_FALL_SPEED = 100
-var WEAPON_SCENES = {
+var ITEM_SCENES = {
+	GlobalEnums.Items.Health: "HEALTH",
 	GlobalEnums.Items.Glock: preload("res://scenes/weapons/glock.tscn"),
 	GlobalEnums.Items.AK47: preload("res://scenes/weapons/ak_47.tscn"),
 	GlobalEnums.Items.Shotgun: preload("res://scenes/weapons/shotgun.tscn"),
@@ -13,12 +14,12 @@ var WEAPON_SCENES = {
 @onready var pickup_collision: CollisionShape2D = $PickupArea/PickupCollision
 @onready var pickup_sound: AudioStreamPlayer2D = $PickupSound
 
-@export var random_item: bool = true
+@export var do_random_item: bool = true
 @export var selected_item: GlobalEnums.Items = GlobalEnums.Items.Glock
 @export var do_despawn: bool = true
 @export_range(5, 10000, 0.1) var time_to_despawn: float = 60
 
-var item: Weapon
+var item
 var changed_texture = false
 
 func _ready() -> void:
@@ -30,11 +31,19 @@ func _ready() -> void:
 		$DespawnTimer.start()
 		
 	$DespawnTimer.wait_time = time_to_despawn
-	item = get_random_weapon_scene().instantiate() if random_item else WEAPON_SCENES.get(selected_item).instantiate()
+	if do_random_item:
+		selected_item = randi() % GlobalEnums.Items.values().size()
+		
+	item = ITEM_SCENES[selected_item]
+	if item is PackedScene:
+		item = item.instantiate()
 	
-	$AnimatedSprite2D.sprite_frames = item.sprite_frames
-	$AnimatedSprite2D.scale *= 0.313
-	$AnimatedSprite2D.play("default")
+		$AnimatedSprite2D.sprite_frames = item.sprite_frames
+		$AnimatedSprite2D.scale *= 0.313
+		$AnimatedSprite2D.play("default")
+	else:
+		$AnimatedSprite2D.scale *= 0.7
+		$AnimatedSprite2D.play("default")
 
 func _physics_process(delta: float) -> void:
 	if not multiplayer.is_server():
@@ -57,8 +66,13 @@ func _on_pickup_area_body_entered(body: Node2D) -> void:
 	if body is Player:
 		var player: Player = body as Player
 		# must come first to queue free the old weapon
-		item.init(player)
-		player.weapon = item
+		if item is Weapon:
+			var gun = item as Weapon
+			item.init(player)
+			player.weapon = item
+		else:
+			player.hp += randi_range(10,50)
+			
 		pickup_collision.set_deferred("disabled", true)
 		visible = false
 		remove_pickup()
@@ -71,15 +85,20 @@ func _on_despawn_timer_timeout() -> void:
 func remove_pickup():
 	queue_free()
 	
-func get_random_weapon_scene() -> PackedScene:
-	selected_item = randi() % GlobalEnums.Items.values().size()
-	var random_gun = GlobalEnums.Items.values()[selected_item]
-	return WEAPON_SCENES[random_gun]
+#func get_random_item():
+	#selected_item = randi() % GlobalEnums.Items.values().size()
+	#var random_gun = GlobalEnums.Items.values()[selected_item]
+	#return ITEM_SCENES[random_gun]
 	
 func sync_weapon_texture_on_client():
 	changed_texture = true
-	var gun_idx = GlobalEnums.Items.values()[selected_item]
-	var random_gun = WEAPON_SCENES[gun_idx].instantiate()
-	$AnimatedSprite2D.sprite_frames = random_gun.sprite_frames
-	$AnimatedSprite2D.scale *= 0.313
-	$AnimatedSprite2D.play("default")
+	var item_idx = GlobalEnums.Items.values()[selected_item]
+	var random_item = ITEM_SCENES[item_idx]
+	if random_item is PackedScene:
+		random_item = random_item.instantiate()
+		$AnimatedSprite2D.sprite_frames = random_item.sprite_frames
+		$AnimatedSprite2D.scale *= 0.313
+		$AnimatedSprite2D.play("default")
+	else:
+		$AnimatedSprite2D.scale *= 0.7
+		$AnimatedSprite2D.play("default")

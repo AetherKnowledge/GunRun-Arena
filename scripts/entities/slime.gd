@@ -33,9 +33,9 @@ func _physics_process(delta: float) -> void:
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body is Player:
 		var player = body as Player
-		player.take_damage(damage, get_recoil_force(player))
+		player.take_damage(damage, get_knockback_force(player))
 
-func get_recoil_force(player: Player) -> Vector2:
+func get_knockback_force(player: Player) -> Vector2:
 	var knockback_strength = 4
 	var direction_to_player = sign(player.global_position.x - global_position.x)
 	return Vector2(direction_to_player * knockback_strength, -knockback_strength)  # up and away

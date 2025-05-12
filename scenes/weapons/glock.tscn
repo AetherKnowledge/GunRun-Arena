@@ -238,6 +238,7 @@ animations = [{
 sprite_frames = SubResource("SpriteFrames_qkjx8")
 animation = &"empty"
 autoplay = "default"
+offset = Vector2(-8, 32)
 max_distance = 125
 
 [node name="PickupSFX" parent="." index="0"]
@@ -247,4 +248,4 @@ stream = ExtResource("6_w00mn")
 stream = ExtResource("4_c04vw")
 
 [node name="ShootPos" parent="." index="4"]
-position = Vector2(16, -12)
+position = Vector2(8, 19)

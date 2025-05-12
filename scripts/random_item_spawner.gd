@@ -2,6 +2,10 @@ extends Area2D
 
 const PICKUP_SCENE = preload("res://scenes/entities/pickup.tscn")
 @export_range(0,100,1) var max_items: int = 8
+@export_range(0.5, 100, 0.1) var cooldown: float = 5
+
+func _ready() -> void:
+	$SpawnTimer.wait_time = cooldown
 
 func _physics_process(delta: float) -> void:
 	pass
@@ -26,7 +30,7 @@ func spawn_item_on_segment():
 	pickup.global_position = global_point
 
 func _on_spawn_timer_timeout() -> void:
-	if get_child_count() >= max_items + 3 or MultiplayerManager.player_count < 1:
+	if get_tree().get_nodes_in_group("Items").size() >= max_items + 3 or MultiplayerManager.player_count < 1:
 		return
 	
 	spawn_item_on_segment()
