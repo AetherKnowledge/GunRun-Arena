@@ -272,7 +272,7 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 	hp -= damage
 
 	# Knockback
-	if knockback_force != Vector2.ZERO:
+	if alive and knockback_force != Vector2.ZERO:
 		velocity = knockback_force * 10
 		velocity.y = min(velocity.y, knockback_force.y * 10)
 
@@ -301,6 +301,7 @@ func _process_death() -> void:
 	_respawn()
 
 func _respawn() -> void:
+	$AnimationPlayer.play("invincible")
 	invincibility_timer.start()
 	collision.disabled = false
 	animated_sprite.play("idle")
@@ -350,3 +351,7 @@ func _on_weapon_spawner_spawned(node: Node) -> void:
 	weapon.init(self)
 	weapon.reparent($Weapon)
 	weapon.PickupSFX.play()
+
+
+func _on_invincibility_timer_timeout() -> void:
+	$AnimationPlayer.stop()

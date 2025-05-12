@@ -237,6 +237,7 @@ script = ExtResource("2_278ir")
 max_ammo = 30
 max_distance = 125
 cooldown = 1.0
+knockback_strength = 20
 
 [node name="PickupSFX" parent="." index="0"]
 stream = ExtResource("6_vx5qo")

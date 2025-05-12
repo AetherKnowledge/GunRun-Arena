@@ -440,8 +440,8 @@ offset = Vector2(25, -10)
 max_ammo = 30
 max_distance = 500
 cooldown = 1.5
-weapon_type = 1
 damage = 50
+knockback_strength = 40
 
 [node name="PickupSFX" parent="." index="0"]
 stream = ExtResource("2_aip7g")
