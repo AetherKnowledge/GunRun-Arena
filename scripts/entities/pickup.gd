@@ -3,25 +3,28 @@ class_name Pickup
 
 const MAX_ITEM_FALL_SPEED = 100
 var WEAPON_SCENES = {
-	GlobalEnums.Guns.Glock: preload("res://scenes/weapons/glock.tscn"),
-	GlobalEnums.Guns.AK47: preload("res://scenes/weapons/ak_47.tscn"),
-	GlobalEnums.Guns.Shotgun: preload("res://scenes/weapons/shotgun.tscn"),
-	GlobalEnums.Guns.Sniper: preload("res://scenes/weapons/sniper.tscn"),
-	GlobalEnums.Guns.RPG: preload("res://scenes/weapons/rpg.tscn")
+	GlobalEnums.Items.Glock: preload("res://scenes/weapons/glock.tscn"),
+	GlobalEnums.Items.AK47: preload("res://scenes/weapons/ak_47.tscn"),
+	GlobalEnums.Items.Shotgun: preload("res://scenes/weapons/shotgun.tscn"),
+	GlobalEnums.Items.Sniper: preload("res://scenes/weapons/sniper.tscn"),
+	GlobalEnums.Items.RPG: preload("res://scenes/weapons/rpg.tscn")
 }
 
 @onready var pickup_collision: CollisionShape2D = $PickupArea/PickupCollision
 @onready var pickup_sound: AudioStreamPlayer2D = $PickupSound
+
+@export var random_item: bool = true
+@export var selected_item: GlobalEnums.Items = GlobalEnums.Items.Glock
 var item: Weapon
 var changed_texture = false
-var weapon_idx: int = 0
 
 func _ready() -> void:
 	if not multiplayer.is_server():
 		pickup_collision.disabled = true
 		return
-		
-	item = get_random_weapon_scene().instantiate()
+	
+	item = get_random_weapon_scene().instantiate() if random_item else WEAPON_SCENES.get(selected_item).instantiate()
+	
 	$AnimatedSprite2D.sprite_frames = item.sprite_frames
 	$AnimatedSprite2D.scale *= 0.313
 	$AnimatedSprite2D.play("default")
@@ -62,13 +65,13 @@ func remove_pickup():
 	queue_free()
 	
 func get_random_weapon_scene() -> PackedScene:
-	weapon_idx = randi() % GlobalEnums.Guns.values().size()
-	var random_gun = GlobalEnums.Guns.values()[weapon_idx]
+	selected_item = randi() % GlobalEnums.Items.values().size()
+	var random_gun = GlobalEnums.Items.values()[selected_item]
 	return WEAPON_SCENES[random_gun]
 	
 func change_weapon_texture_on_client():
 	changed_texture = true
-	var gun_idx = GlobalEnums.Guns.values()[weapon_idx]
+	var gun_idx = GlobalEnums.Items.values()[selected_item]
 	var random_gun = WEAPON_SCENES[gun_idx].instantiate()
 	$AnimatedSprite2D.sprite_frames = random_gun.sprite_frames
 	$AnimatedSprite2D.scale *= 0.313

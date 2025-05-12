@@ -1,6 +1,6 @@
 extends Node
 
-enum Guns {
+enum Items {
 	Glock,
 	AK47,
 	Shotgun,

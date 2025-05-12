@@ -77,7 +77,7 @@ func shoot():
 	start_cooldown()
 	
 func make_bullet(player: Player, bullet_type: GlobalEnums.BulletTypes, dir_angle: float = (player.looking_at - shoot_pos.global_position).normalized().angle()) -> Bullet:
-	return get_bullet(bullet_type).instantiate().init(shoot_pos, dir_angle, max_distance,damage,player)
+	return get_bullet(bullet_type).instantiate().init(player, shoot_pos, dir_angle, max_distance,damage, knockback_strength)
 		
 
 func get_bullet(bullet_type: GlobalEnums.BulletTypes) -> PackedScene:

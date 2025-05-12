@@ -5,17 +5,18 @@ class_name Bullet
 var bullet_type: GlobalEnums.BulletTypes
 var max_distance: int = 100
 var speed: float = 200
-var damage: int = 0
+var damage: int = 1
 var knockback_strength = 10
 var player: Player
 var player_id: int = 100
 var initial_pos: Vector2
 var bullet_hit_has_played = false
 
-func init(shoot_pos: Marker2D, dir_angle: float, max_distance: int, damage: int, player: Player):
-	self.max_distance = max_distance
+func init(player: Player, shoot_pos: Marker2D, dir_angle: float, max_distance: int = 100, damage: int = 1, knockback_strength: int = 10):
 	self.player = player
+	self.max_distance = max_distance
 	self.damage = damage
+	self.knockback_strength = knockback_strength
 	self.initial_pos = shoot_pos.global_position
 	
 	if player is MultiplayerPlayer:
