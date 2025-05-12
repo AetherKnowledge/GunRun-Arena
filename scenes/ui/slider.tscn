@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5u1rvhh54uss"]
+
+[ext_resource type="Script" uid="uid://c7hg22ogou2v8" path="res://scripts/ui/slider.gd" id="1_q3p31"]
+
+[node name="Slider" type="VBoxContainer"]
+offset_left = 144.0
+offset_top = 72.0
+offset_right = 1327.0
+offset_bottom = 145.0
+script = ExtResource("1_q3p31")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 24
+text = "MasterVolume"
+
+[node name="Slider" type="HSlider" parent="."]
+layout_mode = 2
+size_flags_vertical = 4
+value = 100.0
+
+[connection signal="value_changed" from="Slider" to="." method="_on_slider_value_changed"]

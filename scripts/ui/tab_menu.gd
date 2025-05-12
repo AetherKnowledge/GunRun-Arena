@@ -1,19 +1,22 @@
-extends Control
+@tool
+extends BlurredPanel
 
-@onready var color_rect: ColorRect = $ColorRect
 const player_stats_scene = preload("res://scenes/ui/player_stats.tscn")
 
 func _input(event: InputEvent) -> void:
-	if not color_rect:
+	if Engine.is_editor_hint():
 		return
-		
-	if Input.is_action_just_pressed("tab"):
-		show()
-	if Input.is_action_just_released("tab"):
-		hide()
 	
+	if Input.is_action_just_pressed("tab"):
+		play()
+	if Input.is_action_just_released("tab"):
+		play_backwards()
+		
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+	
 	hide()
 	MultiplayerManager.player_connected.connect(add_player_to_tab_menu)
 	MultiplayerManager.player_disconnected.connect(remove_player_to_tab_menu)

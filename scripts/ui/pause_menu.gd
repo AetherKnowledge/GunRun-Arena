@@ -1,12 +1,8 @@
-extends Control
+extends BlurredPanel
 class_name PauseMenu
 
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
 signal state_changed
 var paused = false
-		
-func _ready() -> void:
-	hide()
 
 func _input(event):
 	if event.is_action_pressed("pause"):
@@ -21,11 +17,8 @@ func testESC():
 func _on_resume_pressed() -> void:
 	resume()
 
-func _on_restart_pressed() -> void:
-	restart()
-
 func _on_options_pressed() -> void:
-	pass # Replace with function body.
+	$SettingsPanel.play()
 
 func _on_main_menu_pressed() -> void:
 	resume()
@@ -36,15 +29,17 @@ func _on_main_menu_pressed() -> void:
 func pause():
 	paused = true
 	state_changed.emit()
-	animation_player.play("blur")
-	#get_tree().paused = paused
+	play()
 	show()
 
 func resume():
 	paused = false
-	animation_player.play_backwards("blur")
-	#get_tree().paused = paused
+	play_backwards()
 	state_changed.emit()
+	
+	await animation_finished
+	if $SettingsPanel.visible:
+		$SettingsPanel.play_backwards()
 
 func restart():
 	resume()

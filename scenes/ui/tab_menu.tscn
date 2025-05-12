@@ -1,96 +1,96 @@
-[gd_scene load_steps=6 format=3 uid="uid://vmsni765mhvb"]
+[gd_scene load_steps=4 format=3 uid="uid://vmsni765mhvb"]
 
 [ext_resource type="Script" uid="uid://dqhi135o6ikx5" path="res://scripts/ui/tab_menu.gd" id="1_x1u8e"]
-[ext_resource type="Shader" uid="uid://b6ul0hp42tf6o" path="res://assets/shaders/blur.gdshader" id="2_5ca08"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ca08"]
-shader = ExtResource("2_5ca08")
-shader_parameter/lod = 0.8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8deiy"]
-bg_color = Color(0.176471, 0.176471, 0.176471, 0.65098)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x1u8e"]
+bg_color = Color(0.0980392, 0.0980392, 0.0980392, 0.886275)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.423529)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.247059)
+shadow_size = 10
+shadow_offset = Vector2(15, 10)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ca08"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_top = 1
 border_width_bottom = 1
 
-[node name="TabMenu" type="Control"]
+[node name="TabMenu" type="PanelContainer"]
+modulate = Color(1, 1, 1, 255)
+self_modulate = Color(1, 1, 1, 0)
 z_index = 300
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_x1u8e")
+max_background_opacity = 0
+metadata/_custom_type_script = "uid://drk53exk5d6f4"
 
-[node name="ColorRect" type="ColorRect" parent="."]
-material = SubResource("ShaderMaterial_5ca08")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -817.5
-offset_top = -459.5
-offset_right = 817.5
-offset_bottom = 459.5
+offset_left = -737.0
+offset_top = -414.5
+offset_right = 737.0
+offset_bottom = 414.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_8deiy")
+theme_override_styles/panel = SubResource("StyleBoxFlat_x1u8e")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/PanelContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer2"]
+[node name="Label" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer2"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Stats"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PlayerStatsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer2"]
+[node name="PlayerStatsContainer" type="VBoxContainer" parent="Control/PanelContainer/MarginContainer/VBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = -1
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="Control/PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5ca08")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="PlayerName" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="PlayerName" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -98,7 +98,7 @@ text = "Username"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Kills" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="Kills" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -106,7 +106,7 @@ text = "Kills"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Deaths" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="Deaths" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -114,7 +114,7 @@ text = "Deaths"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="KDR" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="KDR" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer2/PlayerStatsContainer/PanelContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

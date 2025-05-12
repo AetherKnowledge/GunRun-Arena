@@ -1,13 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bcxjubp1ocyjq"]
+[gd_scene load_steps=8 format=3 uid="uid://bcxjubp1ocyjq"]
 
 [ext_resource type="Script" uid="uid://bjuruyhownecp" path="res://scripts/ui/pause_menu.gd" id="1_myx47"]
 [ext_resource type="FontFile" uid="uid://d1rodyu85fb2" path="res://assets/fonts/GrapeSoda.ttf" id="1_n87rw"]
-[ext_resource type="Shader" uid="uid://b6ul0hp42tf6o" path="res://assets/shaders/blur.gdshader" id="2_kukqi"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kukqi"]
-resource_local_to_scene = true
-shader = ExtResource("2_kukqi")
-shader_parameter/lod = 0.0
+[ext_resource type="PackedScene" uid="uid://csitx20st4s72" path="res://scenes/ui/settings_panel.tscn" id="3_f6eus"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_myx47"]
 
@@ -38,180 +33,18 @@ corner_radius_bottom_left = 16
 shadow_size = 5
 shadow_offset = Vector2(3, 3)
 
-[sub_resource type="Animation" id="Animation_5d2l8"]
-length = 0.001
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Control:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [true]
-}
-tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Control:modulate:a")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Control:modulate:b")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/4/type = "bezier"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Control:modulate:g")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/5/type = "bezier"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Control:modulate:r")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0)
-}
-
-[sub_resource type="Animation" id="Animation_kukqi"]
-resource_name = "blur"
-length = 0.3
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0, -0.15, 0, 0.15, 0, 0.75, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0, 0.3)
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Control:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.00104666),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [false, true]
-}
-tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Control:modulate:a")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0, -0.15, 0, 0.15, 0, 1, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0, 0.3)
-}
-tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Control:modulate:b")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1, -0.15, 0, 0.15, 0, 1, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0, 0.3)
-}
-tracks/4/type = "bezier"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Control:modulate:g")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1, -0.15, 0, 0.15, 0, 1, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0, 0.3)
-}
-tracks/5/type = "bezier"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Control:modulate:r")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1, -0.15, 0, 0.15, 0, 1, -0.15, 0, 0.15, 0),
-"times": PackedFloat32Array(0, 0.3)
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_7l7mv"]
-_data = {
-&"RESET": SubResource("Animation_5d2l8"),
-&"blur": SubResource("Animation_kukqi")
-}
-
-[node name="PauseMenu" type="Control"]
+[node name="PauseMenu" type="PanelContainer"]
 process_mode = 3
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_myx47")
-metadata/_custom_type_script = "uid://cb2x6uokb10e0"
-
-[node name="ColorRect" type="ColorRect" parent="."]
-material = SubResource("ShaderMaterial_kukqi")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+metadata/_custom_type_script = "uid://drk53exk5d6f4"
 
 [node name="Control" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
 [node name="Label" type="Label" parent="Control"]
 layout_mode = 1
@@ -274,23 +107,6 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_7l7mv")
 text = "Resume
 "
 
-[node name="Restart" type="Button" parent="Control/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_myx47")
-theme_override_styles/hover = SubResource("StyleBoxFlat_kukqi")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_5d2l8")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7l7mv")
-text = "Restart
-"
-
 [node name="Options" type="Button" parent="Control/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -323,12 +139,9 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_5d2l8")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7l7mv")
 text = "Main Menu"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_7l7mv")
-}
+[node name="SettingsPanel" parent="." instance=ExtResource("3_f6eus")]
+layout_mode = 2
 
 [connection signal="pressed" from="Control/PanelContainer/MarginContainer/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="Control/PanelContainer/MarginContainer/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/MarginContainer/VBoxContainer/Main Menu" to="." method="_on_main_menu_pressed"]

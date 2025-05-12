@@ -1,0 +1,119 @@
+[gd_scene load_steps=5 format=3 uid="uid://csitx20st4s72"]
+
+[ext_resource type="Script" uid="uid://wc5x0cdjs7l6" path="res://scripts/settings_panel.gd" id="1_dbor5"]
+[ext_resource type="Texture2D" uid="uid://bcnrpyd0mir6u" path="res://assets/ui/empty-texture.png" id="2_qm286"]
+[ext_resource type="PackedScene" uid="uid://c5u1rvhh54uss" path="res://scenes/ui/slider.tscn" id="3_i3lpr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i3lpr"]
+bg_color = Color(0.0980392, 0.0980392, 0.0980392, 0.886275)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.423529)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.247059)
+shadow_size = 10
+shadow_offset = Vector2(15, 10)
+
+[node name="SettingsPanel" type="PanelContainer"]
+modulate = Color(1, 1, 1, 255)
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dbor5")
+max_background_opacity = 0
+metadata/_custom_type_script = "uid://drk53exk5d6f4"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -737.0
+offset_top = -414.5
+offset_right = 737.0
+offset_bottom = 414.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i3lpr")
+
+[node name="HSplitContainer" type="VBoxContainer" parent="Control/PanelContainer"]
+layout_mode = 2
+
+[node name="VSplitContainer" type="HBoxContainer" parent="Control/PanelContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer/HSplitContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Label" type="Label" parent="Control/PanelContainer/HSplitContainer/VSplitContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackBtn" type="Button" parent="Control/PanelContainer/HSplitContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+focus_mode = 0
+theme_override_colors/font_hover_color = Color(0.560955, 0.560955, 0.560955, 1)
+theme_override_colors/font_pressed_color = Color(0.396889, 0.396889, 0.396889, 1)
+theme_override_font_sizes/font_size = 32
+text = "<-"
+icon = ExtResource("2_qm286")
+flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer/HSplitContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 50
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/PanelContainer/HSplitContainer/MarginContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer/HSplitContainer/MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 45
+
+[node name="MasterVolume" parent="Control/PanelContainer/HSplitContainer/MarginContainer/PanelContainer/VBoxContainer" instance=ExtResource("3_i3lpr")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "Master Volume"
+value = 50
+
+[node name="MusicVolume" parent="Control/PanelContainer/HSplitContainer/MarginContainer/PanelContainer/VBoxContainer" instance=ExtResource("3_i3lpr")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "Music Volume"
+value = 50
+
+[node name="SFXVolume" parent="Control/PanelContainer/HSplitContainer/MarginContainer/PanelContainer/VBoxContainer" instance=ExtResource("3_i3lpr")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "SFX Volume"
+value = 100
+
+[connection signal="pressed" from="Control/PanelContainer/HSplitContainer/VSplitContainer/BackBtn" to="." method="_on_back_btn_pressed"]
+[connection signal="value_changed" from="Control/PanelContainer/HSplitContainer/MarginContainer/PanelContainer/VBoxContainer/MasterVolume" to="." method="_on_master_volume_value_changed"]
+[connection signal="value_changed" from="Control/PanelContainer/HSplitContainer/MarginContainer/PanelContainer/VBoxContainer/MusicVolume" to="." method="_on_music_volume_value_changed"]
+[connection signal="value_changed" from="Control/PanelContainer/HSplitContainer/MarginContainer/PanelContainer/VBoxContainer/SFXVolume" to="." method="_on_sfx_volume_value_changed"]
