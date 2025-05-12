@@ -14,6 +14,7 @@ const DEFAULT_WEAPON_SCENE = preload("res://scenes/weapons/glock.tscn")
 @onready var camera: Camera2D = $Camera2D
 @onready var hp_bar: ProgressBar = $HPBar
 @onready var collision: CollisionShape2D = $CollisionShape2D
+@onready var invincibility_timer: Timer = $InvincibilityTimer
 
 # Player states
 var do_dash: bool = false
@@ -257,7 +258,7 @@ func _attack() -> void:
 		weapon.attack()
 
 func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
-	if not alive:
+	if not alive or not invincibility_timer.is_stopped():
 		return
 	
 	if not multiplayer.is_server() and not MultiplayerManager.host_mode:
@@ -300,12 +301,14 @@ func _process_death() -> void:
 	_respawn()
 
 func _respawn() -> void:
+	invincibility_timer.start()
 	collision.disabled = false
 	animated_sprite.play("idle")
 	hp = 100
 	alive = true
-	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
-	global_position = get_random_spawnpoint().global_position
+	if multiplayer.is_server():
+		weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
+		global_position = get_random_spawnpoint().global_position
 
 func get_random_spawnpoint() -> Marker2D:
 	var spawnpoints = get_tree().get_nodes_in_group("SpawnPoints")
