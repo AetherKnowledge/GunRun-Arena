@@ -126,8 +126,8 @@ func _process_movement(delta: float) -> void:
 	if not is_on_floor():
 		var gravity_force = get_gravity().y * 0.7
 		
-		# Jump Cuts
-		if velocity.y < 0 and not holding_jump:
+		# Jump Cuts only only after knockback timer is done
+		if velocity.y < 0 and not holding_jump and $KnockbackGravityCancelTimer.is_stopped():
 			velocity.y *= 0.7
 		
 		# Apex Jump Modifier
@@ -277,8 +277,12 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 	# Knockback
 	if alive and knockback_force != Vector2.ZERO:
 		velocity = knockback_force * 10
+		$KnockbackGravityCancelTimer.start()
 
-	
+func recoil(recoil_force: Vector2 = Vector2.ZERO) -> void:
+	# Knockback
+	if alive and recoil_force != Vector2.ZERO:
+		velocity = recoil_force * 10
 
 func kill() -> void:
 	if not multiplayer.is_server():

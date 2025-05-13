@@ -236,7 +236,8 @@ offset = Vector2(25, 20)
 script = ExtResource("2_278ir")
 max_ammo = 30
 cooldown = 1.0
-knockback_strength = 20
+recoil_strength = 30
+knockback_strength = 30
 
 [node name="PickupSFX" parent="." index="0"]
 stream = ExtResource("6_vx5qo")

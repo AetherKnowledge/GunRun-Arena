@@ -4,6 +4,6 @@ const DEFAULT_WIDTH = 1920
 const DEFAULT_HEIGT = 1080
 
 const DEBUG_UI = true
-const DEBUG_GAME = false
+const DEBUG_GAME = true
 const DEBUG_ANDROID = false
 var EnableJoystick = false

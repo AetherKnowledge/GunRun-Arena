@@ -440,6 +440,7 @@ offset = Vector2(25, 20)
 max_ammo = 30
 max_distance = 500
 cooldown = 1.5
+recoil_strength = 30
 damage = 45
 knockback_strength = 40
 

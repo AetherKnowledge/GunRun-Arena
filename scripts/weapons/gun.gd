@@ -16,7 +16,8 @@ var ammo: int = max_ammo:
 	set(value):
 		cooldown = max(0.05, value)
 		cooldown = min(10, value)
-		
+	
+@export_range(1,200, 1) var recoil_strength = 10
 
 
 @onready var shoot_sfx: AudioStreamPlayer2D = $ShootSFX
@@ -70,6 +71,7 @@ func shoot():
 	# Calculate direction vector from shoot_pos to mouse position
 	if multiplayer.is_server():
 		var new_bullet: Bullet = make_bullet(player, bullet_type)
+		player.recoil(get_recoil_force(shoot_pos, player))
 		get_tree().get_current_scene().get_node("Bullets").add_child(new_bullet, true)
 		
 		
@@ -91,7 +93,7 @@ func get_bullet(bullet_type: GlobalEnums.BulletTypes) -> PackedScene:
 		_:
 			return default_bullet_scene
 
-func get_recoil_force(player: Player) -> Vector2:
-	var direction_to_player = (global_position - player.global_position).normalized()
+func get_recoil_force(barrel_pos:Marker2D, player: Player) -> Vector2:
+	var direction_to_player = (player.global_position - barrel_pos.global_position).normalized()
 	direction_to_player.y *= 3
-	return direction_to_player * knockback_strength
+	return direction_to_player * recoil_strength

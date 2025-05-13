@@ -431,6 +431,7 @@ bullet_type = 1
 max_ammo = 15
 max_distance = 200
 cooldown = 2.0
+recoil_strength = 20
 weapon_name = 4
 damage = 50
 knockback_strength = 50
