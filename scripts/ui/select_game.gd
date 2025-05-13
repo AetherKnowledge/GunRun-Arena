@@ -45,7 +45,8 @@ func single_player_pressed() -> void:
 
 func host_pressed() -> void:
 	do_host = true
-	popup_panel.size.y = popup_default_height/2
+	popup_panel.size.y = popup_default_height/1.5
+	
 	%AddressLabel.visible = false
 	%AddressTxtBox.visible = false
 	
@@ -89,8 +90,6 @@ func parse_and_join(full_address: String, username: String):
 	else:
 		print("Invalid address format. Use address:port")
 
-
-
 func _on_cancel_pressed() -> void:
 	show_popup_panel(false)
 
@@ -103,13 +102,15 @@ func show_popup_panel(show: bool):
 	else:
 		$AnimationPlayer.play_backwards("blur")
 		await $AnimationPlayer.animation_finished
+		move_popup_panel(false)
+		$AnimationPlayer.seek(0, true)
 		$PanelBlur.visible = show
+		
 
 func panel_focus():
-	textbox_focused = false
 	%AddressTxtBox.release_focus()
 	%UsernameTxtBox.release_focus()
-	move_popup_panel(false)
+	show_popup_panel(false)
 
 func textbox_focus():
 	textbox_focused = true
@@ -129,9 +130,9 @@ func move_popup_panel(up: bool):
 	is_popup_panel_up = up
 	
 	if up:
-		$AnimationPlayer.play("move_up_popup_panel")
+		$AnimationPlayer.play("move_up_join_panel")
 	else:
-		$AnimationPlayer.play_backwards("move_up_popup_panel")
+		$AnimationPlayer.play_backwards("move_up_join_panel")
 	
 
 func _on_panel_blur_gui_input(event: InputEvent) -> void:
