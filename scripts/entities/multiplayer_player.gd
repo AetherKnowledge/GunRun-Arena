@@ -127,13 +127,13 @@ func _process_movement(delta: float) -> void:
 		var gravity_force = get_gravity().y * 0.7
 		
 		# Jump Cuts only only after knockback timer is done
-		if velocity.y < 0 and not holding_jump and $KnockbackGravityCancelTimer.is_stopped():
+		if velocity.y < 0 and not holding_jump:
 			velocity.y *= 0.7
 		
 		# Apex Jump Modifier
 		elif abs(velocity.y) < APEX_VELOCITY_THRESHOLD:
 			gravity_force *= APEX_GRAVITY_MULTIPLIER
-		
+			
 		velocity.y += gravity_force * delta
 		velocity.y = min(velocity.y, MAX_FALL_SPEED)
 	
@@ -293,7 +293,6 @@ func _process_death() -> void:
 	if not alive:
 		return
 	
-	collision.disabled = true
 	alive = false
 	death_count += 1
 	animated_sprite.play("death")

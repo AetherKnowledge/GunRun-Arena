@@ -14,16 +14,19 @@ class_name HUD
 @onready var death_label: Label = %DeathLabel
 @onready var touch_controls: Control = $TouchControls
 @onready var movement_controls: Control = %MovementControls
-@onready var aim_controls: Control = %AimControls
-@onready var aim_stick: VirtualJoystick = %AimStick
 
 var last_ping_time: int = 0
 var ping_ms: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	touch_controls.visible = OS.get_name() == "Android" or Settings.DEBUG_ANDROID
-		
+	movement_controls.visible = Settings.TouchControlsEnabled
+	
+	Settings.TouchControlsEnabledChanged.connect(_on_touch_controls_enabled_change)
+	
+func _on_touch_controls_enabled_change(value: bool):
+	movement_controls.visible = value
+
 func _on_ping_timer_timeout() -> void:
 	if not MultiplayerManager.is_multiplayer:
 		return
@@ -42,3 +45,10 @@ func ping_response(client_time: int):
 	var now = Time.get_ticks_msec()
 	ping_ms = now - client_time
 	$PingLabel.text = "Ping: %d ms" % ping_ms
+
+func _on_menu_button_pressed() -> void:
+	var nodes = get_tree().get_nodes_in_group("PauseMenu")
+	if nodes.size() != 1 or not nodes.get(0) is PauseMenu:
+		return
+	var pause_menu = nodes.get(0) as PauseMenu 
+	pause_menu.play()

@@ -17,6 +17,7 @@ func _ready() -> void:
 				MultiplayerManager.join(MultiplayerManager.SERVER_IP, MultiplayerManager.SERVER_PORT, "Client")
 				DisplayServer.window_set_position(Vector2i(second_monitor_x, 800))
 				
+				
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -33,9 +34,6 @@ func _on_options_pressed() -> void:
 func _on_exit_pressed() -> void:
 	get_tree().quit()
 
-
-func _on_touch_screen_button_pressed() -> void:
-	print("bruh")
 
 func is_port_open(port: int, max_clients: int = 32) -> bool:
 	var peer = ENetMultiplayerPeer.new()

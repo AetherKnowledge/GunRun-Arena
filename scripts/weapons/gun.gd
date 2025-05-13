@@ -85,7 +85,6 @@ func shoot():
 func make_bullet(player: Player, bullet_type: GlobalEnums.BulletTypes, dir_angle: float = (player.looking_at - shoot_pos.global_position).normalized().angle()) -> Bullet:
 	return get_bullet(bullet_type).instantiate().init(player, shoot_pos, dir_angle, max_distance,damage, knockback_strength)
 		
-
 func get_bullet(bullet_type: GlobalEnums.BulletTypes) -> PackedScene:
 	match bullet_type:
 		GlobalEnums.BulletTypes.Explosive:
@@ -94,6 +93,6 @@ func get_bullet(bullet_type: GlobalEnums.BulletTypes) -> PackedScene:
 			return default_bullet_scene
 
 func get_recoil_force(barrel_pos:Marker2D, player: Player) -> Vector2:
-	var direction_to_player = (player.global_position - barrel_pos.global_position).normalized()
-	direction_to_player.y *= 3
+	var direction_to_player = (player.global_position - player.looking_at).normalized()
+	direction_to_player.y *= 1.5
 	return direction_to_player * recoil_strength

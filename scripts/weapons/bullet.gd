@@ -77,7 +77,10 @@ func _on_timer_timeout() -> void:
 	queue_free()
 
 func get_knockback_force(player: Player) -> Vector2:
-	var direction_to_player = (player.global_position - global_position).normalized()
-	direction_to_player.y *= 3
+	var collision_shape = player.get_node("CollisionShape2D")
+	var shape_center = player.to_global(collision_shape.position)
 	
-	return direction_to_player * knockback_strength
+	var direction_to_center = (shape_center - global_position).normalized()
+	direction_to_center.y *= 3
+	
+	return direction_to_center * knockback_strength

@@ -416,7 +416,7 @@ wait_time = 3.0
 one_shot = true
 
 [node name="KnockbackGravityCancelTimer" type="Timer" parent="."]
-wait_time = 0.15
+wait_time = 0.1
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]

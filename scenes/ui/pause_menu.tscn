@@ -33,7 +33,7 @@ corner_radius_bottom_left = 16
 shadow_size = 5
 shadow_offset = Vector2(3, 3)
 
-[node name="PauseMenu" type="PanelContainer"]
+[node name="PauseMenu" type="PanelContainer" groups=["MouseIgnore", "PauseMenu"]]
 process_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
