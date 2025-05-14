@@ -4111,6 +4111,13 @@ sources/5 = SubResource("TileSetAtlasSource_03e4c")
 layout_mode = 3
 anchors_preset = 0
 
+[node name="Background" type="Node" parent="."]
+
+[node name="Parallax" parent="Background" instance=ExtResource("11_uie1y")]
+position = Vector2(960, 540)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="Background"]
+
 [node name="GameManager" parent="." instance=ExtResource("1_p2uc1")]
 unique_name_in_owner = true
 
@@ -4175,9 +4182,6 @@ position = Vector2(1329, 949)
 
 [node name="SpawnPoint7" type="Marker2D" parent="SpawnPoints" groups=["SpawnPoints"]]
 position = Vector2(1479, 874)
-
-[node name="Parallax" parent="." instance=ExtResource("11_uie1y")]
-position = Vector2(960, 540)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 2
