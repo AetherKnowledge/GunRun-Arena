@@ -1,7 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://i4j3cdrs3yr8"]
+[gd_scene load_steps=18 format=3 uid="uid://i4j3cdrs3yr8"]
 
 [ext_resource type="Texture2D" uid="uid://bsjyoncjyqx1n" path="res://assets/guns/bullet.png" id="1_mx1hr"]
 [ext_resource type="Script" uid="uid://b2rn78jr7brub" path="res://scripts/weapons/bullet.gd" id="2_dnt7v"]
+[ext_resource type="Script" uid="uid://3lbngqcexe0l" path="res://addons/netfox/state-synchronizer.gd" id="3_1t05q"]
+[ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="4_ymvs7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dnt7v"]
 atlas = ExtResource("1_mx1hr")
@@ -94,12 +96,9 @@ animations = [{
 }]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_dnt7v"]
-properties/0/path = NodePath(".:global_position")
+properties/0/path = NodePath(".:player_id")
 properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:player_id")
-properties/1/spawn = true
-properties/1/replication_mode = 2
+properties/0/replication_mode = 2
 
 [node name="Bullet" type="AnimatedSprite2D"]
 z_index = 100
@@ -107,6 +106,18 @@ scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_pfnfn")
 autoplay = "default"
 script = ExtResource("2_dnt7v")
+
+[node name="StateSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("3_1t05q")
+root = NodePath("..")
+properties = Array[String]([":position"])
+metadata/_custom_type_script = "uid://3lbngqcexe0l"
+
+[node name="TickInterpolator" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("4_ymvs7")
+root = NodePath("..")
+properties = Array[String]([":position"])
+metadata/_custom_type_script = "uid://dour8fehaaugp"
 
 [node name="BulletSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_dnt7v")

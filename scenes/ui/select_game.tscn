@@ -181,55 +181,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="SinglePlayer" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
-theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
-text = "Single Player"
-
-[node name="LocalMultiplayer" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
-theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
-text = "Local Multiplayer"
-
-[node name="LocalMultiplayerPanel" type="Panel" parent="VBoxContainer/LocalMultiplayer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 5
-
-[node name="Host" type="Button" parent="VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel/HBoxContainer"]
+[node name="Host" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -246,7 +198,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
 theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
 text = "Host"
 
-[node name="Join" type="Button" parent="VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel/HBoxContainer"]
+[node name="Join" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -414,12 +366,8 @@ libraries = {
 &"": SubResource("AnimationLibrary_aym5w")
 }
 
-[connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="single_player_pressed"]
-[connection signal="mouse_entered" from="VBoxContainer/LocalMultiplayer" to="." method="local_multiplayer_mouse_entered"]
-[connection signal="mouse_exited" from="VBoxContainer/LocalMultiplayer" to="." method="local_multiplayer_mouse_exited"]
-[connection signal="pressed" from="VBoxContainer/LocalMultiplayer" to="." method="local_multiplayer"]
-[connection signal="pressed" from="VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel/HBoxContainer/Host" to="." method="host_pressed"]
-[connection signal="pressed" from="VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel/HBoxContainer/Join" to="." method="join_pressed"]
+[connection signal="pressed" from="VBoxContainer/Host" to="." method="host_pressed"]
+[connection signal="pressed" from="VBoxContainer/Join" to="." method="join_pressed"]
 [connection signal="pressed" from="VBoxContainer/Back" to="." method="on_back_pressed"]
 [connection signal="gui_input" from="PanelBlur" to="." method="_on_panel_blur_gui_input"]
 [connection signal="focus_entered" from="PopupPanel/MarginContainer/VBoxContainer/UsernameTxtBox" to="." method="textbox_focus"]

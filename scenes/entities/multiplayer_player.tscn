@@ -1,8 +1,10 @@
-[gd_scene load_steps=46 format=3 uid="uid://csdaf6s2dyu5o"]
+[gd_scene load_steps=47 format=3 uid="uid://csdaf6s2dyu5o"]
 
 [ext_resource type="Script" uid="uid://cpjxwhuswn5if" path="res://scripts/entities/multiplayer_player.gd" id="1_gsel8"]
+[ext_resource type="Script" uid="uid://d350u8evihs1u" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="2_2ws2a"]
 [ext_resource type="Script" uid="uid://ci2ysifd4oo60" path="res://scripts/multiplayer/input_synchronizer.gd" id="2_gm7j5"]
 [ext_resource type="Texture2D" uid="uid://b5fh51psrqk3n" path="res://assets/entities/knight.png" id="2_jlq18"]
+[ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="3_fb65g"]
 [ext_resource type="AudioStream" uid="uid://du50dj5fj1t70" path="res://assets/sfx/hurt.wav" id="3_xk3hh"]
 [ext_resource type="AudioStream" uid="uid://ci57naxhy85ep" path="res://assets/sfx/jump.wav" id="4_m4ka2"]
 [ext_resource type="PackedScene" uid="uid://boony3y1rqxqe" path="res://scenes/ui/hud.tscn" id="5_jxau2"]
@@ -12,74 +14,36 @@
 properties/0/path = NodePath(".:player_id")
 properties/0/spawn = true
 properties/0/replication_mode = 0
-properties/1/path = NodePath(".:position")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:can_jump")
-properties/2/spawn = true
-properties/2/replication_mode = 2
-properties/3/path = NodePath(".:_is_on_floor")
-properties/3/spawn = true
-properties/3/replication_mode = 2
-properties/4/path = NodePath(".:do_jump")
-properties/4/spawn = true
-properties/4/replication_mode = 2
-properties/5/path = NodePath(".:direction")
-properties/5/spawn = true
-properties/5/replication_mode = 1
-properties/6/path = NodePath(".:looking_at")
-properties/6/spawn = true
-properties/6/replication_mode = 2
-properties/7/path = NodePath(".:do_attack")
-properties/7/spawn = true
-properties/7/replication_mode = 2
-properties/8/path = NodePath(".:hp")
-properties/8/spawn = true
-properties/8/replication_mode = 1
-properties/9/path = NodePath(".:alive")
-properties/9/spawn = true
-properties/9/replication_mode = 1
-properties/10/path = NodePath(".:velocity")
-properties/10/spawn = true
-properties/10/replication_mode = 1
-properties/11/path = NodePath(".:max_jumps")
-properties/11/spawn = true
-properties/11/replication_mode = 2
-properties/12/path = NodePath(".:jumps_remaining")
-properties/12/spawn = true
-properties/12/replication_mode = 2
-properties/13/path = NodePath(".:jumps_count")
-properties/13/spawn = true
-properties/13/replication_mode = 2
-properties/14/path = NodePath(".:do_dash")
-properties/14/spawn = true
-properties/14/replication_mode = 2
-properties/15/path = NodePath(".:kill_count")
-properties/15/spawn = true
-properties/15/replication_mode = 1
-properties/16/path = NodePath(".:death_count")
-properties/16/spawn = true
-properties/16/replication_mode = 1
-properties/17/path = NodePath(".:username")
-properties/17/spawn = true
-properties/17/replication_mode = 2
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2ws2a"]
-properties/0/path = NodePath("InputSynchronizer:input_direction")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("InputSynchronizer:looking_at")
+properties/1/path = NodePath(".:can_jump")
 properties/1/spawn = true
 properties/1/replication_mode = 2
-properties/2/path = NodePath("InputSynchronizer:input_attack")
+properties/2/path = NodePath(".:do_attack")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath("InputSynchronizer:input_jump")
+properties/3/path = NodePath(".:hp")
 properties/3/spawn = true
-properties/3/replication_mode = 2
-properties/4/path = NodePath("InputSynchronizer:username")
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:alive")
 properties/4/spawn = true
-properties/4/replication_mode = 2
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:max_jumps")
+properties/5/spawn = true
+properties/5/replication_mode = 2
+properties/6/path = NodePath(".:jumps_remaining")
+properties/6/spawn = true
+properties/6/replication_mode = 2
+properties/7/path = NodePath(".:jumps_count")
+properties/7/spawn = true
+properties/7/replication_mode = 2
+properties/8/path = NodePath(".:kill_count")
+properties/8/spawn = true
+properties/8/replication_mode = 1
+properties/9/path = NodePath(".:death_count")
+properties/9/spawn = true
+properties/9/replication_mode = 1
+properties/10/path = NodePath(".:username")
+properties/10/spawn = true
+properties/10/replication_mode = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
 atlas = ExtResource("2_jlq18")
@@ -368,18 +332,31 @@ _data = {
 &"invincible": SubResource("Animation_jxau2")
 }
 
-[node name="MultiplayerPlayer" type="CharacterBody2D" groups=["Players"]]
+[node name="MultiplayerPlayer" type="CharacterBody2D" node_paths=PackedStringArray("input") groups=["Players"]]
 z_index = 5
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_gsel8")
+input = NodePath("Input")
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_gm7j5")
 
-[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("2_2ws2a")
+root = NodePath("..")
+state_properties = Array[String]([":global_transform", ":velocity"])
+input_properties = Array[String](["Input:input_attack", "Input:input_direction", "Input:input_jump", "Input:input_dash", "Input:looking_at"])
+metadata/_custom_type_script = "uid://d350u8evihs1u"
+
+[node name="TickInterpolator" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("3_fb65g")
+root = NodePath("..")
+properties = Array[String]([":global_position", ":velocity"])
+metadata/_custom_type_script = "uid://dour8fehaaugp"
+
+[node name="Input" type="Node" parent="."]
 unique_name_in_owner = true
-replication_config = SubResource("SceneReplicationConfig_2ws2a")
 script = ExtResource("2_gm7j5")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -445,6 +422,10 @@ step = 1.0
 value = 100.0
 show_percentage = false
 
+[node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://bkqws3c7xfme3", "uid://6rompywgvv8n", "uid://d1ecvajwo05", "uid://ckvmfiunmpy1q", "uid://ce3onrd0plj8n")
+spawn_path = NodePath("../Weapon")
+
 [node name="UsernameLabel" type="Label" parent="."]
 offset_left = -19.0
 offset_top = -32.0
@@ -455,10 +436,6 @@ text = "Player"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
-
-[node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://bkqws3c7xfme3", "uid://6rompywgvv8n", "uid://d1ecvajwo05", "uid://ckvmfiunmpy1q", "uid://ce3onrd0plj8n")
-spawn_path = NodePath("../Weapon")
 
 [node name="Weapon" type="Node2D" parent="."]
 

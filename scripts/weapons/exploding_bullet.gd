@@ -28,6 +28,12 @@ func explode():
 	# Queue the bullet for deletion after exploding
 	queue_free()
 
+func _tick(delta, tick):
+	if exploded:
+		return
+	
+	global_position += Vector2(1,0).rotated(rotation) * speed * delta
+
 func _process(delta: float) -> void:
 	if not multiplayer.is_server():
 		if do_explosion and not exploded:
@@ -43,7 +49,6 @@ func process_physics_server(delta: float):
 	if exploded:
 		return
 	
-	global_position += Vector2(1,0).rotated(rotation) * speed * delta
 	if initial_pos.distance_to(global_position) >= max_distance:
 		explode()
 		return

@@ -1,6 +1,5 @@
 extends Control
 
-@onready var local_multiplayer_panel: Panel = $VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel
 @onready var popup_panel: Panel = $PopupPanel
 @onready var username_txt_box: TextEdit = %UsernameTxtBox
 @onready var address_txt_box: TextEdit = %AddressTxtBox
@@ -15,7 +14,6 @@ func _ready() -> void:
 	popup_default_height = popup_panel.size.y
 	popup_panel.visible = false
 	$PanelBlur.visible = false
-	local_multiplayer_panel.visible = false
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -25,14 +23,6 @@ func _process(delta: float) -> void:
 
 func local_multiplayer() -> void:
 	pass # Replace with function body.
-
-
-func local_multiplayer_mouse_entered() -> void:
-	local_multiplayer_panel.visible = true
-
-
-func local_multiplayer_mouse_exited() -> void:
-	local_multiplayer_panel.visible = false
 
 
 func on_back_pressed() -> void:

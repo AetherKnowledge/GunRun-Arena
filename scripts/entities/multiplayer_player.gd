@@ -10,7 +10,7 @@ const DEFAULT_WEAPON_SCENE = preload("res://scenes/weapons/glock.tscn")
 @onready var dash_cooldown: Timer = $DashCooldown
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var hud: HUD = %HUD
-@onready var input_synchronizer: InputSynchronizer = %InputSynchronizer
+@export var input: PlayerInput
 @onready var camera: Camera2D = $Camera2D
 @onready var hp_bar: ProgressBar = $HPBar
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -19,11 +19,14 @@ const DEFAULT_WEAPON_SCENE = preload("res://scenes/weapons/glock.tscn")
 # Player states
 var do_dash: bool = false
 var do_attack: bool = false
-var _is_on_floor: bool = true
 var can_coyote_jump: bool = true
 var holding_jump: bool = false
 var kill_count: int = 0
 var death_count: int = 0
+var has_dashed: bool = false
+var respawning: bool = false
+var knockback_force: Vector2 = Vector2.ZERO
+var has_knockback: bool = false
 
 # Jumping vars
 @export var max_jumps: int = 2
@@ -31,8 +34,7 @@ var air_jumps_remaining: int = 1
 var jumps_remaining: int = 1
 var jumps_count: int = 0
 var ended_jump_early = false
-var do_jump = false
-var release_jump = false
+var has_jumped: bool = false
 
 # Dashing vars
 @export var max_dash: int = 1
@@ -44,7 +46,7 @@ var username := "Player"
 var player_id: int = 1:
 	set(id):
 		player_id = id
-		%InputSynchronizer.set_multiplayer_authority(id)
+		input.set_multiplayer_authority(id)
 
 # Weapon logic
 var weapon: Weapon:
@@ -83,11 +85,10 @@ func _ready() -> void:
 	else:
 		%HUD.visible = false
 		
-	weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
 	_respawn()
 	_setup_camera()
 	update_hud()
-
+	
 func _setup_camera() -> void:
 	var is_local_player = multiplayer.get_unique_id() == player_id
 	camera.enabled = is_local_player
@@ -98,30 +99,36 @@ func _setup_camera() -> void:
 func _process(delta: float) -> void:
 	if not alive:
 		return
+	
+	if not multiplayer.is_server() or MultiplayerManager.host_mode:
+		_process_animations(delta)
+		update_hud()
+		
+	if do_attack:
+		_attack()
+	
+func _rollback_tick(delta, tick, is_fresh):
+	if respawning:
+		respawning = false
+		global_position = get_random_spawnpoint().global_position
+		velocity = Vector2(0,0)
+		$TickInterpolator.teleport()
+	else:
+		_process_movement(delta)
 
-	update_hud()
-
-func _physics_process(delta: float) -> void:
+func _process_movement(delta: float) -> void:
 	if not alive:
 		return
 	
-	holding_jump = input_synchronizer.input_jump
-	do_attack = input_synchronizer.input_attack
-	looking_at = input_synchronizer.looking_at
-	direction = input_synchronizer.input_direction
-	username = input_synchronizer.username
-	
-	if is_multiplayer_authority() or MultiplayerManager.host_mode:
-		_is_on_floor = is_on_floor()
-		_process_movement(delta)
+	do_dash = input.input_dash
+	holding_jump = input.input_jump
 		
-	if not multiplayer.is_server() or MultiplayerManager.host_mode:
-		_process_animations(delta)
+	do_attack = input.input_attack
+	looking_at = input.looking_at
+	direction = input.input_direction
 	
-	if do_attack:
-		_attack()
-
-func _process_movement(delta: float) -> void:
+	_force_update_is_on_floor()
+	
 	# Gravity
 	if not is_on_floor():
 		var gravity_force = get_gravity().y * 0.7
@@ -145,12 +152,24 @@ func _process_movement(delta: float) -> void:
 	
 	# Movement handling
 	_handle_movement(delta)
-
+	
+	velocity *= NetworkTime.physics_factor
 	move_and_slide()
+	velocity /= NetworkTime.physics_factor
+
+func _force_update_is_on_floor():
+	var old_velocity = velocity
+	velocity = Vector2.ZERO
+	move_and_slide()
+	velocity = old_velocity
 
 func _handle_movement(delta: float) -> void:
+	if has_knockback:
+		has_knockback = false
+		do_knockback(knockback_force)
+	
 	var target_speed = direction * MAX_MOVEMENT_SPEED
-
+	
 	# Snappy ground acceleration
 	var accel = 0.0
 	if is_on_floor():
@@ -171,12 +190,14 @@ func _handle_movement(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, friction * delta)
 
 func _handle_dash_logic(delta):
-	if can_dash and do_dash:
+	if can_dash and do_dash and not has_dashed:
 		dash(delta)
 	else:
-		do_dash = false
+		has_dashed = false
 	
 func dash(delta):
+	has_dashed = true
+	
 	var dash_speed = max(DASH_SPEED, abs(velocity.x))
 	dash_speed = min(dash_speed, MAX_DASH_SPEED)
 	dash_speed = dash_speed * -1 if animated_sprite.flip_h else dash_speed
@@ -199,13 +220,17 @@ func _handle_jump_logic() -> void:
 		coyote_timer.start()
 
 	jumps_remaining = max_jumps if is_on_floor() or can_coyote_jump else air_jumps_remaining
-	var can_jump = can_coyote_jump or air_jumps_remaining > 0
+	var can_jump = is_on_floor() or can_coyote_jump or air_jumps_remaining > 0
 	
-	if do_jump and not is_on_floor() and can_jump and release_jump:
+	if holding_jump and can_jump and not has_jumped:
+		has_jumped = true
 		_jump()
-		release_jump = false
-	elif holding_jump and is_on_floor() and can_jump:
+	
+	elif holding_jump and is_on_floor():
+		has_jumped = true
 		_jump()
+	elif not holding_jump:
+		has_jumped = false
 		
 func _reset_jump_states() -> void:
 	ended_jump_early = false
@@ -214,16 +239,16 @@ func _reset_jump_states() -> void:
 	air_jumps_remaining = max_jumps - 1
 
 func _jump() -> void:
+	
+	
 	if is_on_floor() or can_coyote_jump:
 		can_coyote_jump = false
 	else:
 		air_jumps_remaining -= 1
 	
 	jumps_count += 1
-	velocity.y -= max(velocity.y, 0) + JUMP_VELOCITY
+	velocity.y = -JUMP_VELOCITY
 	animated_sprite.play("jump")
-	
-	do_jump = false
 	
 	jump_sfx.play()
 
@@ -233,7 +258,7 @@ func _buffer_jump() -> void:
 func _process_animations(delta: float) -> void:
 	if not alive:
 		return
-
+	
 	# Flip sprite
 	#animated_sprite.flip_h = direction < 0 if direction else animated_sprite.flip_h
 	if direction > 0:
@@ -246,7 +271,7 @@ func _process_animations(delta: float) -> void:
 		return
 
 	# Jumping/Falling
-	if not _is_on_floor:
+	if not is_on_floor():
 		animated_sprite.play("jump")
 		return
 
@@ -276,13 +301,19 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 
 	# Knockback
 	if alive and knockback_force != Vector2.ZERO:
-		velocity = knockback_force * 10
+		self.knockback_force = knockback_force
+		has_knockback = true
 		$KnockbackGravityCancelTimer.start()
 
 func recoil(recoil_force: Vector2 = Vector2.ZERO) -> void:
-	# Knockback
 	if alive and recoil_force != Vector2.ZERO:
-		velocity = recoil_force * 10
+		knockback_force = recoil_force
+		has_knockback = true
+		
+func do_knockback(force: Vector2 = Vector2.ZERO):
+	if alive and force != Vector2.ZERO:
+		velocity = force * 10
+		force = Vector2.ZERO
 
 func kill() -> void:
 	if not multiplayer.is_server():
@@ -314,8 +345,7 @@ func _respawn() -> void:
 	alive = true
 	if multiplayer.is_server():
 		weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
-		global_position = get_random_spawnpoint().global_position
-		velocity = Vector2(0,0)
+		respawning = true
 
 func get_random_spawnpoint() -> Marker2D:
 	var spawnpoints = get_tree().get_nodes_in_group("SpawnPoints")

@@ -30,6 +30,8 @@ func init(player: Player, shoot_pos: Marker2D, dir_angle: float, max_distance: i
 	return self
 
 func _ready() -> void:
+	NetworkTime.on_tick.connect(_tick)
+	
 	visible = false
 	await get_tree().process_frame
 	visible = true
@@ -37,6 +39,9 @@ func _ready() -> void:
 	await animation_finished
 	play("on_air")
 
+func _tick(delta, tick):
+	global_position += Vector2(1,0).rotated(rotation) * speed * delta
+	
 func _physics_process(delta: float) -> void:
 
 	if multiplayer.is_server():
@@ -53,7 +58,6 @@ func _physics_process(delta: float) -> void:
 			bullet_hit_has_played = true
 
 func process_physics_server(delta: float):
-	global_position += Vector2(1,0).rotated(rotation) * speed * delta
 	if initial_pos.distance_to(global_position) >= max_distance:
 		queue_free()
 		return	

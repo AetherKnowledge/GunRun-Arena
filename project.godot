@@ -22,6 +22,11 @@ Settings="*res://scripts/settings.gd"
 Music="*res://scenes/music.tscn"
 GlobalEnums="*res://scripts/global_enums.gd"
 MultiplayerManager="*res://scripts/multiplayer/multiplayer_manager.gd"
+NetworkTime="*res://addons/netfox/network-time.gd"
+NetworkTimeSynchronizer="*res://addons/netfox/network-time-synchronizer.gd"
+NetworkRollback="*res://addons/netfox/rollback/network-rollback.gd"
+NetworkEvents="*res://addons/netfox/network-events.gd"
+NetworkPerformance="*res://addons/netfox/network-performance.gd"
 
 [display]
 
@@ -37,6 +42,10 @@ window/stretch/aspect="keep_height"
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/netfox.internals/plugin.cfg", "res://addons/netfox/plugin.cfg", "res://addons/virtual_joystick/plugin.cfg")
 
 [global_group]
 
@@ -104,6 +113,11 @@ tab={
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+
+[netfox]
+
+time/tickrate=60
+time/max_ticks_per_frame=16
 
 [rendering]
 
