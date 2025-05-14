@@ -28,9 +28,13 @@ func spawn_item_on_segment():
 	var pickup = PICKUP_SCENE.instantiate()
 	get_tree().get_current_scene().get_node("Items").add_child(pickup, true)
 	pickup.global_position = global_point
+	print(items_count())
 
 func _on_spawn_timer_timeout() -> void:
-	if get_tree().get_nodes_in_group("Items").size() >= max_items + 3 or MultiplayerManager.player_count < 1:
+	if items_count() >= max_items + 3 or MultiplayerManager.player_count < 1:
 		return
 	
 	spawn_item_on_segment()
+	
+func items_count() -> int:
+	return get_tree().get_nodes_in_group("Items").size()
