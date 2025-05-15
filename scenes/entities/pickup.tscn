@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bkooy2uf63l2i"]
+[gd_scene load_steps=11 format=3 uid="uid://bkooy2uf63l2i"]
 
 [ext_resource type="Script" uid="uid://cyoiq567yd3po" path="res://scripts/entities/pickup.gd" id="1_7cqbe"]
 [ext_resource type="Texture2D" uid="uid://do5xg3b6tgtni" path="res://assets/entities/health_pickup.png" id="2_kyjqt"]
 [ext_resource type="AudioStream" uid="uid://cbfb7mgc7jkti" path="res://assets/sfx/heal.mp3" id="3_kyjqt"]
+[ext_resource type="Script" uid="uid://e5hjxy22inhn" path="res://scenes/entities/shadow_animator.gd" id="4_yoejb"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kyjqt"]
 properties/0/path = NodePath(".:position")
@@ -42,6 +43,9 @@ radius = 5.38516
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kyjqt"]
 size = Vector2(29, 14)
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_yoejb"]
+polygon = PackedVector2Array(-9, -9, -10, -9, -10, 9, -9, 9, -9, 10, 9, 10, 9, 9, 10, 9, 10, -9, 9, -9, 9, -10, -9, -10)
+
 [node name="Pickup" type="CharacterBody2D" groups=["Items"]]
 scale = Vector2(0.999992, 0.999992)
 collision_layer = 4
@@ -75,6 +79,12 @@ bus = &"SFX"
 [node name="DespawnTimer" type="Timer" parent="."]
 wait_time = 60.0
 one_shot = true
+
+[node name="AnimatedLightOccluder2D" type="LightOccluder2D" parent="." node_paths=PackedStringArray("animated_sprite")]
+occluder = SubResource("OccluderPolygon2D_yoejb")
+script = ExtResource("4_yoejb")
+animated_sprite = NodePath("../AnimatedSprite2D")
+metadata/_custom_type_script = "uid://e5hjxy22inhn"
 
 [connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]
 [connection signal="timeout" from="DespawnTimer" to="." method="_on_despawn_timer_timeout"]

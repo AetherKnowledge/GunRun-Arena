@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://khv7vxdgppi"]
+[gd_scene load_steps=6 format=3 uid="uid://khv7vxdgppi"]
 
 [ext_resource type="Script" uid="uid://kevo3nm86cl" path="res://scripts/weapons/gun.gd" id="1_76485"]
 [ext_resource type="PackedScene" uid="uid://k2ua23ygxig5" path="res://scenes/weapons/weapon.tscn" id="1_mfrst"]
 [ext_resource type="AudioStream" uid="uid://cmob55xffu8f4" path="res://assets/sfx/empty.mp3" id="2_mgo42"]
+[ext_resource type="Script" uid="uid://e5hjxy22inhn" path="res://scenes/entities/shadow_animator.gd" id="4_imjbj"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_imjbj"]
 properties/0/path = NodePath(".:ammo")
@@ -10,11 +11,13 @@ properties/0/spawn = true
 properties/0/replication_mode = 1
 
 [node name="Gun" instance=ExtResource("1_mfrst")]
+z_index = -4
 script = ExtResource("1_76485")
 bullet_type = 0
 max_ammo = 100
 max_distance = 100
 cooldown = 0.5
+recoil_strength = 10
 weapon_type = 1
 
 [node name="GunSynchronizer" type="MultiplayerSynchronizer" parent="." index="1"]
@@ -30,3 +33,9 @@ max_distance = 100.0
 bus = &"SFX"
 
 [node name="ShootPos" type="Marker2D" parent="." index="4"]
+
+[node name="AnimatedLightOccluder2D" type="LightOccluder2D" parent="." index="5" node_paths=PackedStringArray("animated_sprite")]
+occluder_light_mask = 3
+script = ExtResource("4_imjbj")
+animated_sprite = NodePath("..")
+metadata/_custom_type_script = "uid://e5hjxy22inhn"

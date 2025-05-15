@@ -105,10 +105,16 @@ tab={
 
 pointing/emulate_touch_from_mouse=true
 
+[navigation]
+
+2d/default_filters/anisotropic_filtering_level=2
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
+textures/decals/filter=5
+textures/light_projectors/filter=5
 2d/size/window_height_override=0
 2d/size/window_width_override=0

@@ -71,10 +71,10 @@ func shoot():
 	# Calculate direction vector from shoot_pos to mouse position
 	if multiplayer.is_server():
 		var new_bullet: Bullet = make_bullet(player, bullet_type)
-		player.recoil(get_recoil_force(shoot_pos, player))
 		get_tree().get_current_scene().get_node("Bullets").add_child(new_bullet, true)
-		
-		
+	
+	if player.is_player_authority():
+		player.recoil(get_recoil_force(shoot_pos, player))
 	
 	stop()
 	play("shoot")

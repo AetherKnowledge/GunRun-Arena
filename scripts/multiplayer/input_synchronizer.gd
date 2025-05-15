@@ -5,8 +5,10 @@ const ATTACK_THRESHOLD: float = 0.8
 var input_attack: bool = false
 var input_direction: int = 1
 var input_jump: bool = false
+var input_dash: bool = false
 
 @onready var player: MultiplayerPlayer = $".."
+#@export var player: MultiplayerPlayer
 
 var looking_at: Vector2 = Vector2(0,0)
 var username: String = "Player"
@@ -24,17 +26,11 @@ func _ready() -> void:
 		set_process_input(false)
 	else:
 		username = MultiplayerManager.username
-	input_direction = Input.get_axis("move_left", "move_right")
-	looking_at = player.get_global_mouse_position()
 
 func _physics_process(delta: float) -> void:
-	# must be here for joystick to work on android
 	_process_default_controls()
 
 func _input(event):
-	if not player.alive:
-		return
-	
 	if event is InputEventScreenTouch:
 		process_android_controls(event.pressed, event.position)
 		if Input.is_action_pressed("move_left"):
@@ -44,7 +40,9 @@ func _input(event):
 				left_tap_count = 0
 			elif left_tap_count == 2:
 				left_tap_count = 0
-				dash.rpc()
+				input_dash = true
+				await get_tree().create_timer(0.1).timeout
+				input_dash = false
 				
 		# Check for right input
 		elif Input.is_action_just_pressed("move_right"):
@@ -55,7 +53,9 @@ func _input(event):
 				right_tap_count = 0
 			elif right_tap_count == 2:
 				right_tap_count = 0
-				dash.rpc()
+				input_dash = true
+				await get_tree().create_timer(0.1).timeout
+				input_dash = false
 				
 	elif event is InputEventScreenDrag:
 		process_android_controls(true, event.position)
@@ -83,7 +83,6 @@ func process_android_controls(is_pressed: bool, touch_pos: Vector2):
 			
 		
 func _process_default_controls():
-	#input_direction = Input.get_axis("move_left", "move_right")
 	if is_pause_menu_visible() and input_attack:
 		input_attack = false
 	
@@ -96,30 +95,21 @@ func _process_default_controls():
 
 		if aim_input.length() > 0.2:
 			looking_at = aim_input * Vector2(200, 200) + player.global_position
+		else:
+			looking_at = player.get_global_mouse_position()	
 			
 		if Input.is_action_just_pressed("attack"):
 			input_attack = true
 		if Input.is_action_just_released("attack"):
-			input_attack = false	
+			input_attack = false
 	
-	if Input.is_action_pressed("move_left") and not Input.is_action_pressed("move_right"):
-		input_direction = -1
-	elif Input.is_action_pressed("move_right") and not Input.is_action_pressed("move_left"):
-		input_direction = 1
-	else:
-		input_direction = 0
 	
-	if Input.is_action_just_pressed("jump"):
-		jump.rpc()
-		input_jump = true
-		if player.can_jump:
-			player.jump_sfx.play()
-	if Input.is_action_just_released("jump"):
-		release_jump.rpc()
-		input_jump = false 
-			
-	if Input.is_action_just_pressed("dash"):
-		dash.rpc()
+	if not Settings.TouchControlsEnabled:
+		looking_at = player.get_global_mouse_position()
+	
+	input_direction = Input.get_axis("move_left", "move_right")
+	input_jump = Input.get_action_strength("jump")
+	input_dash = Input.get_action_strength("dash")	
 
 func is_pause_menu_visible() -> bool:
 	var nodes = get_tree().get_nodes_in_group("PauseMenu")
@@ -127,20 +117,3 @@ func is_pause_menu_visible() -> bool:
 		return false
 	var pause_menu = nodes.get(0) as PauseMenu 
 	return pause_menu.visible
-
-@rpc("call_local")
-func jump():
-	if multiplayer.is_server():
-		player.do_jump = true
-	elif player.jumps_remaining > 0:
-		player.jump_sfx.play()
-		
-@rpc("call_local")
-func release_jump():
-	if multiplayer.is_server():
-		player.release_jump = true
-		
-@rpc("call_local")
-func dash():
-	if multiplayer.is_server():
-		player.do_dash = true

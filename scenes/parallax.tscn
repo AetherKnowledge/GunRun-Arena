@@ -12,10 +12,12 @@ script = ExtResource("1_dgjee")
 [node name="Parallax2D" type="Parallax2D" parent="."]
 scale = Vector2(1.62, 1.62)
 scroll_scale = Vector2(0.1, 0)
+scroll_offset = Vector2(281, 757)
 repeat_size = Vector2(288, 0)
 repeat_times = 3
 
 [node name="Background" type="Sprite2D" parent="Parallax2D"]
+position = Vector2(114.543, -467.284)
 texture = ExtResource("1_m6okp")
 
 [node name="Parallax2D2" type="Parallax2D" parent="."]

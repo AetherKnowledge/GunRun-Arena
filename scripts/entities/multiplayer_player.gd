@@ -18,12 +18,16 @@ const DEFAULT_WEAPON_SCENE = preload("res://scenes/weapons/glock.tscn")
 
 # Player states
 var do_dash: bool = false
+var has_dashed: bool = false
+var can_dash: bool = true
 var do_attack: bool = false
-var _is_on_floor: bool = true
 var can_coyote_jump: bool = true
 var holding_jump: bool = false
 var kill_count: int = 0
 var death_count: int = 0
+var respawn_point: Vector2 = Vector2.ZERO
+var respawning = false
+var has_respawned = true
 
 # Jumping vars
 @export var max_jumps: int = 2
@@ -31,12 +35,10 @@ var air_jumps_remaining: int = 1
 var jumps_remaining: int = 1
 var jumps_count: int = 0
 var ended_jump_early = false
-var do_jump = false
-var release_jump = false
+var has_jumped: int = false
 
 # Dashing vars
 @export var max_dash: int = 1
-var can_dash: bool = true
 var dash_remaining: int = 1
 
 # Multiplayer
@@ -96,30 +98,44 @@ func _setup_camera() -> void:
 		camera.make_current()
 
 func _process(delta: float) -> void:
-	if not alive:
+	if respawning:
+		if multiplayer.is_server():
+			respawning = false
+		
+		if is_player_authority():
+			global_position = respawn_point
+			velocity = Vector2(0,0)
+			has_respawned = true
 		return
-
-	update_hud()
+	else:
+		if is_player_authority():
+			has_respawned = true
+		if not has_respawned:
+			return
+	
+	if not alive or not has_respawned:
+		return
+	
+	holding_jump = input_synchronizer.input_jump
+	direction = input_synchronizer.input_direction
+	username = input_synchronizer.username
+	do_dash = input_synchronizer.input_dash
+	looking_at = input_synchronizer.looking_at
+	do_attack = input_synchronizer.input_attack
+	
+	if not multiplayer.is_server() or MultiplayerManager.host_mode:
+		_process_animations(delta)
+		update_hud()
+		
+	if do_attack:
+		_attack()
 
 func _physics_process(delta: float) -> void:
 	if not alive:
 		return
-	
-	holding_jump = input_synchronizer.input_jump
-	do_attack = input_synchronizer.input_attack
-	looking_at = input_synchronizer.looking_at
-	direction = input_synchronizer.input_direction
-	username = input_synchronizer.username
-	
-	if is_multiplayer_authority() or MultiplayerManager.host_mode:
-		_is_on_floor = is_on_floor()
+
+	if is_player_authority():
 		_process_movement(delta)
-		
-	if not multiplayer.is_server() or MultiplayerManager.host_mode:
-		_process_animations(delta)
-	
-	if do_attack:
-		_attack()
 
 func _process_movement(delta: float) -> void:
 	# Gravity
@@ -171,12 +187,14 @@ func _handle_movement(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, friction * delta)
 
 func _handle_dash_logic(delta):
-	if can_dash and do_dash:
+	if do_dash and can_dash and not has_dashed:
 		dash(delta)
 	else:
-		do_dash = false
+		has_dashed = true
 	
 func dash(delta):
+	has_dashed = true
+	
 	var dash_speed = max(DASH_SPEED, abs(velocity.x))
 	dash_speed = min(dash_speed, MAX_DASH_SPEED)
 	dash_speed = dash_speed * -1 if animated_sprite.flip_h else dash_speed
@@ -186,11 +204,7 @@ func dash(delta):
 	if velocity.y < 0:
 		velocity.y = 0
 		
-	do_dash = false
-	
-	can_dash = false
 	dash_cooldown.start()
-	
 
 func _handle_jump_logic() -> void:
 	if is_on_floor():
@@ -201,11 +215,12 @@ func _handle_jump_logic() -> void:
 	jumps_remaining = max_jumps if is_on_floor() or can_coyote_jump else air_jumps_remaining
 	var can_jump = can_coyote_jump or air_jumps_remaining > 0
 	
-	if do_jump and not is_on_floor() and can_jump and release_jump:
+	if holding_jump and can_jump and not has_jumped:
 		_jump()
-		release_jump = false
 	elif holding_jump and is_on_floor() and can_jump:
 		_jump()
+	elif not holding_jump:
+		has_jumped = false
 		
 func _reset_jump_states() -> void:
 	ended_jump_early = false
@@ -214,6 +229,8 @@ func _reset_jump_states() -> void:
 	air_jumps_remaining = max_jumps - 1
 
 func _jump() -> void:
+	has_jumped = true
+	
 	if is_on_floor() or can_coyote_jump:
 		can_coyote_jump = false
 	else:
@@ -222,8 +239,6 @@ func _jump() -> void:
 	jumps_count += 1
 	velocity.y -= max(velocity.y, 0) + JUMP_VELOCITY
 	animated_sprite.play("jump")
-	
-	do_jump = false
 	
 	jump_sfx.play()
 
@@ -246,7 +261,7 @@ func _process_animations(delta: float) -> void:
 		return
 
 	# Jumping/Falling
-	if not _is_on_floor:
+	if not is_on_floor():
 		animated_sprite.play("jump")
 		return
 
@@ -268,6 +283,7 @@ func take_damage(damage: int, knockback_force: Vector2 = Vector2.ZERO) -> void:
 		animated_sprite.play("hurt")
 		hurt_sfx.play()
 		return
+		
 	elif MultiplayerManager.host_mode:
 		animated_sprite.play("hurt")
 		hurt_sfx.play()
@@ -312,10 +328,11 @@ func _respawn() -> void:
 	animated_sprite.play("idle")
 	hp = 100
 	alive = true
+	
 	if multiplayer.is_server():
 		weapon = DEFAULT_WEAPON_SCENE.instantiate().init(self)
-		global_position = get_random_spawnpoint().global_position
-		velocity = Vector2(0,0)
+		respawn_point = get_random_spawnpoint().global_position
+		respawning = true
 
 func get_random_spawnpoint() -> Marker2D:
 	var spawnpoints = get_tree().get_nodes_in_group("SpawnPoints")
@@ -348,7 +365,6 @@ func update_hud() -> void:
 		hud.ammo_bar.max_value = weapon.max_ammo
 		hud.ammo_bar.value = weapon.ammo
 
-
 func _on_dash_cooldown_timeout() -> void:
 	can_dash = true
 
@@ -358,6 +374,8 @@ func _on_weapon_spawner_spawned(node: Node) -> void:
 	weapon.reparent($Weapon)
 	weapon.PickupSFX.play()
 
-
 func _on_invincibility_timer_timeout() -> void:
 	$AnimationPlayer.stop()
+
+func is_player_authority():
+	return input_synchronizer.is_multiplayer_authority()
