@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bkqws3c7xfme3"]
+[gd_scene load_steps=33 format=3 uid="uid://bkqws3c7xfme3"]
 
 [ext_resource type="PackedScene" uid="uid://khv7vxdgppi" path="res://scenes/weapons/gun.tscn" id="1_jx0ug"]
 [ext_resource type="AudioStream" uid="uid://d1uq4xn4et0ky" path="res://assets/sfx/ak47_shoot.wav" id="2_hh3i5"]
@@ -199,6 +199,9 @@ animations = [{
 "speed": 60.0
 }]
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_hybat"]
+polygon = PackedVector2Array(-3, 12, -22, 12, -22, 13, -24, 13, -24, 14, -27, 14, -27, 15, -29, 15, -29, 16, -32, 16, -32, 15, -36, 15, -36, 16, -40, 16, -40, 17, -44, 17, -44, 18, -45, 18, -45, 22, -44, 22, -44, 26, -43, 26, -43, 27, -41, 27, -41, 26, -39, 26, -39, 25, -37, 25, -37, 24, -35, 24, -35, 23, -33, 23, -33, 22, -31, 22, -31, 21, -29, 21, -29, 20, -27, 20, -27, 19, -25, 19, -25, 18, -24, 18, -24, 19, -23, 19, -23, 20, -22, 20, -22, 22, -23, 22, -23, 24, -24, 24, -24, 25, -25, 25, -25, 27, -24, 27, -24, 28, -21, 28, -21, 27, -20, 27, -20, 25, -19, 25, -19, 23, -18, 23, -18, 22, -17, 22, -17, 23, -12, 23, -12, 22, -11, 22, -11, 20, -3, 20, -3, 19, 6, 19, 6, 18, 12, 18, 12, 17, 31, 17, 31, 15, 30, 15, 30, 14, 29, 14, 29, 11, 28, 11, 28, 12, 27, 12, 27, 14, 26, 14, 26, 15, 21, 15, 21, 14, 20, 14, 20, 13, 19, 13, 19, 12, 2, 12, 2, 11, -3, 11)
+
 [node name="AK47" instance=ExtResource("1_jx0ug")]
 sprite_frames = SubResource("SpriteFrames_006mj")
 animation = &"empty"
@@ -219,4 +222,7 @@ stream = ExtResource("5_4322t")
 stream = ExtResource("2_hh3i5")
 
 [node name="ShootPos" parent="." index="4"]
-position = Vector2(30, 16)
+position = Vector2(31, 18)
+
+[node name="AnimatedLightOccluder2D" parent="." index="5"]
+occluder = SubResource("OccluderPolygon2D_hybat")

@@ -5,7 +5,7 @@ const MAX_ITEM_FALL_SPEED = 100
 var ITEM_SCENES = {
 	GlobalEnums.Items.Health: "HEALTH",
 	GlobalEnums.Items.Glock: preload("res://scenes/weapons/glock.tscn"),
-	GlobalEnums.Items.AK47: preload("res://scenes/weapons/ak_47.tscn"),
+	GlobalEnums.Items.AK47: preload("res://scenes/weapons/ak47.tscn"),
 	GlobalEnums.Items.Shotgun: preload("res://scenes/weapons/shotgun.tscn"),
 	GlobalEnums.Items.Sniper: preload("res://scenes/weapons/sniper.tscn"),
 	GlobalEnums.Items.RPG: preload("res://scenes/weapons/rpg.tscn")
@@ -44,6 +44,8 @@ func _ready() -> void:
 	else:
 		$AnimatedSprite2D.scale *= 0.7
 		$AnimatedSprite2D.play("default")
+	
+	$AnimatedLightOccluder2D.generate_occluders()
 
 func _physics_process(delta: float) -> void:
 	if not multiplayer.is_server():
