@@ -457,7 +457,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="WeaponSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://6rompywgvv8n", "uid://d1ecvajwo05", "uid://ckvmfiunmpy1q", "uid://ce3onrd0plj8n")
+_spawnable_scenes = PackedStringArray("uid://6rompywgvv8n", "uid://d1ecvajwo05", "uid://ckvmfiunmpy1q", "uid://ce3onrd0plj8n", "uid://bkqws3c7xfme3")
 spawn_path = NodePath("../Weapon")
 
 [node name="Weapon" type="Node2D" parent="."]

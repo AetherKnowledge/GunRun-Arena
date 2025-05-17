@@ -181,23 +181,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="SinglePlayer" type="Button" parent="VBoxContainer"]
-visible = false
-layout_mode = 2
-size_flags_vertical = 3
-mouse_default_cursor_shape = 2
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ekxnf")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_wu84c")
-theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
-text = "Single Player"
-
 [node name="Host2" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -459,7 +442,6 @@ libraries = {
 &"": SubResource("AnimationLibrary_aym5w")
 }
 
-[connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="single_player_pressed"]
 [connection signal="pressed" from="VBoxContainer/Host2" to="." method="host_pressed"]
 [connection signal="pressed" from="VBoxContainer/Join2" to="." method="join_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/LocalMultiplayer" to="." method="local_multiplayer_mouse_entered"]

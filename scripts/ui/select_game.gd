@@ -59,36 +59,35 @@ func join_pressed() -> void:
 	popup_panel.size.y = popup_default_height
 	show_popup_panel(true)
 
-func start_singleplayer_game():
-	if get_tree().root.get_node("Game"):
-		get_tree().root.get_node("Game").queue_free()
-	
-	get_tree().change_scene_to_file("res://scenes/game.tscn")
-
 func _on_connect_pressed() -> void:
 	if get_tree().root.get_node("Multiplayer"):
 		get_tree().root.get_node("Multiplayer").queue_free()
 		
-	get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
-	popup_panel.visible = false
-	
 	if do_host:
 		var username = username_txt_box.text if username_txt_box.text != "" else username_txt_box.placeholder_text
+		get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
 		MultiplayerManager.host(username)
+		popup_panel.visible = false
 	else:
 		var username = username_txt_box.text if username_txt_box.text != "" else username_txt_box.placeholder_text
 		var address = address_txt_box.text if address_txt_box.text != "" else address_txt_box.placeholder_text
 		print(username, address)
-		parse_and_join(address, username)
+		
+		if parse_and_join(address, username):
+			get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
+			popup_panel.visible = false
+		
 	
-func parse_and_join(full_address: String, username: String):
+func parse_and_join(full_address: String, username: String) -> bool:
 	var parts = full_address.split(":")
 	if parts.size() == 2 and parts[1].is_valid_int():
 		var address = parts[0]
 		var port = int(parts[1])
 		MultiplayerManager.join(address, port, username)
+		return true
 	else:
 		print("Invalid address format. Use address:port")
+		return false
 
 func _on_cancel_pressed() -> void:
 	show_popup_panel(false)

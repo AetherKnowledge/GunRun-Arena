@@ -70,7 +70,6 @@ visible = false
 light_mask = 519
 position = Vector2(167, -35)
 rotation = 0.745256
-scale = Vector2(1, 1)
 energy = 0.9
 shadow_color = Color(0.29874, 0.862567, 0.894263, 0)
 shadow_filter = 2
