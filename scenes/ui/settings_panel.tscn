@@ -200,8 +200,90 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 20
 
+[node name="HSeparator3" type="HSeparator" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_i3lpr")
+
+[node name="PanelContainer3" type="PanelContainer" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer"]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = -20
+theme_override_constants/margin_right = 50
+
+[node name="VolumeContainer2" type="VBoxContainer" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Graphics"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 45
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="PointLightsToggle" type="CheckButton" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_bbxxw")
+theme_override_font_sizes/font_size = 24
+text = "Point Lights"
+expand_icon = true
+
+[node name="BulletLightsToggle" type="CheckButton" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_bbxxw")
+theme_override_font_sizes/font_size = 24
+text = "Bullet Lights"
+expand_icon = true
+
+[node name="DynamicShadowsToggle" type="CheckButton" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_bbxxw")
+theme_override_font_sizes/font_size = 24
+text = "Dynamic Shadows"
+expand_icon = true
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+theme_override_constants/separation = 20
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
 [connection signal="pressed" from="Control/PanelContainer/HSplitContainer/TopBarContainer/BackBtn" to="." method="_on_back_btn_pressed"]
 [connection signal="value_changed" from="Control/PanelContainer/HSplitContainer/SettingControlsContainer/MarginContainer/VolumeContainer/VBoxContainer/MasterVolume" to="." method="_on_master_volume_value_changed"]
 [connection signal="value_changed" from="Control/PanelContainer/HSplitContainer/SettingControlsContainer/MarginContainer/VolumeContainer/VBoxContainer/MusicVolume" to="." method="_on_music_volume_value_changed"]
 [connection signal="value_changed" from="Control/PanelContainer/HSplitContainer/SettingControlsContainer/MarginContainer/VolumeContainer/VBoxContainer/SFXVolume" to="." method="_on_sfx_volume_value_changed"]
 [connection signal="toggled" from="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer2/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer/VBoxContainer/TouchControlToggle" to="." method="_on_touch_control_toggle_toggled"]
+[connection signal="toggled" from="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer/VBoxContainer/PointLightsToggle" to="." method="_on_point_light_toggled"]
+[connection signal="toggled" from="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer/VBoxContainer/BulletLightsToggle" to="." method="_on_bullet_lights_toggle_toggled"]
+[connection signal="toggled" from="Control/PanelContainer/HSplitContainer/SettingControlsContainer/PanelContainer3/MarginContainer2/VolumeContainer2/VBoxContainer/HBoxContainer/VBoxContainer/DynamicShadowsToggle" to="." method="_on_dynamic_shadows_toggle_toggled"]

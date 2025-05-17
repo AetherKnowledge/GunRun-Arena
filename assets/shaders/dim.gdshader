@@ -2,6 +2,7 @@ shader_type canvas_item;
 
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture;
 uniform float threshold : hint_range(0.0, 1.0) = 0.05;
+instance uniform bool shader_enabled = true;
 
 const vec3 sky_colors[4] = vec3[](
     vec3(0.3137, 0.5529, 0.8),    // #508DCC
@@ -12,16 +13,21 @@ const vec3 sky_colors[4] = vec3[](
 const vec3 light_colors = vec3(0.4863, 0.6745, 0.8784);
 
 void fragment() {
-    vec4 screen_col = texture(SCREEN_TEXTURE, SCREEN_UV);
+	if (!shader_enabled){
+		COLOR = texture(TEXTURE, UV) * COLOR;
+	}
+	else{
+		vec4 screen_col = texture(SCREEN_TEXTURE, SCREEN_UV);
 
-    // Match raw screen color to sky tones (pre-lighting!)
-    for (int i = 0; i < 4; i++) {
-        if (distance(screen_col.rgb, sky_colors[i]) < threshold) {
-            discard; // Don't draw dimmer over sky
-        }
-    }
+	    // Match raw screen color to sky tones (pre-lighting!)
+	    for (int i = 0; i < 4; i++) {
+	        if (distance(screen_col.rgb, sky_colors[i]) < threshold) {
+	            discard; // Don't draw dimmer over sky
+	        }
+	    }
 
-    COLOR = texture(TEXTURE, UV) * COLOR; // Respect modulate and dimmer alpha
-	// Draw dimmer normally
-    //COLOR = vec4(0.0, 0.0, 0.0, dim_strength) * COLOR.a;
+	    COLOR = texture(TEXTURE, UV) * COLOR; // Respect modulate and dimmer alpha
+		// Draw dimmer normally
+	    //COLOR = vec4(0.0, 0.0, 0.0, dim_strength) * COLOR.a;
+	}
 }

@@ -107,7 +107,14 @@ func _process_default_controls():
 	if not Settings.TouchControlsEnabled:
 		looking_at = player.get_global_mouse_position()
 	
-	input_direction = Input.get_axis("move_left", "move_right")
+	if Input.is_action_pressed("move_left"):
+		input_direction = -1
+	elif Input.is_action_pressed("move_right"):
+		input_direction = 1
+	else:
+		input_direction = 0
+	
+	#input_direction = Input.get_axis("move_left", "move_right")
 	input_jump = Input.get_action_strength("jump")
 	input_dash = Input.get_action_strength("dash")	
 

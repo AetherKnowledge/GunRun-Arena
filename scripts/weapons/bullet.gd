@@ -32,10 +32,17 @@ func init(player: Player, shoot_pos: Marker2D, dir_angle: float, max_distance: i
 func _ready() -> void:
 	visible = false
 	await get_tree().process_frame
+	
+	Settings.BulletLightsEnabledChanged.connect(_on_bullet_light_enabled_changed)
+	$PointLight2D.visible = Settings.BulletLightsEnabled
+	
 	visible = true
 	play("default")
 	await animation_finished
 	play("on_air")
+	
+func _on_bullet_light_enabled_changed(value: bool):
+	$PointLight2D.visible = value
 
 func _physics_process(delta: float) -> void:
 
@@ -51,6 +58,8 @@ func _physics_process(delta: float) -> void:
 		if hit_player.player_id != player_id and not bullet_hit_has_played:
 			hit_player.take_damage(damage, get_knockback_force(hit_player))
 			bullet_hit_has_played = true
+			
+	
 
 func process_physics_server(delta: float):
 	global_position += Vector2(1,0).rotated(rotation) * speed * delta

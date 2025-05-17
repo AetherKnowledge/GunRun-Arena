@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 	if OS.has_feature("dedicated_server"):
 		return
 	
-	if not animated_sprite or not animated_sprite.sprite_frames or not enabled:
+	if not animated_sprite or not animated_sprite.sprite_frames:
 		return
 	
 	if flip_h != animated_sprite.flip_h:
@@ -116,8 +116,11 @@ func generate_occluders() -> void:
 func _on_frame_changed() -> void:
 	if OS.has_feature("dedicated_server"):
 		return
-	
+		
 	if not enabled:
+		return
+		
+	if not Settings.DynamicShadowEnabled and not Settings.PointLightsEnabled:
 		return
 	
 	update_occluder(animated_sprite.frame)
