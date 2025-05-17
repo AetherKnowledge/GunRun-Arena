@@ -32,7 +32,7 @@ func _ready() -> void:
 		
 	$DespawnTimer.wait_time = time_to_despawn
 	if do_random_item:
-		selected_item = randi() % GlobalEnums.Items.values().size()
+		selected_item = (randi() % GlobalEnums.Items.values().size()) as GlobalEnums.Items
 		
 	item = ITEM_SCENES[selected_item]
 	if item is PackedScene:
@@ -46,6 +46,8 @@ func _ready() -> void:
 		$AnimatedSprite2D.play("default")
 	
 	$AnimatedLightOccluder2D.generate_occluders()
+	$AnimatedLightOccluder2D.scale = $AnimatedSprite2D.scale
+
 
 func _physics_process(delta: float) -> void:
 	if not multiplayer.is_server():
@@ -69,7 +71,6 @@ func _on_pickup_area_body_entered(body: Node2D) -> void:
 		var player: Player = body as Player
 		# must come first to queue free the old weapon
 		if item is Weapon:
-			var gun = item as Weapon
 			item.init(player)
 			player.weapon = item
 		else:

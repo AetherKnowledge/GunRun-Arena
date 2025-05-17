@@ -2,7 +2,9 @@
 extends LightOccluder2D
 class_name AnimatedLightOccluder2D
 
+@export var enabled: bool = true
 @export var animated_sprite: AnimatedSprite2D
+@export var cull_mode: OccluderPolygon2D.CullMode = OccluderPolygon2D.CULL_DISABLED as int
 var animations = {}
 var flip_h: bool = false
 
@@ -16,12 +18,24 @@ func _ready() -> void:
 	update_occluder(animated_sprite.frame)
 
 func _process(delta: float) -> void:
-	if not animated_sprite or not animated_sprite.sprite_frames:
+	if not animated_sprite or not animated_sprite.sprite_frames or not enabled:
 		return
 	
 	if flip_h != animated_sprite.flip_h:
 		flip_h = animated_sprite.flip_h
 		scale.x *= -1
+		
+	# if has cull mode clockwise flip it to counter clockwise or vice versa
+	if flip_h:
+		if cull_mode == 1:
+			occluder.cull_mode = 2
+		elif cull_mode == 2:
+			occluder.cull_mode = 1
+	else:
+		if cull_mode == 1:
+			occluder.cull_mode = 1
+		elif cull_mode == 2:
+			occluder.cull_mode = 2
 
 func generate_occluders() -> void:
 	animations.clear()
@@ -73,18 +87,27 @@ func generate_occluders() -> void:
 					adjusted_polygon.append(snapped_point + sprite_offset)
 				adjusted_polygons.append(adjusted_polygon)
 			
+			# Find largest polygon
+			var largest_polygon: PackedVector2Array
 			if adjusted_polygons.size() == 0:
-				occluder_polygons.append(OccluderPolygon2D.new())
-				return
+				largest_polygon = []
+			else:
+				largest_polygon = find_largest_polygon(adjusted_polygons)
+			
 			
 			# Create and store occluder
 			var occluder = OccluderPolygon2D.new()
-			occluder.polygon = adjusted_polygons[0]
+			occluder.cull_mode = cull_mode as int
+			occluder.polygon = largest_polygon
 			occluder_polygons.append(occluder)
 		
 		animations[animation] = occluder_polygons
-
+		animated_sprite.frame_changed.emit()
+		
 func _on_frame_changed() -> void:
+	if not enabled:
+		return
+	
 	update_occluder(animated_sprite.frame)
 
 func update_occluder(frame: int) -> void:
@@ -95,3 +118,25 @@ func update_occluder(frame: int) -> void:
 		push_error("Frame index out of range: %d" % frame)
 		return
 	occluder = occluder_polygons[frame]
+	
+func find_largest_polygon(polygons: Array[PackedVector2Array]) -> PackedVector2Array:
+	var largest_polygon: PackedVector2Array = PackedVector2Array()
+	var max_area := 0.0
+
+	for polygon in polygons:
+		var area : float = 0.0
+		var points := polygon.size()
+		if points >= 3:
+			for i in range(points):
+				var p1 = polygon[i]
+				var p2 = polygon[(i + 1) % points]
+				area += (p1.x * p2.y) - (p2.x * p1.y)
+			area = abs(area) * 0.5
+		else:
+			area = 0.0
+
+		if area > max_area:
+			max_area = area
+			largest_polygon = polygon
+	
+	return largest_polygon

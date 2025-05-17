@@ -11,6 +11,7 @@ properties/0/spawn = true
 properties/0/replication_mode = 1
 
 [node name="Gun" instance=ExtResource("1_mfrst")]
+light_mask = 7
 z_index = -4
 script = ExtResource("1_76485")
 bullet_type = 0
@@ -35,7 +36,11 @@ bus = &"SFX"
 [node name="ShootPos" type="Marker2D" parent="." index="4"]
 
 [node name="AnimatedLightOccluder2D" type="LightOccluder2D" parent="." index="5" node_paths=PackedStringArray("animated_sprite")]
-occluder_light_mask = 3
+show_behind_parent = true
+light_mask = 7
+occluder_light_mask = 7
 script = ExtResource("4_imjbj")
+enabled = null
 animated_sprite = NodePath("..")
+cull_mode = 1
 metadata/_custom_type_script = "uid://e5hjxy22inhn"

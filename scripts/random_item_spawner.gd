@@ -7,9 +7,6 @@ const PICKUP_SCENE = preload("res://scenes/entities/pickup.tscn")
 func _ready() -> void:
 	$SpawnTimer.wait_time = cooldown
 
-func _physics_process(delta: float) -> void:
-	pass
-
 func spawn_item_on_segment():
 	if not $CollisionShape2D:
 		return

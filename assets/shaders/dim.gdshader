@@ -13,7 +13,7 @@ const vec3 light_colors = vec3(0.4863, 0.6745, 0.8784);
 
 void fragment() {
     vec4 screen_col = texture(SCREEN_TEXTURE, SCREEN_UV);
-    
+
     // Match raw screen color to sky tones (pre-lighting!)
     for (int i = 0; i < 4; i++) {
         if (distance(screen_col.rgb, sky_colors[i]) < threshold) {

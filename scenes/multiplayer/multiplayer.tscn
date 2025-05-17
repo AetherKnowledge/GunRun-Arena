@@ -1,9 +1,10 @@
-[gd_scene load_steps=18 format=4 uid="uid://ba85b0r3q1r4b"]
+[gd_scene load_steps=23 format=4 uid="uid://ba85b0r3q1r4b"]
 
 [ext_resource type="PackedScene" uid="uid://bdrcr5jgvmul8" path="res://scenes/game_manager.tscn" id="1_p2uc1"]
 [ext_resource type="Texture2D" uid="uid://b80ameqlvqyk7" path="res://assets/world/background_0.png" id="3_fmuvn"]
 [ext_resource type="Shader" uid="uid://dailxmavg4k8x" path="res://assets/shaders/dim.gdshader" id="4_p2uc1"]
 [ext_resource type="PackedScene" uid="uid://84wajth4l6qf" path="res://scenes/killzone.tscn" id="7_oubon"]
+[ext_resource type="Shader" uid="uid://dlfwcvxijegma" path="res://assets/shaders/drop_shadow.gdshader" id="7_uie1y"]
 [ext_resource type="TileSet" uid="uid://b0rtgmeh480fo" path="res://assets/world/world_tileset.tres" id="10_rnw5s"]
 [ext_resource type="PackedScene" uid="uid://sj5vsyy1sdu3" path="res://scenes/parallax.tscn" id="11_uie1y"]
 [ext_resource type="PackedScene" uid="uid://bcxjubp1ocyjq" path="res://scenes/ui/pause_menu.tscn" id="12_64p4e"]
@@ -26,6 +27,19 @@ use_hdr = true
 fill = 1
 fill_from = Vector2(0.547009, 0.504274)
 
+[sub_resource type="Gradient" id="Gradient_uie1y"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_64p4e"]
+gradient = SubResource("Gradient_uie1y")
+fill_to = Vector2(0.149573, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_we4bw"]
+shader = ExtResource("7_uie1y")
+shader_parameter/color = Color(0, 0, 0, 0.211765)
+shader_parameter/angle = 273.971
+shader_parameter/max_dist = 10.0
+shader_parameter/gradientTexture = SubResource("GradientTexture2D_64p4e")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uie1y"]
 shader = ExtResource("4_p2uc1")
 shader_parameter/threshold = 0.05
@@ -42,6 +56,8 @@ fill = 2
 fill_from = Vector2(0.498728, 0.661578)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_p57ef"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_uie1y"]
 
 [node name="Game" type="Control"]
 layout_mode = 3
@@ -63,7 +79,7 @@ position = Vector2(1077, 831)
 texture = ExtResource("3_fmuvn")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Lighting"]
-light_mask = 7
+light_mask = 519
 color = Color(0.129558, 0.129558, 0.129558, 1)
 
 [node name="Sky" type="PointLight2D" parent="Lighting"]
@@ -73,12 +89,12 @@ material = SubResource("CanvasItemMaterial_64p4e")
 position = Vector2(1646, 389)
 rotation = -0.925049
 shadow_enabled = true
-shadow_item_cull_mask = 7
+shadow_item_cull_mask = 519
 texture = SubResource("GradientTexture2D_p2uc1")
 height = 1024.0
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="Lighting"]
-light_mask = 6
+light_mask = 519
 position = Vector2(167, -35)
 rotation = 0.745256
 energy = 0.9
@@ -89,39 +105,36 @@ shadow_filter = 2
 light_mask = 6
 position = Vector2(1049, 854)
 color = Color(0.488073, 0.675741, 0.877932, 1)
-energy = 2.0
-range_item_cull_mask = 14
+range_item_cull_mask = 6
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.509804)
-shadow_filter = 2
+shadow_filter = 1
 shadow_filter_smooth = 1.0
-shadow_item_cull_mask = 14
+shadow_item_cull_mask = 6
 texture = ExtResource("13_rnw5s")
 
 [node name="PointLight2D2" type="PointLight2D" parent="Lighting"]
-light_mask = 6
-position = Vector2(1238, 902)
-color = Color(0.488073, 0.675741, 0.877932, 1)
-energy = 2.0
-range_item_cull_mask = 14
+light_mask = 14
+position = Vector2(1241, 902)
+color = Color(0.486275, 0.67451, 0.878431, 1)
+range_item_cull_mask = 6
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.509804)
-shadow_filter = 2
+shadow_filter = 1
 shadow_filter_smooth = 1.0
-shadow_item_cull_mask = 14
+shadow_item_cull_mask = 6
 texture = ExtResource("13_rnw5s")
 
 [node name="PointLight2D3" type="PointLight2D" parent="Lighting"]
 light_mask = 6
 position = Vector2(1337, 853)
 color = Color(0.488073, 0.675741, 0.877932, 1)
-energy = 2.0
-range_item_cull_mask = 14
+range_item_cull_mask = 6
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.509804)
-shadow_filter = 2
+shadow_filter = 1
 shadow_filter_smooth = 1.0
-shadow_item_cull_mask = 14
+shadow_item_cull_mask = 6
 texture = ExtResource("13_rnw5s")
 
 [node name="DirectionalLight2D3" type="DirectionalLight2D" parent="Lighting"]
@@ -134,18 +147,24 @@ shadow_color = Color(0.1677, 0.27144, 0.39, 0.211765)
 shadow_filter = 2
 shadow_filter_smooth = 0.1
 
-[node name="Sprite2D" type="Sprite2D" parent="Lighting"]
-modulate = Color(1, 1, 1, 0.658824)
+[node name="DropShadow" type="ColorRect" parent="Lighting"]
+material = SubResource("ShaderMaterial_we4bw")
+offset_right = 1926.0
+offset_bottom = 1081.0
+
+[node name="HouseDim" type="Sprite2D" parent="Lighting"]
+modulate = Color(1, 1, 1, 0.313726)
 light_mask = 14
 z_index = 2
 material = SubResource("ShaderMaterial_uie1y")
-position = Vector2(1192, 886)
-scale = Vector2(0.76, 1.07)
+position = Vector2(1191.5, 886)
+scale = Vector2(0.762, 1.07)
 texture = SubResource("GradientTexture2D_fmuvn")
 
 [node name="Tilemap" type="Node2D" parent="."]
 
 [node name="Back1Shadow" type="TileMapLayer" parent="Tilemap"]
+visible = false
 modulate = Color(0, 0, 0, 0.313726)
 light_mask = 0
 use_parent_material = true
@@ -154,6 +173,7 @@ tile_map_data = PackedByteArray("AAAfADoAAwAAAAcAAAAfADsAAwAAAAgAAAAfADwAAwAAAAk
 tile_set = ExtResource("10_rnw5s")
 
 [node name="Back2Shadow" type="TileMapLayer" parent="Tilemap"]
+visible = false
 modulate = Color(0, 0, 0, 0.313726)
 light_mask = 0
 use_parent_material = true
@@ -162,6 +182,7 @@ tile_map_data = PackedByteArray("AAAfADwABAAVABMAAAAgADwABQANAAIAAAAhADwABQAOAAI
 tile_set = ExtResource("10_rnw5s")
 
 [node name="MidShadow" type="TileMapLayer" parent="Tilemap"]
+visible = false
 modulate = Color(0, 0, 0, 0.313726)
 light_mask = 0
 use_parent_material = true
@@ -198,10 +219,6 @@ position = Vector2(1, 0)
 tile_map_data = PackedByteArray("AAAnADYABAAMAAQAAAAoADYABAAMAAoAAAAkADIABAAJAAIAAAAkADMABAAJAAMAAAAjADIABAAMAAoAABAiADIABAANAAoAABAhADIABAAOAAoAABAjADMABAAMAAsAABAiADMABAANAAsAABAhADMABAAOAAsAABAnAC4ABAAMAAAAAAAnAC8ABAAMAAEAAAAoAC4ABAAMAAoAAAAoAC8ABAAMAAsAAAApAC4ABAANAAoAAAApAC8ABAANAAsAAAAqAC4ABAAOAAoAAAAqAC8ABAAOAAsAAAAqADwABAAFAAUAAAAqAD0ABAAFAAYAAAArADwABAAGAAUAAAArAD0ABAAGAAYAAAAsADwABAAGAAUAAAAsAD0ABAAGAAYAAAAtADwABAAGAAUAAAAtAD0ABAAGAAYAAAAuADwABAAGAAUAAAAuAD0ABAAGAAYAAAAvADwABAAGAAUAAAAvAD0ABAAGAAYAAAAwADwABAAGAAUAAAAwAD0ABAAGAAYAAAAxADwABAAGAAUAAAAxAD0ABAAGAAYAAAAyADwABAAGAAUAAAAzADwABAAGAAUAAAA1ADwABAAHAAUAAAA1AD0ABAAHAAYAAAAyAD0ABAAGAAYAAAAzAD0ABAAGAAYAAAAqADYABAAOAAoAAAApADYABAANAAoAAAA0ADwABAAGAAUAAAA0AD0ABAAGAAYAAABCADgAAAAJAAYAAABDADgAAAAKAAYAAABEADgAAAALAAYAAABFADgAAAAMAAYAAABGADUAAAANAAUAAABHADUAAAAOAAQAAABIADUAAAAOAAUAAABPADUAAAANAAUAAABQADUAAAAOAAQAAABRADUAAAAOAAUAAAAsADgABAAFAAUAAAAsADkABAAFAAYAAAAtADgABAAGAAUAAAAtADkABAAGAAYAAAAuADgABAAGAAUAAAAuADkABAAGAAYAAAAvADgABAAGAAUAAAAvADkABAAGAAYAAAAwADgABAAHAAUAAAAwADkABAAHAAYAAAAzADUABAAFAAUAAAAzADYABAAFAAYAAAA0ADUABAAGAAUAAAA0ADYABAAGAAYAAAA1ADUABAAGAAUAAAA1ADYABAAGAAYAAAAsADIABAAFAAUAAAAsADMABAAFAAYAAAAtADIABAAGAAUAAAAtADMABAAGAAYAAAAuADIABAAHAAUAAAAuADMABAAHAAYAAAA2ADUABAAGAAUAAAA2ADYABAAGAAYAAAA3ADUABAAGAAUAAAA3ADYABAAGAAYAAAA4ADUABAAHAAUAAAA4ADYABAAHAAYAAAAyAC8ABAAFAAUAAAAyADAABAAFAAYAAAAzAC8ABAAGAAUAAAAzADAABAAGAAYAAAA0AC8ABAAGAAUAAAA0ADAABAAGAAYAAAA1AC8ABAAHAAUAAAA1ADAABAAHAAYAAAAoADcABAAMAAsAAAApADcABAANAAsAAAAqADcABAAOAAsAAAAnADcABAAMAAUAAAA+ADEAAAAUAAAAAAA/ADEAAAAVAAAAAABAADEAAAAWAAAAAABBADEAAAAXAAAAAABCADEAAAAXAAAAAABDADEAAAAVAAAAAABEADEAAAAWAAAAAABFADEAAAAXAAAAAABGADEAAAAVAAAAAABHADEAAAAWAAAAAABIADEAAAAXAAAAAABJADEAAAAVAAAAAABKADEAAAAWAAAAAABLADEAAAAXAAAAAABMADEAAAAVAAAAAABNADEAAAAWAAAAAABOADEAAAAXAAAAAABPADEAAAAVAAAAAABQADEAAAAWAAAAAABRADEAAAAXAAAAAABSADEAAAAVAAAAAABTADEAAAAVAAAAAABUADEAAAAWAAAAAABVADEAAAAXAAAAAABWADEAAAAYAAAAAAA/ADIAAAAVAAEAAAA/ADMAAAAVAAIAAABAADIAAAAWAAEAAABAADMAAAAWAAIAAABBADIAAAAXAAEAAABBADMAAAAXAAIAAABCADIAAAAVAAEAAABCADMAAAAVAAIAAABDADIAAAAWAAEAAABDADMAAAAWAAIAAABEADIAAAAVAAEAAABEADMAAAAVAAIAAABFADIAAAAWAAEAAABFADMAAAAWAAIAAABGADIAAAAXAAEAAABGADMAAAAXAAIAAABHADIAAAAVAAEAAABHADMAAAAVAAIAAABIADIAAAAWAAEAAABIADMAAAAWAAIAAABJADIAAAAXAAEAAABJADMAAAAXAAIAAABKADIAAAAVAAEAAABKADMAAAAVAAIAAABLADIAAAAWAAEAAABLADMAAAAWAAIAAABMADIAAAAXAAEAAABMADMAAAAXAAIAAABNADIAAAAVAAEAAABNADMAAAAVAAIAAABOADIAAAAWAAEAAABOADMAAAAWAAIAAABPADIAAAAXAAEAAABPADMAAAAXAAIAAABQADIAAAAVAAEAAABQADMAAAAVAAIAAABRADIAAAAWAAEAAABRADMAAAAWAAIAAABSADIAAAAXAAEAAABSADMAAAAXAAIAAABTADIAAAAVAAEAAABTADMAAAAVAAIAAABUADIAAAAWAAEAAABUADMAAAAWAAIAAABVADIAAAAXAAEAAABVADMAAAAXAAIAAAA=")
 tile_set = ExtResource("10_rnw5s")
 
-[node name="Platforms" type="Node" parent="."]
-
-[node name="Enemies" type="Node" parent="."]
-
 [node name="Killzone" parent="." instance=ExtResource("7_oubon")]
 position = Vector2(729, 967)
 collision_mask = 1
@@ -210,8 +227,22 @@ collision_mask = 1
 position = Vector2(-128, 121)
 shape = SubResource("WorldBoundaryShape2D_p57ef")
 
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Killzone"]
+position = Vector2(-143, -716)
+rotation = 3.14159
+shape = SubResource("WorldBoundaryShape2D_p57ef")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Killzone"]
+position = Vector2(-438, -455)
+rotation = 1.5708
+shape = SubResource("WorldBoundaryShape2D_uie1y")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Killzone"]
+position = Vector2(1187, -416)
+rotation = 4.71239
+shape = SubResource("WorldBoundaryShape2D_uie1y")
+
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://csdaf6s2dyu5o")
 spawn_path = NodePath("../Players")
 
 [node name="Players" type="Node2D" parent="."]

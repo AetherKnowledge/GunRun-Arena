@@ -43,3 +43,7 @@ func is_port_open(port: int, max_clients: int = 32) -> bool:
 		return true
 	else:
 		return false
+
+
+func _on_credits_pressed() -> void:
+	$CreditsPanel.play()

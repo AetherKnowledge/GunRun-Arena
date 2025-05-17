@@ -1,6 +1,6 @@
 extends Node
 
-const player_scene = preload("res://scenes/entities/multiplayer_player.tscn")
+const player_scene = preload("res://scenes/entities/player.tscn")
 const SERVER_IP = "127.0.0.1"
 const SERVER_PORT = 8080
 var SERVER_FULL_ADDRESS = SERVER_IP + ":" + str(SERVER_PORT)
@@ -11,8 +11,8 @@ var players_node: Node2D
 var player_count: int = 0
 var username: String = "Player"
 
-signal player_connected(player: MultiplayerPlayer)
-signal player_disconnected(player: MultiplayerPlayer)
+signal player_connected(player: Player)
+signal player_disconnected(player: Player)
 
 func _ready() -> void:
 	if OS.has_feature("dedicated_server"):

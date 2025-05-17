@@ -19,7 +19,7 @@ func init(player: Player, shoot_pos: Marker2D, dir_angle: float, max_distance: i
 	self.knockback_strength = knockback_strength
 	self.initial_pos = shoot_pos.global_position
 	
-	if player is MultiplayerPlayer:
+	if player is Player:
 		self.player_id = player.player_id
 	
 	# Position Bullet on barrel of gun
@@ -44,10 +44,10 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	if not multiplayer.is_server() and not MultiplayerManager.host_mode:
-		if not collider.is_colliding() or not collider.get_collider() is MultiplayerPlayer:
+		if not collider.is_colliding() or not collider.get_collider() is Player:
 			return
 		
-		var hit_player = collider.get_collider() as MultiplayerPlayer
+		var hit_player = collider.get_collider() as Player
 		if hit_player.player_id != player_id and not bullet_hit_has_played:
 			hit_player.take_damage(damage, get_knockback_force(hit_player))
 			bullet_hit_has_played = true
