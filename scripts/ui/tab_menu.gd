@@ -7,7 +7,7 @@ func _input(event: InputEvent) -> void:
 	if Engine.is_editor_hint():
 		return
 	
-	if Input.is_action_just_pressed("tab"):
+	if Input.is_action_just_pressed("tab") and not visible:
 		play()
 	if Input.is_action_just_released("tab"):
 		play_backwards()

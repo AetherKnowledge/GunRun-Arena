@@ -40,7 +40,6 @@ show_behind_parent = true
 light_mask = 7
 occluder_light_mask = 7
 script = ExtResource("4_imjbj")
-enabled = null
 animated_sprite = NodePath("..")
 cull_mode = 1
 metadata/_custom_type_script = "uid://e5hjxy22inhn"

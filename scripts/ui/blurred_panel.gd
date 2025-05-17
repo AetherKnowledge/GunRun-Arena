@@ -102,16 +102,10 @@ func _create_animation() -> void:
 	animation_player.add_animation_library("blur", anim_library)
 	
 func play(custom_blend: float = -1, custom_speed: float = 1.0, from_end: bool = false):
-	if animation_player.is_playing():
-		return
-	
 	visible = true
 	animation_player.play("blur/blur", custom_blend, custom_speed, from_end)
 
 func play_backwards(custom_blend: float = -1, custom_speed: float = 1.0):
-	if animation_player.is_playing():
-		return
-	
 	animation_player.play_backwards("blur/blur", custom_blend)
 	
 func animation_player_animation_finished(anim_name: StringName) -> void:
