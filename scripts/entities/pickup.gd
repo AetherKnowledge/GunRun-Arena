@@ -105,3 +105,6 @@ func sync_weapon_texture_on_client():
 	else:
 		$AnimatedSprite2D.scale *= 0.7
 		$AnimatedSprite2D.play("default")
+		
+	$AnimatedLightOccluder2D.generate_occluders()
+	$AnimatedLightOccluder2D.scale = $AnimatedSprite2D.scale

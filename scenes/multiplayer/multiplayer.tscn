@@ -243,6 +243,7 @@ rotation = 4.71239
 shape = SubResource("WorldBoundaryShape2D_uie1y")
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://csdaf6s2dyu5o")
 spawn_path = NodePath("../Players")
 
 [node name="Players" type="Node2D" parent="."]

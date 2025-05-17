@@ -9,6 +9,9 @@ var animations = {}
 var flip_h: bool = false
 
 func _ready() -> void:
+	if OS.has_feature("dedicated_server"):
+		return
+	
 	if not animated_sprite or not animated_sprite.sprite_frames:
 		return
 	
@@ -18,6 +21,9 @@ func _ready() -> void:
 	update_occluder(animated_sprite.frame)
 
 func _process(delta: float) -> void:
+	if OS.has_feature("dedicated_server"):
+		return
+	
 	if not animated_sprite or not animated_sprite.sprite_frames or not enabled:
 		return
 	
@@ -38,6 +44,9 @@ func _process(delta: float) -> void:
 			occluder.cull_mode = 2
 
 func generate_occluders() -> void:
+	if OS.has_feature("dedicated_server"):
+		return
+	
 	animations.clear()
 	var sprite_frames = animated_sprite.sprite_frames
 	if not sprite_frames:
@@ -102,15 +111,21 @@ func generate_occluders() -> void:
 			occluder_polygons.append(occluder)
 		
 		animations[animation] = occluder_polygons
-		animated_sprite.frame_changed.emit()
+	animated_sprite.frame_changed.emit()
 		
 func _on_frame_changed() -> void:
+	if OS.has_feature("dedicated_server"):
+		return
+	
 	if not enabled:
 		return
 	
 	update_occluder(animated_sprite.frame)
 
 func update_occluder(frame: int) -> void:
+	if OS.has_feature("dedicated_server"):
+		return
+	
 	var current_animation = animated_sprite.animation
 	var occluder_polygons = animations[current_animation]
 		
