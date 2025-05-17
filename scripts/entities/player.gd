@@ -128,7 +128,7 @@ func _setup_camera() -> void:
 
 func _process(delta: float) -> void:
 	if respawning:
-		if multiplayer.is_server() and global_position == respawn_point:
+		if multiplayer.is_server() and global_position.distance_to(respawn_point) <= 25:
 			respawning = false
 		
 		if is_player_authority() and global_position != respawn_point:
