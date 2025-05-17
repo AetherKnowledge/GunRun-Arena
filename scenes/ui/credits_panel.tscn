@@ -1,0 +1,156 @@
+[gd_scene load_steps=6 format=3 uid="uid://crjbb720yeylv"]
+
+[ext_resource type="Script" uid="uid://b3qdv4bfny6r5" path="res://scripts/ui/credits_panel.gd" id="1_vcgks"]
+[ext_resource type="Texture2D" uid="uid://bcnrpyd0mir6u" path="res://assets/ui/empty-texture.png" id="2_bet0l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y0bee"]
+bg_color = Color(0.0980392, 0.0980392, 0.0980392, 0.886275)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.423529)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.247059)
+shadow_size = 10
+shadow_offset = Vector2(15, 10)
+
+[sub_resource type="Theme" id="Theme_gleon"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_um21f"]
+color = Color(1, 1, 1, 1)
+thickness = 2
+
+[node name="CreditsPanel" type="PanelContainer"]
+modulate = Color(1, 1, 1, 255)
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vcgks")
+max_background_opacity = 0
+metadata/_custom_type_script = "uid://drk53exk5d6f4"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -737.0
+offset_top = -414.5
+offset_right = 737.0
+offset_bottom = 414.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y0bee")
+
+[node name="HSplitContainer" type="VBoxContainer" parent="Control/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TopBarContainer" type="HBoxContainer" parent="Control/PanelContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer/HSplitContainer/TopBarContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Label" type="Label" parent="Control/PanelContainer/HSplitContainer/TopBarContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Credits"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackBtn" type="Button" parent="Control/PanelContainer/HSplitContainer/TopBarContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_gleon")
+theme_override_colors/font_hover_color = Color(0.843184, 0.843184, 0.843184, 1)
+theme_override_colors/font_color = Color(0.481789, 0.481789, 0.481789, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "<-"
+icon = ExtResource("2_bet0l")
+flat = true
+
+[node name="HSeparator" type="HSeparator" parent="Control/PanelContainer/HSplitContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_um21f")
+
+[node name="CreditsContainer" type="MarginContainer" parent="Control/PanelContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/PanelContainer/HSplitContainer/CreditsContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer/HSplitContainer/CreditsContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/PanelContainer/HSplitContainer/CreditsContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 32
+bbcode_enabled = true
+text = "• [url=https://anokolisa.itch.io/sidescroller-pixelart-sprites-asset-pack-forest-16x16]Sidescroller Fantasy[/url] by [url=https://anokolisa.itch.io/]Anokolisa[/url]  
+
+• [url=https://brackeysgames.itch.io/brackeys-platformer-bundle]Brackeys' Platformer Bundle[/url] by [url=https://brackeysgames.itch.io/]Brackeys[/url]  
+
+• [url=https://arcadeisland.itch.io/guns-asset-pack-v1]GUNS_V1.00[/url] by [url=https://arcadeisland.itch.io/]Arcade Island[/url]  
+
+• [url=https://f8studios.itch.io/snakes-authentic-gun-sounds]Snake's Authentic Gun Sounds[/url] by [url=https://f8studios.itch.io/]SnakeF8[/url]  
+
+• [url=https://trixelized.itch.io/starstring-fields]Stringstar Fields[/url] by [url=https://itch.io/profile/trixelized]Trixie (Trixelized)[/url]  
+
+• [url=https://admurin.itch.io/free-chest-animations]Chest Animations[/url] by [url=https://itch.io/profile/admurin]Admurin[/url]  
+
+• [url=https://mounirtohami.itch.io/pixel-art-gui-elements]Pixel Art GUI Elements[/url] by [url=https://mounirtohami.itch.io/]Mounir Tohami[/url]  
+
+• [url=https://www.dafont.com/grapesoda-2.font]Grape Soda[/url] by [url=https://www.dafont.com/jeti.d2122]jeti[/url]  
+
+• [url=https://github.com/MarcoFazioRandom/Virtual-Joystick-Godot]Godot Virtual Joystick[/url] by [url=https://github.com/MarcoFazioRandom]Marco Fazio[/url]  
+
+• [url=https://soundbible.com/1996-Shotgun-Reload-Old.html]Shotgun Reload Old[/url] by [url=https://soundbible.com/]RA The Sun God[/url]  
+
+• [url=https://soundbible.com/2101-12-Ga-Winchester-Shotgun.html]12 Ga Winchester Shotgun[/url] by [url=https://soundbible.com/]RA The Sun God[/url]  
+
+• [url=https://ansimuz.itch.io/explosion-animations-pack]Explosion Animations Pack[/url] by [url=https://ansimuz.itch.io/]ansimuz[/url]  
+
+• [url=https://www.bluezone-corporation.com/free-sound-effects]Free Weapon Sound Effects[/url] by [url=https://www.bluezone-corporation.com/]Bluezone Corporation[/url]  
+
+• [url=https://pixabay.com/users/freesound_community-46691455/]Sound Effects[/url] by [url=https://pixabay.com/users/freesound_community-46691455/]freesound_community[/url]  
+
+• [url=https://github.com/foxssake/netfox]Netfox[/url] by [url=https://github.com/foxssake]Fox's Sake Studio[/url]
+"
+fit_content = true
+
+[connection signal="pressed" from="Control/PanelContainer/HSplitContainer/TopBarContainer/BackBtn" to="." method="_on_back_btn_pressed"]
+[connection signal="meta_clicked" from="Control/PanelContainer/HSplitContainer/CreditsContainer/ScrollContainer/VBoxContainer/RichTextLabel" to="." method="_on_rich_text_label_meta_clicked"]

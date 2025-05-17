@@ -1,10 +1,10 @@
 extends Control
 class_name PlayerStatsPanel
 
-var player: MultiplayerPlayer
+var player: Player
 var has_player: bool = false
 
-func init(player: MultiplayerPlayer) -> PlayerStatsPanel:
+func init(player: Player) -> PlayerStatsPanel:
 	self.player = player
 	return self
 

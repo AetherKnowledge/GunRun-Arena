@@ -21,6 +21,10 @@ const BLUR_SHADER = preload("res://assets/shaders/blur.gdshader")
 
 @export_range(0.1, 10, 0.001) var animation_length: float = 0.3
 
+
+@export var hide_on_action: String = ""
+@export var show_on_action: String = ""
+
 signal animation_finished
 
 func _process(delta: float) -> void:
@@ -29,6 +33,13 @@ func _process(delta: float) -> void:
 	
 	modulate.a = max_opacity
 	self_modulate.a = max_background_opacity
+
+func _input(event):
+	if not animation_player.is_playing():
+		if hide_on_action and Input.is_action_just_pressed(hide_on_action):
+			play_backwards()
+		elif show_on_action and Input.is_action_just_pressed(show_on_action):
+			play()
 
 # If overriding do super._init()
 func _init() -> void:
@@ -91,13 +102,18 @@ func _create_animation() -> void:
 	animation_player.add_animation_library("blur", anim_library)
 	
 func play(custom_blend: float = -1, custom_speed: float = 1.0, from_end: bool = false):
+	if animation_player.is_playing():
+		return
+	
 	visible = true
 	animation_player.play("blur/blur", custom_blend, custom_speed, from_end)
 
 func play_backwards(custom_blend: float = -1, custom_speed: float = 1.0):
+	if animation_player.is_playing():
+		return
+	
 	animation_player.play_backwards("blur/blur", custom_blend)
-
-
+	
 func animation_player_animation_finished(anim_name: StringName) -> void:
 	animation_finished.emit()
 	if animation_player.current_animation_position == 0:

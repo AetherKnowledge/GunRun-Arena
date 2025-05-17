@@ -7,8 +7,8 @@ var input_direction: int = 1
 var input_jump: bool = false
 var input_dash: bool = false
 
-@onready var player: MultiplayerPlayer = $".."
-#@export var player: MultiplayerPlayer
+@onready var player: Player = $".."
+#@export var player: Player
 
 var looking_at: Vector2 = Vector2(0,0)
 var username: String = "Player"

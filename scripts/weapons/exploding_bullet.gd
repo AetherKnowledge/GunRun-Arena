@@ -50,7 +50,7 @@ func process_physics_server(delta: float):
 	
 	elif collider.is_colliding():
 		var target = collider.get_collider()
-		if target is MultiplayerPlayer and (target as MultiplayerPlayer).player_id == player_id:
+		if target is Player and (target as Player).player_id == player_id:
 			return
 		else:
 			explode()

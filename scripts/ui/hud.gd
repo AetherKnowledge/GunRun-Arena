@@ -51,4 +51,4 @@ func _on_menu_button_pressed() -> void:
 	if nodes.size() != 1 or not nodes.get(0) is PauseMenu:
 		return
 	var pause_menu = nodes.get(0) as PauseMenu 
-	pause_menu.play()
+	pause_menu.pause()

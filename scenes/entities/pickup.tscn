@@ -83,6 +83,7 @@ one_shot = true
 [node name="AnimatedLightOccluder2D" type="LightOccluder2D" parent="." node_paths=PackedStringArray("animated_sprite")]
 occluder = SubResource("OccluderPolygon2D_yoejb")
 script = ExtResource("4_yoejb")
+enabled = null
 animated_sprite = NodePath("../AnimatedSprite2D")
 metadata/_custom_type_script = "uid://e5hjxy22inhn"
 

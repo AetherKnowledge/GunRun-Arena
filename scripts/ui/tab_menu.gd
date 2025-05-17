@@ -21,7 +21,7 @@ func _ready() -> void:
 	MultiplayerManager.player_connected.connect(add_player_to_tab_menu)
 	MultiplayerManager.player_disconnected.connect(remove_player_to_tab_menu)
 	
-func add_player_to_tab_menu(player: MultiplayerPlayer):
+func add_player_to_tab_menu(player: Player):
 	if multiplayer.is_server() and not MultiplayerManager.host_mode:
 		return
 		
@@ -29,7 +29,7 @@ func add_player_to_tab_menu(player: MultiplayerPlayer):
 	player_stats.name = player.name
 	%PlayerStatsContainer.add_child(player_stats)
 
-func remove_player_to_tab_menu(player: MultiplayerPlayer):
+func remove_player_to_tab_menu(player: Player):
 	if multiplayer.is_server() and not MultiplayerManager.host_mode:
 		return
 		
@@ -40,13 +40,13 @@ func remove_player_to_tab_menu(player: MultiplayerPlayer):
 
 
 func _on_multiplayer_spawner_spawned(node: Node) -> void:
-	if not node is MultiplayerPlayer:
+	if not node is Player:
 		return
 		
-	add_player_to_tab_menu(node as MultiplayerPlayer)
+	add_player_to_tab_menu(node as Player)
 
 func _on_multiplayer_spawner_despawned(node: Node) -> void:
-	if not node is MultiplayerPlayer:
+	if not node is Player:
 		return
 		
-	remove_player_to_tab_menu(node as MultiplayerPlayer)
+	remove_player_to_tab_menu(node as Player)
