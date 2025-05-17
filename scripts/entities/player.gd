@@ -47,7 +47,6 @@ var death_count: int = 0
 
 # Player Status
 var respawning = false
-var has_respawned = true
 var alive: bool = true
 var respawn_point: Vector2 = Vector2.ZERO
 
@@ -129,21 +128,15 @@ func _setup_camera() -> void:
 
 func _process(delta: float) -> void:
 	if respawning:
-		if multiplayer.is_server():
+		if multiplayer.is_server() and global_position == respawn_point:
 			respawning = false
 		
-		if is_player_authority():
+		if is_player_authority() and global_position != respawn_point:
 			global_position = respawn_point
-			velocity = Vector2(0,0)
-			has_respawned = true
+		
 		return
-	else:
-		if is_player_authority():
-			has_respawned = true
-		if not has_respawned:
-			return
 	
-	if not alive or not has_respawned:
+	if not alive:
 		return
 	
 	holding_jump = input_synchronizer.input_jump

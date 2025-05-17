@@ -37,10 +37,10 @@ properties/7/replication_mode = 1
 properties/8/path = NodePath(".:username")
 properties/8/spawn = true
 properties/8/replication_mode = 2
-properties/9/path = NodePath(".:respawning")
+properties/9/path = NodePath(".:respawn_point")
 properties/9/spawn = true
-properties/9/replication_mode = 2
-properties/10/path = NodePath(".:respawn_point")
+properties/9/replication_mode = 1
+properties/10/path = NodePath(".:respawning")
 properties/10/spawn = true
 properties/10/replication_mode = 1
 
@@ -69,9 +69,6 @@ properties/6/replication_mode = 1
 properties/7/path = NodePath(".:velocity")
 properties/7/spawn = true
 properties/7/replication_mode = 1
-properties/8/path = NodePath(".:has_respawned")
-properties/8/spawn = true
-properties/8/replication_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
 atlas = ExtResource("3_b6tgf")
