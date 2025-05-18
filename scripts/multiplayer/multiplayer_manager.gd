@@ -3,7 +3,9 @@ extends Node
 const player_scene = preload("res://scenes/entities/player.tscn")
 const SERVER_IP = "sia.buyitproperties.uk"
 const SERVER_PORT = 8890
-var SERVER_FULL_ADDRESS = SERVER_IP + ":" + str(SERVER_PORT)
+const LOCAL_PORT = 8080
+
+var PUBLIC_LOBBY_ADDRESS = SERVER_IP + ":" + str(42069)
 
 var is_multiplayer = true
 var host_mode = false
@@ -23,7 +25,7 @@ func _ready() -> void:
 		get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
 		host()
 
-func host(username: String = "Player") -> Error:
+func host(username: String = "Player", noray: bool = false) -> Error:
 	print("Connecting to noray on Address: %s and Port %s " % [SERVER_IP, str(SERVER_PORT)])
 	var err = await _connect_to_noray()
 	if err != OK:
@@ -31,18 +33,29 @@ func host(username: String = "Player") -> Error:
 		return err
 	
 	host_mode = true
-	var server_peer = ENetMultiplayerPeer.new()
-	err = server_peer.create_server(Noray.local_port)
-	if err != OK:
-		print("Error Code: " + str(err))
-		return err
-	
-	server_oid = Noray.oid
-	multiplayer.multiplayer_peer = server_peer
-	Noray.on_connect_nat.connect(_noray_client_connected)
-	Noray.on_connect_relay.connect(_noray_client_connected)
-	Noray.on_disconnect_from_host.connect(sudden_disconnect_to_server)
-	
+	if not OS.has_feature("dedicated_server") or noray:
+		var noray_server_peer = ENetMultiplayerPeer.new()
+		err = noray_server_peer.create_server(Noray.local_port)
+		if err != OK:
+			print("Error Code: " + str(err))
+			return err
+			
+		server_oid = Noray.oid
+		multiplayer.multiplayer_peer = noray_server_peer
+		
+		Noray.on_connect_nat.connect(_noray_client_connected)
+		Noray.on_connect_relay.connect(_noray_client_connected)
+		Noray.on_disconnect_from_host.connect(sudden_disconnect_to_server)
+		
+	else:
+		var server_peer = ENetMultiplayerPeer.new()
+		err = server_peer.create_server(LOCAL_PORT)
+		if err != OK:
+			print("Error Code: " + str(err))
+			return err
+			
+		multiplayer.multiplayer_peer = server_peer
+		
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(remove_player)
 	
@@ -53,7 +66,7 @@ func host(username: String = "Player") -> Error:
 	
 	return OK
 	
-func join(oid: String, username: String) -> Error:
+func join_noray(oid: String, username: String) -> Error:
 	print("Joining Game at OID: %s" % oid)
 	self.username = username
 	
@@ -67,6 +80,21 @@ func join(oid: String, username: String) -> Error:
 	
 	Noray.connect_nat(oid)
 	server_oid = oid
+	return OK
+	
+func join_ip(address: String, port: int, username: String) -> Error:
+	print("Joining Game at Address: %s and Port %s " % [address, str(port)])
+	
+	self.username = username
+	var client_peer = ENetMultiplayerPeer.new()
+	var err = await client_peer.create_client(address,port)
+	if err != OK:
+		print("Cannot connect with ip")
+		return err
+	
+	multiplayer.server_disconnected.connect(sudden_disconnect_to_server)
+	multiplayer.multiplayer_peer = client_peer
+	
 	return OK
 
 func _connect_to_noray() -> Error:
