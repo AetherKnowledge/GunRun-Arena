@@ -32,5 +32,7 @@ Special thanks to the talented creators whose assets and tools brought this game
 - [**Free Weapon Sound Effects**](https://www.bluezone-corporation.com/free-sound-effects) by [Bluezone Corporation](https://www.bluezone-corporation.com/)
 - [**Sound Effects**](https://pixabay.com/users/freesound_community-46691455/) by [freesound_community](https://pixabay.com/users/freesound_community-46691455/)
 - [**Netfox**](https://github.com/foxssake/netfox) by [Fox's Sake Studio](https://github.com/foxssake)
+- [**noray**](https://github.com/foxssake/noray) by [Fox's Sake Studio](https://github.com/foxssake)
+- [**Paste Clipboard Icons**](https://www.flaticon.com/free-icons/paste-clipboard) by [Anggara](https://www.flaticon.com/authors/anggara) via [Flaticon](https://www.flaticon.com/)
 
 Please support these creators for their incredible work!

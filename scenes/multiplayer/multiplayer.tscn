@@ -1,5 +1,6 @@
-[gd_scene load_steps=23 format=4 uid="uid://ba85b0r3q1r4b"]
+[gd_scene load_steps=25 format=4 uid="uid://ba85b0r3q1r4b"]
 
+[ext_resource type="Script" uid="uid://5jxla6us7f7a" path="res://scripts/game.gd" id="1_oubon"]
 [ext_resource type="PackedScene" uid="uid://bdrcr5jgvmul8" path="res://scenes/game_manager.tscn" id="1_p2uc1"]
 [ext_resource type="Shader" uid="uid://dailxmavg4k8x" path="res://assets/shaders/dim.gdshader" id="4_p2uc1"]
 [ext_resource type="Script" uid="uid://j3u40h6y78ld" path="res://scripts/point_light.gd" id="5_64p4e"]
@@ -14,6 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://b2k2wl1ls1mby" path="res://assets/lighting/light.png" id="13_rnw5s"]
 [ext_resource type="PackedScene" uid="uid://vmsni765mhvb" path="res://scenes/ui/tab_menu.tscn" id="13_we4bw"]
 [ext_resource type="PackedScene" uid="uid://cjha85c4y6th" path="res://scenes/random_item_spawner.tscn" id="14_oubon"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oubon"]
 
 [sub_resource type="Gradient" id="Gradient_uie1y"]
 
@@ -50,6 +53,10 @@ fill_from = Vector2(0.498728, 0.661578)
 [node name="Game" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_oubon")
+
+[node name="OIDSyncronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_oubon")
 
 [node name="GameManager" parent="." instance=ExtResource("1_p2uc1")]
 unique_name_in_owner = true

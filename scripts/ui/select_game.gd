@@ -3,7 +3,9 @@ extends Control
 @onready var local_multiplayer_panel: Panel = $VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel
 @onready var popup_panel: Panel = $PopupPanel
 @onready var username_txt_box: TextEdit = %UsernameTxtBox
-@onready var address_txt_box: TextEdit = %AddressTxtBox
+@onready var game_code_txt_box: TextEdit = %GameCodeTxtBox
+@onready var popup: MyPopup = $Popup
+
 var popup_default_height: float = 287
 
 var is_popup_panel_up: bool = false
@@ -16,12 +18,12 @@ func _ready() -> void:
 	popup_panel.visible = false
 	$PanelBlur.visible = false
 	local_multiplayer_panel.visible = false
+	$Popup.visible = false
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		show_popup_panel(false)
-
 
 func local_multiplayer() -> void:
 	pass # Replace with function body.
@@ -47,15 +49,15 @@ func host_pressed() -> void:
 	do_host = true
 	popup_panel.size.y = popup_default_height/1.5
 	
-	%AddressLabel.visible = false
-	%AddressTxtBox.visible = false
+	%GameCodeLabel.visible = false
+	%GameCodeTxtBox.visible = false
 	
 	show_popup_panel(true)
 
 func join_pressed() -> void:
 	do_host = false
-	%AddressLabel.visible = true
-	%AddressTxtBox.visible = true
+	%GameCodeLabel.visible = true
+	%GameCodeTxtBox.visible = true
 	popup_panel.size.y = popup_default_height
 	show_popup_panel(true)
 
@@ -65,30 +67,36 @@ func _on_connect_pressed() -> void:
 		
 	if do_host:
 		var username = username_txt_box.text if username_txt_box.text != "" else username_txt_box.placeholder_text
+		var err = await MultiplayerManager.host(username)
+		if err != OK:
+			popup.position.y = popup_panel.position.y/2
+			popup.make_error_popup(err)
+			return
+		
+		popup.change_popup("Game Code", Noray.oid, true, "Start Game")
+		await popup.button_clicked
+		
 		get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
-		MultiplayerManager.host(username)
 		popup_panel.visible = false
 	else:
 		var username = username_txt_box.text if username_txt_box.text != "" else username_txt_box.placeholder_text
-		var address = address_txt_box.text if address_txt_box.text != "" else address_txt_box.placeholder_text
-		print(username, address)
+		var err = await join(game_code_txt_box.text, username)
+		if err != OK:
+			popup.position.y = popup_panel.position.y/2
+			popup.make_error_popup(err)
+			return
 		
-		if parse_and_join(address, username):
-			get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
-			popup_panel.visible = false
+		get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
+		popup_panel.visible = false
 		
 	
-func parse_and_join(full_address: String, username: String) -> bool:
-	var parts = full_address.split(":")
-	if parts.size() == 2 and parts[1].is_valid_int():
-		var address = parts[0]
-		var port = int(parts[1])
-		MultiplayerManager.join(address, port, username)
-		return true
-	else:
-		print("Invalid address format. Use address:port")
-		return false
-
+func join(oid: String, username: String) -> Error:
+	var err = await MultiplayerManager.join(game_code_txt_box.text, username)
+	if err != OK:
+		return err
+	
+	return OK
+		
 func _on_cancel_pressed() -> void:
 	show_popup_panel(false)
 
@@ -107,7 +115,7 @@ func show_popup_panel(show: bool):
 		
 
 func panel_focus():
-	%AddressTxtBox.release_focus()
+	%GameCodeTxtBox.release_focus()
 	%UsernameTxtBox.release_focus()
 	show_popup_panel(false)
 

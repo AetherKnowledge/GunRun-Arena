@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://blhb6oe40xcx2"]
+[gd_scene load_steps=16 format=3 uid="uid://blhb6oe40xcx2"]
 
 [ext_resource type="Script" uid="uid://cy8864xjupidd" path="res://scripts/ui/select_game.gd" id="1_1qobq"]
 [ext_resource type="Texture2D" uid="uid://ku0sabbsndmc" path="res://assets/ui/gamebg.png" id="2_a2txx"]
 [ext_resource type="FontFile" uid="uid://d1rodyu85fb2" path="res://assets/fonts/GrapeSoda.ttf" id="3_aym5w"]
 [ext_resource type="Shader" uid="uid://b6ul0hp42tf6o" path="res://assets/shaders/blur.gdshader" id="4_a2txx"]
+[ext_resource type="PackedScene" uid="uid://bvyohgkx2hf8e" path="res://scenes/ui/popup.tscn" id="5_aym5w"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wu84c"]
 texture = ExtResource("2_a2txx")
@@ -380,19 +381,19 @@ size_flags_vertical = 3
 theme_override_font_sizes/font_size = 32
 placeholder_text = "Player"
 
-[node name="AddressLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
+[node name="GameCodeLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 0
 theme_override_font_sizes/font_size = 32
-text = "Address:"
+text = "Game Code:"
 
-[node name="AddressTxtBox" type="TextEdit" parent="PopupPanel/MarginContainer/VBoxContainer"]
+[node name="GameCodeTxtBox" type="TextEdit" parent="PopupPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 32
-placeholder_text = "127.0.0.1:8080"
+placeholder_text = "GAMECODE"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PopupPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -442,6 +443,9 @@ libraries = {
 &"": SubResource("AnimationLibrary_aym5w")
 }
 
+[node name="Popup" parent="." instance=ExtResource("5_aym5w")]
+layout_mode = 1
+
 [connection signal="pressed" from="VBoxContainer/Host2" to="." method="host_pressed"]
 [connection signal="pressed" from="VBoxContainer/Join2" to="." method="join_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/LocalMultiplayer" to="." method="local_multiplayer_mouse_entered"]
@@ -453,7 +457,7 @@ libraries = {
 [connection signal="gui_input" from="PanelBlur" to="." method="_on_panel_blur_gui_input"]
 [connection signal="focus_entered" from="PopupPanel/MarginContainer/VBoxContainer/UsernameTxtBox" to="." method="textbox_focus"]
 [connection signal="focus_exited" from="PopupPanel/MarginContainer/VBoxContainer/UsernameTxtBox" to="." method="textbox_unfocus"]
-[connection signal="focus_entered" from="PopupPanel/MarginContainer/VBoxContainer/AddressTxtBox" to="." method="textbox_focus"]
-[connection signal="focus_exited" from="PopupPanel/MarginContainer/VBoxContainer/AddressTxtBox" to="." method="textbox_unfocus"]
+[connection signal="focus_entered" from="PopupPanel/MarginContainer/VBoxContainer/GameCodeTxtBox" to="." method="textbox_focus"]
+[connection signal="focus_exited" from="PopupPanel/MarginContainer/VBoxContainer/GameCodeTxtBox" to="." method="textbox_unfocus"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer/Connect" to="." method="_on_connect_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer/Cancel" to="." method="_on_cancel_pressed"]
