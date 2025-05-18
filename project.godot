@@ -22,6 +22,8 @@ Settings="*res://scripts/settings.gd"
 Music="*res://scenes/music.tscn"
 GlobalEnums="*res://scripts/global_enums.gd"
 MultiplayerManager="*res://scripts/multiplayer/multiplayer_manager.gd"
+Noray="*res://addons/netfox.noray/noray.gd"
+PacketHandshake="*res://addons/netfox.noray/packet-handshake.gd"
 
 [display]
 
@@ -40,7 +42,7 @@ version_control/autoload_on_startup=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/virtual_joystick/plugin.cfg")
+enabled=PackedStringArray("res://addons/netfox.internals/plugin.cfg", "res://addons/netfox.noray/plugin.cfg", "res://addons/virtual_joystick/plugin.cfg")
 
 [global_group]
 

@@ -4,18 +4,22 @@ const SETTINGS_PANEL = preload("res://scenes/ui/settings_panel.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if Settings.DEBUG_GAME or Settings.DEBUG_UI:
-		var second_monitor_x = 10  # Change if your setup is different
+	if MultiplayerManager.suddenly_disconnected:
+		show_disconnected()
+		MultiplayerManager.suddenly_disconnected = false
 		
-		if Settings.DEBUG_GAME:
-			get_tree().change_scene_to_file("res://scenes/multiplayer/debug_world.tscn")
-			
-			if is_port_open(MultiplayerManager.SERVER_PORT):
-				DisplayServer.window_set_position(Vector2i(second_monitor_x, 200))
-				MultiplayerManager.host("Host")
-			else:
-				MultiplayerManager.join(MultiplayerManager.SERVER_IP, MultiplayerManager.SERVER_PORT, "Client")
-				DisplayServer.window_set_position(Vector2i(second_monitor_x, 800))
+	#if Settings.DEBUG_GAME or Settings.DEBUG_UI:
+		#var second_monitor_x = 10  # Change if your setup is different
+		#
+		#if Settings.DEBUG_GAME:
+			#get_tree().change_scene_to_file("res://scenes/multiplayer/debug_world.tscn")
+			#
+			#if is_port_open(MultiplayerManager.SERVER_PORT):
+				#DisplayServer.window_set_position(Vector2i(second_monitor_x, 200))
+				#MultiplayerManager.host("Host")
+			#else:
+				#MultiplayerManager.join(MultiplayerManager.SERVER_IP, MultiplayerManager.SERVER_PORT, "Client")
+				#DisplayServer.window_set_position(Vector2i(second_monitor_x, 800))
 				
 				
 	
@@ -44,6 +48,9 @@ func is_port_open(port: int, max_clients: int = 32) -> bool:
 	else:
 		return false
 
-
 func _on_credits_pressed() -> void:
 	$CreditsPanel.play()
+	
+func show_disconnected():
+	$Popup.change_popup("Disconnected", "Server Disconnected")
+	$Popup.visible

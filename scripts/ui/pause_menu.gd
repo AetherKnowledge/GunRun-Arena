@@ -4,6 +4,9 @@ class_name PauseMenu
 signal state_changed
 var paused = false
 
+func _ready() -> void:
+	%GameCodeTxtBox.text = MultiplayerManager.server_oid
+
 func _input(event):
 	if event.is_action_pressed("pause"):
 		testESC()
@@ -22,9 +25,7 @@ func _on_options_pressed() -> void:
 
 func _on_main_menu_pressed() -> void:
 	resume()
-	MultiplayerManager.disconnect_to_server()
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
-
+	MultiplayerManager.graceful_disconnect_to_server()
 
 func pause():
 	paused = true
@@ -44,3 +45,10 @@ func resume():
 func restart():
 	resume()
 	get_tree().reload_current_scene()
+
+
+func _on_copy_btn_pressed() -> void:
+	# Get the current contents of the clipboard
+	var current_clipboard = DisplayServer.clipboard_get()
+	# Set the contents of the clipboard
+	DisplayServer.clipboard_set(%GameCodeTxtBox.text)

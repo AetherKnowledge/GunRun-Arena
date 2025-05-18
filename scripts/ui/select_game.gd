@@ -3,12 +3,16 @@ extends Control
 @onready var local_multiplayer_panel: Panel = $VBoxContainer/LocalMultiplayer/LocalMultiplayerPanel
 @onready var popup_panel: Panel = $PopupPanel
 @onready var username_txt_box: TextEdit = %UsernameTxtBox
-@onready var address_txt_box: TextEdit = %AddressTxtBox
+@onready var game_code_txt_box: TextEdit = %GameCodeTxtBox
+@onready var popup: MyPopup = $Popup
+@onready var noray_box: CheckBox = %NorayBox
+
 var popup_default_height: float = 287
 
 var is_popup_panel_up: bool = false
 var textbox_focused: bool = false
 var do_host := false
+var join_public: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -16,12 +20,12 @@ func _ready() -> void:
 	popup_panel.visible = false
 	$PanelBlur.visible = false
 	local_multiplayer_panel.visible = false
+	$Popup.visible = false
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		show_popup_panel(false)
-
 
 func local_multiplayer() -> void:
 	pass # Replace with function body.
@@ -44,19 +48,22 @@ func single_player_pressed() -> void:
 
 
 func host_pressed() -> void:
+	join_public = false
 	do_host = true
 	popup_panel.size.y = popup_default_height/1.5
 	
-	%AddressLabel.visible = false
-	%AddressTxtBox.visible = false
-	
+	%GameCodeLabel.visible = false
+	%GameCodeTxtBox.visible = false
+	%NorayBox.visible = true
 	show_popup_panel(true)
 
 func join_pressed() -> void:
+	join_public = false
 	do_host = false
-	%AddressLabel.visible = true
-	%AddressTxtBox.visible = true
+	%GameCodeLabel.visible = true
+	%GameCodeTxtBox.visible = true
 	popup_panel.size.y = popup_default_height
+	%NorayBox.visible = false
 	show_popup_panel(true)
 
 func _on_connect_pressed() -> void:
@@ -64,31 +71,68 @@ func _on_connect_pressed() -> void:
 		get_tree().root.get_node("Multiplayer").queue_free()
 		
 	if do_host:
+		var noray = noray_box.button_pressed
 		var username = username_txt_box.text if username_txt_box.text != "" else username_txt_box.placeholder_text
+		var err = await MultiplayerManager.host(username, noray)
+		if err != OK:
+			popup.position.y = popup_panel.position.y/2
+			popup.make_error_popup(err)
+			return
+		
+		if noray:
+			popup.change_popup("Game Code", Noray.oid, true, "Start Game")
+			await popup.button_clicked
+		
 		get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
-		MultiplayerManager.host(username)
 		popup_panel.visible = false
 	else:
 		var username = username_txt_box.text if username_txt_box.text != "" else username_txt_box.placeholder_text
-		var address = address_txt_box.text if address_txt_box.text != "" else address_txt_box.placeholder_text
-		print(username, address)
+		var address = %GameCodeTxtBox.text
 		
-		if parse_and_join(address, username):
+		if join_public:
+			var err = await join_with_ip(MultiplayerManager.PUBLIC_LOBBY_ADDRESS, username)
+			if err != OK:
+				popup.position.y = popup_panel.position.y/2
+				popup.make_error_popup(err)
+				return
+				
 			get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
 			popup_panel.visible = false
 		
+		# Attempt to join with ip first
+		var err = await join_with_ip(address, username)
+		if err != OK:
+			print("Not ip attempting to connect with noray")
+			err = await join_noray(address, username)
+		
+		if err != OK:
+			print("Cannot join game")
+			popup.position.y = popup_panel.position.y/2
+			popup.make_error_popup(err)
+			return
+		
+		get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayer.tscn")
+		popup_panel.visible = false
+		
 	
-func parse_and_join(full_address: String, username: String) -> bool:
+func join_noray(oid: String, username: String) -> Error:
+	var err = await MultiplayerManager.join_noray(game_code_txt_box.text, username)
+	if err != OK:
+		return err
+	
+	return OK
+	
+func join_with_ip(full_address: String, username: String) -> Error:
 	var parts = full_address.split(":")
 	if parts.size() == 2 and parts[1].is_valid_int():
 		var address = parts[0]
 		var port = int(parts[1])
-		MultiplayerManager.join(address, port, username)
-		return true
+		var err = await MultiplayerManager.join_ip(address, port, username)
+		return err
 	else:
 		print("Invalid address format. Use address:port")
-		return false
-
+		return 27
+		
 func _on_cancel_pressed() -> void:
 	show_popup_panel(false)
 
@@ -107,7 +151,7 @@ func show_popup_panel(show: bool):
 		
 
 func panel_focus():
-	%AddressTxtBox.release_focus()
+	%GameCodeTxtBox.release_focus()
 	%UsernameTxtBox.release_focus()
 	show_popup_panel(false)
 
@@ -142,3 +186,13 @@ func _on_panel_blur_gui_input(event: InputEvent) -> void:
 		panel_focus()
 	if event is InputEventScreenTouch and event.is_pressed():
 		panel_focus()
+
+
+func _on_public_lobby_pressed() -> void:
+	join_public = true
+	do_host = false
+	%GameCodeLabel.visible = false
+	%GameCodeTxtBox.visible = false
+	popup_panel.size.y = popup_default_height
+	%NorayBox.visible = false
+	show_popup_panel(true)

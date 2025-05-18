@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bcxjubp1ocyjq"]
+[gd_scene load_steps=13 format=3 uid="uid://bcxjubp1ocyjq"]
 
 [ext_resource type="Script" uid="uid://bjuruyhownecp" path="res://scripts/ui/pause_menu.gd" id="1_myx47"]
 [ext_resource type="FontFile" uid="uid://d1rodyu85fb2" path="res://assets/fonts/GrapeSoda.ttf" id="1_n87rw"]
+[ext_resource type="Texture2D" uid="uid://dj3gk201swrh5" path="res://assets/ui/copy.png" id="3_8uki6"]
 [ext_resource type="PackedScene" uid="uid://csitx20st4s72" path="res://scenes/ui/settings_panel.tscn" id="3_f6eus"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_myx47"]
@@ -32,6 +33,17 @@ corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 shadow_size = 5
 shadow_offset = Vector2(3, 3)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bkncm"]
+
+[sub_resource type="Theme" id="Theme_0bnpd"]
+RichTextLabel/styles/focus = SubResource("StyleBoxEmpty_bkncm")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t3245"]
+
+[sub_resource type="Theme" id="Theme_4inpj"]
+Button/constants/icon_max_width = 70
+Button/styles/normal = SubResource("StyleBoxEmpty_t3245")
 
 [node name="PauseMenu" type="PanelContainer" groups=["MouseIgnore", "PauseMenu"]]
 process_mode = 3
@@ -142,9 +154,55 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_5d2l8")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7l7mv")
 text = "Main Menu"
 
+[node name="PanelContainer2" type="PanelContainer" parent="Control"]
+layout_mode = 1
+offset_right = 588.0
+offset_bottom = 89.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/PanelContainer2"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GameCodeTxtBox" type="RichTextLabel" parent="Control/PanelContainer2/HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 2
+theme = SubResource("Theme_0bnpd")
+theme_override_colors/selection_color = Color(0.419813, 0.419813, 0.419813, 0.933333)
+theme_override_font_sizes/bold_italics_font_size = 40
+theme_override_font_sizes/italics_font_size = 40
+theme_override_font_sizes/mono_font_size = 40
+theme_override_font_sizes/normal_font_size = 40
+theme_override_font_sizes/bold_font_size = 40
+bbcode_enabled = true
+text = "test"
+context_menu_enabled = true
+horizontal_alignment = 1
+vertical_alignment = 1
+selection_enabled = true
+
+[node name="CopyBtn" type="Button" parent="Control/PanelContainer2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_4inpj")
+icon = ExtResource("3_8uki6")
+icon_alignment = 1
+
 [node name="SettingsPanel" parent="." instance=ExtResource("3_f6eus")]
+visible = false
 layout_mode = 2
 
 [connection signal="pressed" from="Control/PanelContainer/MarginContainer/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/MarginContainer/VBoxContainer/Main Menu" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Control/PanelContainer2/HBoxContainer/CopyBtn" to="." method="_on_copy_btn_pressed"]

@@ -149,7 +149,10 @@ text = "• [url=https://anokolisa.itch.io/sidescroller-pixelart-sprites-asset-p
 • [url=https://pixabay.com/users/freesound_community-46691455/]Sound Effects[/url] by [url=https://pixabay.com/users/freesound_community-46691455/]freesound_community[/url]  
 
 • [url=https://github.com/foxssake/netfox]Netfox[/url] by [url=https://github.com/foxssake]Fox's Sake Studio[/url]
-"
+
+• [url=https://www.flaticon.com/free-icons/paste-clipboard]Paste Clipboard Icons[/url] by [url=https://www.flaticon.com/authors/anggara]Anggara[/url] via [url=https://www.flaticon.com/]Flaticon[/url]
+
+• [url=https://github.com/foxssake/noray]noray[/url] by [url=https://github.com/foxssake]Fox's Sake Studio[/url]"
 fit_content = true
 
 [connection signal="pressed" from="Control/PanelContainer/HSplitContainer/TopBarContainer/BackBtn" to="." method="_on_back_btn_pressed"]
